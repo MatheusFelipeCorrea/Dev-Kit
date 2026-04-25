@@ -25,6 +25,7 @@ ${CARD_TYPES="All|Epic only|Frontend only|Backend only|Database only|Prototype o
 6. **ALWAYS mark files as (EXISTENTE — MODIFICAR) or (NOVO — CRIAR)** — based on what actually exists in the project docs
 7. **ALWAYS adapt to the tech stack** — hooks, endpoints, schemas, SQL must match the project's technologies
 8. **ALWAYS generate ONE README file** — Epic on top, sub-issues below, separated by dividers
+9. **ALWAYS end each card with a summary section** — include `CONCLUIDO` and `PENDENTE` so the board clearly shows what is closed and what still needs attention
 
 ## Language
 
@@ -148,6 +149,14 @@ Pai:         —
 Data Limite: (preencher)
 
 [Epic description: narrative format describing the full module scope, sections of the system, screens organized by user role, images if provided]
+
+## 🧾 Resumo
+
+### CONCLUIDO
+[What is already defined, validated, or confirmed for the Epic]
+
+### PENDENTE
+[Open questions, validations, dependencies, or items awaiting approval]
 
 ---
 
@@ -306,6 +315,14 @@ Registrar em: src/routes/index.js
 ## 🚫 Regras de Negócio
 * [Rule 1]
 * [Rule 2]
+
+## 🧾 Resumo
+
+### CONCLUIDO
+[What is already defined, validated, or confirmed for this story]
+
+### PENDENTE
+[Open questions, validations, dependencies, or items awaiting approval]
 
 ---
 

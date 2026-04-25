@@ -1,412 +1,337 @@
 # 🚀 Starter-Pack-ForProjects
 
-Uma metodologia completa para planejar, desenvolver e manter projetos de software com auxílio de IA — do zero ou entrando em projetos existentes.
+Um kit prático para planejar, documentar, implementar e manter projetos de software com apoio de IA. A ideia é simples: você usa os agents para ganhar velocidade, mas continua no comando das decisões.
 
-> **"Mente Superior Domina Mente Inferior"** — Sua mente domina a IA. A IA é ferramenta, você é o arquiteto.
+> **Mente Superior Domina Mente Inferior** — a IA é ferramenta; você é o arquiteto.
 
 **Autor:** Matheus Felipe Correa
-**Versão:** 1.0
+**Versão:** 2.0
 **Data:** Abril 2026
 
 ---
 
-## 📑 Índice
+## Índice
 
-- [Visão Geral](#-visão-geral)
-- [Filosofia](#-filosofia)
-- [Componentes do Starter Pack](#-componentes-do-starter-pack)
-- [Fluxo 1 — Projeto do Zero](#-fluxo-1--projeto-do-zero)
-- [Fluxo 2 — Entrando em Projeto Existente](#-fluxo-2--entrando-em-projeto-existente)
-- [Os 3 C's — Contexto para Cada Tarefa](#-os-3-cs--contexto-para-cada-tarefa)
-- [Ciclo de Desenvolvimento](#-ciclo-de-desenvolvimento)
-- [Catálogo de Skills](#-catálogo-de-skills)
-- [Catálogo de Agents](#-catálogo-de-agents)
-- [Onde Salvar Cada Arquivo](#-onde-salvar-cada-arquivo)
-- [Frequência de Uso](#-frequência-de-uso)
-- [Templates Úteis](#-templates-úteis)
-- [Exemplos Práticos](#-exemplos-práticos)
+- [O que existe neste repositório](#o-que-existe-neste-repositório)
+- [Estrutura da pasta .github](#estrutura-da-pasta-github)
+- [Como usar os agents](#como-usar-os-agents)
+- [Skills](#skills)
+- [Fluxo recomendado do zero](#fluxo-recomendado-do-zero)
+- [Fluxo recomendado em projeto existente](#fluxo-recomendado-em-projeto-existente)
+- [Onde cada arquivo deve ficar](#onde-cada-arquivo-deve-ficar)
+- [Templates rápidos](#templates-rápidos)
 
 ---
 
-## 🎯 Visão Geral
+## O que existe neste repositório
 
-O Starter-Pack-ForProjects é um ecossistema de **8 skills** e **2 agents** que cobrem todo o ciclo de vida de um projeto:
+Este repositório organiza o trabalho em 3 blocos:
 
-Planejar → Documentar → Refinar → Implementar → Ensinar → Manter
+1. **Skills** geram documentação e artefatos de apoio.
+2. **Agents** ajudam a implementar ou a aprender com o código.
+3. **Docs, plans e diagrams** guardam o resultado do processo.
 
-Funciona com **qualquer stack** (React, Node.js, .NET, Java, Go, Rust, Vue, Angular, Next.js, Flutter, Swift, Kotlin e mais) e **qualquer estrutura** (monorepo, fullstack, backend-only, microservices).
+O objetivo é deixar o caminho claro para qualquer cenário:
 
-| Problema | Solução |
-|----------|---------|
-| "Não sei como começar o projeto" | `/project-architect` |
-| "A documentação está desatualizada" | `/readme-updater` |
-| "O Copilot gera código fora do padrão" | `/copilot-instructions-blueprint-generator` |
-| "Dev novo não entende a arquitetura" | `/architecture-blueprint-generator` + Agent Sensei |
-| "Não sei onde colocar cada arquivo" | `/folder-structure-blueprint-generator` |
-| "Meus cards do board são bagunçados" | `/card-refiner` |
-| "Não tenho diagramas atualizados" | `/plantuml-diagram-generator` |
-| "Quero implementar um card com IA" | Agent: Implementation Plan |
-| "Junior precisa de mentoria" | Agent: Sensei |
+- começar um projeto do zero
+- entrar em um projeto já existente
+- transformar uma ideia em cards
+- implementar um card com validação fase a fase
 
----
 
-## 💡 Filosofia
+A estrutura atual do workspace é esta:
 
-| # | Princípio | Descrição |
-|---|-----------|-----------|
-| 1 | **Mente Superior Domina Mente Inferior** | Sua mente domina a IA. A IA gera, você valida, decide e aprova. |
-| 2 | **Dividir para Conquistar** | Toda tarefa é quebrada em partes menores antes de ser executada. |
-| 3 | **Nunca Assumir** | Em caso de dúvida, pergunte. Vale para você e para a IA. |
-| 4 | **Validação Humana Obrigatória** | Nenhuma fase avança sem aprovação explícita do desenvolvedor. |
-| 5 | **Manter-se Afiado** | Sempre desenvolva pelo menos uma parte manualmente. |
-| 6 | **Documentação é Produto** | Docs desatualizados são piores que nenhum doc. O Starter Pack mantém vivo. |
-| 7 | **Consistência > Novidade** | Manter os patterns do projeto é mais importante que usar a última trend. |
-| 8 | **Generalizar, depois Especificar** | Skills são genéricas. O projeto específico vem do contexto. |
+```text
+.github/
+├── agents/
+│   ├── implementation-plan.agent.md
+│   └── mentoring-juniors.agent.md
+├── copilot/
+├── diagrams/
+│   ├── Arquitetura/
+│   ├── Caso de Uso/
+│   ├── Classes/
+│   ├── Componentes/
+│   ├── Implantação/
+│   └── Pacotes/
+├── docs/
+├── instructions/
+├── plans/
+│   ├── cards/
+│   └── implementations/
+└── skills/
+	├── architecture-blueprint-generator/
+	├── card-refiner/
+	├── code-exemplars-blueprint-generator/
+	├── copilot-instructions-blueprint-generator/
+	├── folder-structure-blueprint-generator/
+	├── plantuml-diagram-generator/
+	├── project-architect/
+	└── readme-updater/
+```
 
-### A Lógica Invertida
+Leitura rápida da função de cada pasta:
 
-MODELO TRADICIONAL: Dev programa → IA revisa
-
-MODELO STARTER PACK: IA programa → Dev valida cada passo | Dev programa lógica de negócio → IA valida
-
-Resultado: Dev entende TUDO, IA acelera o repetitivo.
-
----
-
-## 🧩 Componentes do Starter Pack
-
-### Skills (Geração de Documentação)
-
-| # | Skill | Comando | O que gera |
-|---|-------|---------|------------|
-| 1 | Architecture Blueprint | `/architecture-blueprint-generator` | Mapa completo da arquitetura |
-| 2 | Code Exemplars | `/code-exemplars-blueprint-generator` | Melhores exemplos de código |
-| 3 | Copilot Instructions | `/copilot-instructions-blueprint-generator` | Regras pro Copilot |
-| 4 | Folder Structure | `/folder-structure-blueprint-generator` | Guia de organização de pastas |
-| 5 | Project Architect | `/project-architect` | Arquitetura + READMEs pra projetos novos |
-| 6 | Card Refiner | `/card-refiner` | Cards padronizados pro board |
-| 7 | PlantUML Diagrams | `/plantuml-diagram-generator` | Diagramas .puml + prompt C4 |
-| 8 | README Updater | `/readme-updater` | Atualização cirúrgica dos READMEs |
-
-### Agents (Execução e Aprendizado)
-
-| # | Agent | O que faz |
-|---|-------|-----------|
-| 1 | **Implementation Plan** | Parseia cards, gera planos, implementa fase a fase com testes e validação |
-| 2 | **Sensei Mentor** | Mentor socrático que ensina usando exemplos reais do projeto |
+| Pasta | Para que serve |
+|---|---|
+| `.github/skills/` | Skills que geram blueprints, cards, diagramas e READMEs |
+| `.github/agents/` | Agents que executam fluxos guiados de implementação e mentoria |
+| `.github/docs/` | Documentos de contexto do projeto, como arquitetura, exemplars e estrutura de pastas |
+| `.github/instructions/` | Instruções de Copilot que guiam o estilo e as regras do projeto |
+| `.github/plans/cards/` | Cards refinados, prontos para copiar para o board |
+| `.github/plans/implementations/` | Planos de execução faseados para implementação de tarefas |
+| `.github/diagrams/` | Diagramas PlantUML e o prompt de arquitetura |
+| `.github/copilot/` | Espaço reservado para arquivos auxiliares do Copilot, se o projeto precisar |
 
 ---
 
-## 🆕 Fluxo 1 — Projeto do Zero
+## Como usar os agents
 
-### Fase 1 — Planejamento e Arquitetura
+### 1. Se você vai começar um projeto do zero
 
-**Skill:** `/project-architect`
+Use primeiro a skill de arquitetura do projeto:
 
-Você fornece: escopo + techs + requisitos + protótipos (opcional). A skill sugere arquitetura, telas/UX, banco, endpoints. Após aprovação gera:
+1. Abra o Copilot Chat.
+2. Chame /project-architect.
+3. Informe escopo, objetivo, stack desejada, público e, se tiver, protótipos.
+4. Leia a sugestão de arquitetura com calma.
+5. Só avance quando a proposta fizer sentido para o projeto.
 
-- `[projeto]/web/Documents/README.md` — Frontend
-- `[projeto]/api/Documents/README.md` — Backend (com seção de Banco de Dados)
+Depois disso, siga esta ordem:
 
-**Por que usar:** Toda a equipe começa com a mesma arquitetura, mesmas pastas, mesmas convenções.
+1. /card-refiner para transformar ideias em cards.
+2. /plantuml-diagram-generator para registrar os diagramas.
+3. /architecture-blueprint-generator para documentar a arquitetura.
+4. /code-exemplars-blueprint-generator para registrar bons exemplos reais.
+5. /folder-structure-blueprint-generator para deixar o mapa de pastas claro.
+6. /copilot-instructions-blueprint-generator por último, para consolidar as regras do projeto.
 
-### Fase 2 — Refinamento de Cards
+### 2. Se você já entrou em um projeto existente
 
-**Skill:** `/card-refiner`
+Comece entendendo o terreno antes de mexer em código:
 
-**Como usar:**
-1. Abra o Copilot Chat e digite `/card-refiner`
-2. Descreva o módulo ou feature que quer transformar em cards. Pode ser uma ideia bruta ("quero um módulo de lembretes com WhatsApp") ou uma descrição detalhada
-3. Anexe como contexto:
-- READMEs do projeto (frontend + backend) — pra skill saber quais arquivos já existem
-- Protótipos PNG se tiver — pra skill extrair telas e componentes
-- Docs das skills (Blueprint, Exemplars) se já existirem — pra skill referenciar patterns reais
-4. A skill vai te fazer perguntas se algo estiver vago
-5. Após entender tudo, pergunta: "Posso gerar os cards?"
-6. Gera UM arquivo markdown contendo o Epic + todas as Stories
+1. /architecture-blueprint-generator para responder como o sistema funciona.
+2. /code-exemplars-blueprint-generator para descobrir padrões reais do projeto.
+3. /folder-structure-blueprint-generator para saber onde cada arquivo deve viver.
+4. /copilot-instructions-blueprint-generator para entender as regras que o Copilot deve seguir.
 
-**O que você recebe:**
+### 3. Se você recebeu um card para implementar
 
-Um arquivo `.github/plans/cards/[EPIC] Nome-do-Modulo.md` contendo:
-- **Epic** no topo com metadata (Tipo, Prioridade, Categoria, Pai, etc.)
-- **Story Database** — SQL pronto pra executar, critérios de aceite como checklist
-- **Story Backend** — Critérios (Given/When/Then com status codes), implementação (controller, service, repository, schemas, rotas), cada arquivo marcado como `(EXISTENTE — MODIFICAR)` ou `(NOVO — CRIAR)`
-- **Story Frontend** — Critérios visuais, integração técnica (hooks, services, componentes), visual e UX
-- **Story Protótipo** — Telas a prototipar com elementos e critérios
+Use o agent de implementação:
 
-**O que você faz depois:**
+1. Cole o card no Copilot Chat.
+2. Chame o agent Implementation Plan.
+3. Anexe READMEs, blueprint, exemplars, estrutura de pastas e protótipos, se existirem.
+4. Deixe o agent interpretar requisitos, tarefas, regras de negócio e débitos.
+5. Leia o plano gerado e aprove antes de começar qualquer fase.
+6. A cada fase concluída, valide o resultado antes de liberar a próxima.
 
-Copie cada seção do arquivo (separadas por `---`) e cole como cards individuais no seu board (GitHub Projects, Jira, etc.). Preencha os campos que ficaram como `(preencher)`: Sprint, Relator, Data Limite.
+### 4. Se a meta é aprender ou destravar uma dúvida
 
-**Por que usar:** Cards padronizados, consistência front↔back↔db garantida, arquivos reais do projeto referenciados, nada inventado.
+Use o agent Sensei quando você quiser entender o código sem receber só a resposta pronta.
 
-### Fase 3 — Diagramas
+Ele é mais útil quando você quer:
 
-**Skill:** `/plantuml-diagram-generator`
+- entender uma arquitetura
+- revisar uma implementação já feita
+- descobrir por que um código existe daquele jeito
+- comparar uma solução atual com um exemplar real do projeto
+- aprender sem receber só a resposta pronta
 
-Gera: caso-de-uso.puml, componentes.puml, classes.puml (backend), pacotes-frontend.puml, pacotes-backend.puml, implantacao.puml, prompt-arquitetura.md (C4 Level 2).
+O melhor formato de uso é simples:
 
-**Por que usar:** Diagramas versionáveis (código .puml), atualizáveis automaticamente.
-
-### Fase 4 — Código Base + Documentação Técnica
-
-Após primeiros arquivos, rode **nesta ordem**:
-
-| Ordem | Skill | Salvar em |
-|-------|-------|-----------|
-| 1º | `/architecture-blueprint-generator` | `.github/docs/Project_Architecture_Blueprint.md` |
-| 2º | `/code-exemplars-blueprint-generator` | `.github/docs/exemplars.md` |
-| 3º | `/folder-structure-blueprint-generator` | `.github/docs/Project_Folders_Structure_Blueprint.md` |
-| 4º | `/copilot-instructions-blueprint-generator` | `.github/instructions/copilot-instructions.md` |
-
-**Por que essa ordem:** Cada skill alimenta a próxima.
-
-### Fase 5 — Desenvolvimento Dia a Dia
-
-Siga o [Ciclo de Desenvolvimento](#-ciclo-de-desenvolvimento).
-
-### Fase 6 — Manutenção (~2 semanas)
-
-- `/readme-updater` → atualiza READMEs
-- `/plantuml-diagram-generator` (modo Update) → atualiza diagramas
-- Se arquitetura mudou muito → re-rode Skills 1-4
-- Novo épico → `/card-refiner`
+1. Explique o que você tentou.
+2. Mostre o erro, a dúvida ou a área do código.
+3. Peça para o Sensei guiar a leitura do projeto com perguntas.
+4. Responda, pense com ele e só depois codifique.
 
 ---
 
-## 📂 Fluxo 2 — Entrando em Projeto Existente
+## Skills
 
-### Fase 1 — Entendendo o Projeto
+As skills são usadas quando você quer gerar documentação, cards, diagramas ou instruções de projeto com base no código real. A regra geral é: primeiro entender o contexto, depois gerar o artefato e só então aplicar no projeto.
 
-| Ordem | Skill | O que responde | Salvar em |
-|-------|-------|----------------|-----------|
-| 1º | `/architecture-blueprint-generator` | "Como funciona?" | `.github/docs/Project_Architecture_Blueprint.md` |
-| 2º | `/code-exemplars-blueprint-generator` | "Melhores exemplos?" | `.github/docs/exemplars.md` |
-| 3º | `/folder-structure-blueprint-generator` | "Onde fica cada coisa?" | `.github/docs/Project_Folders_Structure_Blueprint.md` |
-| 4º | `/copilot-instructions-blueprint-generator` | "Quais as regras?" | `.github/instructions/copilot-instructions.md` |
+### Escala de avaliação
 
-### Fase 2 — Documentação Faltante
+Usei esta régua para pontuar as skills:
 
-| Se falta... | Use... |
-|-------------|--------|
-| READMEs | `/project-architect` (modo existente) |
-| Diagramas | `/plantuml-diagram-generator` |
-| Cards | `/card-refiner` |
+- **9,0 a 10,0 — Excelente:** muito sólida, pronta para uso com poucos ajustes.
+- **8,0 a 8,9 — Muito boa:** já entrega valor real, mas ainda tem pequenos pontos de melhoria.
+- **7,0 a 7,9 — Boa:** funciona bem, porém depende mais de contexto ou disciplina de uso.
+- **6,0 a 6,9 — Regular:** útil, mas ainda pede refinamento antes de virar referência.
+- **Abaixo de 6,0 — Fraca:** precisa de revisão antes de confiar no fluxo.
 
-### Fase 3 — Desenvolvimento
+### Nota geral observada
 
-Mesmo fluxo: Ciclo de Desenvolvimento + Manutenção periódica.
+| Skill | Nota | Categoria | Leitura rápida |
+|---|---:|---|---|
+| `/project-architect` | 9,6 | Excelente | Fluxo bem guiado, cobre arquitetura, stack, telas e banco com boa disciplina de aprovação. |
+| `/architecture-blueprint-generator` | 9,3 | Excelente | Muito forte para documentar arquitetura real e lidar com monorepo. |
+| `/code-exemplars-blueprint-generator` | 9,2 | Excelente | Boa curadoria de exemplos e anti-patterns, útil para padronizar implementação. |
+| `/folder-structure-blueprint-generator` | 9,1 | Excelente | Muito bom para orientar localização de arquivos e convenções de estrutura. |
+| `/copilot-instructions-blueprint-generator` | 9,3 | Excelente | Consolida regras do projeto de forma consistente e alinhada ao código existente. |
+| `/plantuml-diagram-generator` | 9,0 | Excelente | Ótimo para transformar documentação em diagramas com controle de aprovação. |
+| `/card-refiner` | 8,8 | Muito boa | Forte e bem processual; agora fica mais completa com resumo de concluído e pendente. |
+| `/readme-updater` | 8,7 | Muito boa | Boa para manutenção contínua, com foco correto em mudanças reais do projeto. |
 
----
+### 1. /project-architect
 
-## 📋 Os 3 C's — Contexto para Cada Tarefa
+**O que faz:** desenha a arquitetura de um projeto novo do zero e sugere stack, estrutura, banco, telas e fluxo de dados.
 
-### C1 — Contexto da Estratégia
+**Quando usar:** no começo de um projeto, antes de criar as primeiras pastas e arquivos.
 
-**Quando:** Ao iniciar qualquer tarefa. **Como:** Abra o bloco de notas e escreva passo a passo de como VOCÊ faria.
+**Passo a passo:**
+1. Abra o Copilot Chat.
+2. Chame /project-architect.
+3. Informe objetivo, público, stack desejada, prazo e integrações.
+4. Responda às perguntas sobre protótipos, hosting, autenticação e monorepo.
+5. Revise a proposta de arquitetura.
+6. Só avance quando aprovar a sugestão.
 
-### C2 — Contexto da Aplicação
+### 2. /architecture-blueprint-generator
 
-**Quando:** Se não houver ou após melhorias arquiteturais. **Como:** Execute as skills:
+**O que faz:** cria o blueprint da arquitetura do projeto já existente, explicando camadas, responsabilidades e fluxo.
 
-| Skill | Salvar em |
-|-------|-----------|
-| `/copilot-instructions-blueprint-generator` | `.github/instructions/` |
-| `/architecture-blueprint-generator` | `.github/docs/` |
-| `/code-exemplars-blueprint-generator` | `.github/docs/` |
-| `/folder-structure-blueprint-generator` | `.github/docs/` |
+**Quando usar:** quando o código já existe e você precisa entender como tudo se conecta.
 
-### C3 — Contexto da Tarefa
+**Passo a passo:**
+1. Abra o projeto no Copilot Chat.
+2. Chame /architecture-blueprint-generator.
+3. Deixe a skill analisar a estrutura real do repositório.
+4. Revise o blueprint gerado.
+5. Use o arquivo em `.github/docs/` como base para próximas decisões.
 
-**Quando:** Ao iniciar cada tarefa. **Como:** Reunir card do board, prints do Figma, READMEs, docs das skills, arquivos relevantes.
+### 3. /code-exemplars-blueprint-generator
 
-### Usando os 3 C's
+**O que faz:** identifica os melhores exemplos de código do projeto para servir de referência.
 
-C1 (Estratégia) + C2 (Docs) + C3 (Card) → Agent Implementation Plan → Plano → Execução fase a fase
+**Quando usar:** depois do blueprint, quando você quer copiar padrões reais do projeto em vez de adivinhar.
 
----
+**Passo a passo:**
+1. Rode a skill depois da arquitetura já mapeada.
+2. Deixe ela varrer os arquivos do projeto.
+3. Leia os exemplos escolhidos e os anti-patterns, se existirem.
+4. Use os exemplars como modelo para novos arquivos.
 
-## 🔄 Ciclo de Desenvolvimento
+### 4. /folder-structure-blueprint-generator
 
-### 1. Planejamento
+**O que faz:** documenta onde cada arquivo deve ficar e quais nomes o projeto usa.
 
-Cole o card no Copilot Chat com o Agent:
+**Quando usar:** quando você está em dúvida sobre o lugar certo de um arquivo ou vai criar uma nova feature.
 
-Você: "Recebi esse card, vamos implementar juntos" + [card + imagens + docs]
+**Passo a passo:**
+1. Chame a skill depois de entender a arquitetura.
+2. Deixe ela mapear as pastas reais do projeto.
+3. Confira a árvore gerada e as convenções de nomeação.
+4. Use o blueprint de pastas para criar novos arquivos no lugar certo.
 
-Agent: Parseia → Pergunta → Gera plano → Espera aprovação
+### 5. /copilot-instructions-blueprint-generator
 
-### 2. Desenvolvimento
+**O que faz:** transforma os padrões do projeto em instruções para o Copilot seguir.
 
-Para CADA fase:
+**Quando usar:** depois das skills de arquitetura, exemplars e pastas, porque ela consolida tudo no arquivo de instruções.
 
-- Agent implementa + testes unitários
-- VOCÊ verifica cada arquivo: Correto → Keep ✅ | Errado → Corrija ou peça correção | Não entendeu → Sensei explica
-- O próximo passo faz sentido? Sim → "Validado, avança" | Não → Pede revisão
-- **IMPORTANTE:** Desenvolva pelo menos UMA parte manualmente (lógica de negócio recomendado). Lógica invertida: DEV programa, IA valida.
+**Passo a passo:**
+1. Rode a skill por último entre as de contexto.
+2. Deixe ela ler arquitetura, exemplars e estrutura de pastas.
+3. Revise as regras geradas para garantir que combinam com o projeto.
+4. Salve o arquivo em `.github/instructions/`.
 
-### 3. Revisão e Commit
+### 6. /card-refiner
 
-- Revisar TODOS os arquivos (um por vez)
-- Em dúvida? Use o Sensei: "Me explique as alterações em termos de código, arquitetura e segurança. Indique temas pra eu estudar."
-- A decisão final é SEMPRE sua
-- Commit com mensagem clara
+**O que faz:** transforma uma ideia solta, épico ou requisito bagunçado em cards prontos para board.
 
-### Fluxo Geral
+**Quando usar:** quando você quer quebrar uma feature em Epic + Stories com backend, frontend, banco e protótipo.
 
-1. HUMANO planeja (C1) → 2. IA gera plano → 3. IA implementa, HUMANO valida → 4. HUMANO programa uma etapa → 5. HUMANO revisa tudo → 6. Commit
+**Passo a passo:**
+1. Abra o Copilot Chat.
+2. Chame /card-refiner.
+3. Descreva a feature, mesmo que ainda esteja rascunhada.
+4. Anexe os READMEs, o blueprint, os exemplars, a estrutura de pastas e protótipos, se existirem.
+5. Responda às perguntas de escopo, regras de negócio, integrações e telas.
+6. Espere a skill resumir o entendimento antes de gerar qualquer card.
+7. Aprove a geração dos cards.
+8. Receba um único arquivo em `.github/plans/cards/` com Epic + Stories.
+9. Copie cada seção separada por `---` para o seu board.
 
----
+**Regra importante da card-refiner:** ela tem ordem e estrutura próprias.
 
-## 📖 Catálogo de Skills
+- Primeiro ela entende o problema.
+- Depois pergunta o que falta.
+- Só então gera o README do épico.
+- Os cards saem nesta ordem: Banco de Dados → Backend → Frontend → Protótipo.
+- Se um arquivo já existe, ela marca como `EXISTENTE — MODIFICAR`.
+- Se o arquivo ainda não existe, ela marca como `NOVO — CRIAR`.
 
-### /project-architect
 
-**Propósito:** Planejar arquitetura completa de projeto novo. **Quando:** Início de projeto. **Recebe:** Escopo, techs, requisitos, protótipos. **Gera:** Sugestão de arquitetura + telas + banco + endpoints + READMEs. **Fluxo:** 6 etapas com aprovação. **Por que:** Todos começam com a mesma base sólida.
+## Fluxo recomendado do zero
 
-### /architecture-blueprint-generator
+Se o projeto ainda está nascendo, siga esta sequência:
 
-**Propósito:** Documentar arquitetura de codebase existente. **Quando:** Entrando em projeto. Após scaffold. Mudança arquitetural. **Gera:** `Project_Architecture_Blueprint.md` — stack, camadas, dependências, data flow, cross-cutting, 17 techs, monorepo. **Salvar:** `.github/docs/` **Por que:** É o mapa. Todos referenciam ele.
-
-### /code-exemplars-blueprint-generator
-
-**Propósito:** Achar melhores exemplos no projeto. **Quando:** Após Blueprint. Onboarding. **Gera:** `exemplars.md` — melhor arquivo de cada categoria + snippets + anti-patterns. **Salvar:** `.github/docs/` **Por que:** "Como faço X aqui?" → "Olha o exemplar."
-
-### /copilot-instructions-blueprint-generator
-
-**Propósito:** Regras pro Copilot. **Quando:** Após Skills 1-3 (SEMPRE por último). **Gera:** `copilot-instructions.md` — versões, regras por tech, regras de camada, 10 "Never Break These", referências a exemplars. **Salvar:** `.github/instructions/` **Por que:** Copilot gera código consistente ao invés de genérico.
-
-### /folder-structure-blueprint-generator
-
-**Propósito:** Documentar onde cada arquivo fica. **Quando:** Após Blueprint. Onboarding. **Gera:** `Project_Folders_Structure_Blueprint.md` — ASCII tree, naming conventions, file placement, templates. **Salvar:** `.github/docs/` **Por que:** Responde "onde coloco isso?" com certeza.
-
-### /card-refiner
-
-**Propósito:** Ideias brutas → cards padronizados. **Quando:** Novo módulo/feature. **Recebe:** Ideia + READMEs + docs + protótipos. **Gera:** UM README com Epic + Stories (Front, Back, DB, Protótipo). Metadata preenchida:
-
-Tipo: Story | Prioridade: 🔺 Highest | Sprint: (preencher) | Categoria: Backend | Relator: (preencher) | Pai: [EPIC] Nome | Data Limite: (preencher)
-
-Arquivos como (EXISTENTE — MODIFICAR) ou (NOVO — CRIAR). **Salvar:** `.github/plans/cards/[EPIC] Nome.md` **Por que:** Cards consistentes, cruzamento front↔back↔db automático.
-
-### /plantuml-diagram-generator
-
-**Propósito:** Diagramas PlantUML + prompt C4. **Quando:** Início + manutenção ~2 semanas. **Gera:**
-
-| Diagrama | Arquivo |
-|----------|---------|
-| Caso de Uso | `.github/diagrams/Caso de Uso/caso-de-uso.puml` |
-| Componentes | `.github/diagrams/Componentes/componentes.puml` |
-| Classes (Backend) | `.github/diagrams/Classes/classes.puml` |
-| Pacotes Frontend | `.github/diagrams/Pacotes/pacotes-frontend.puml` |
-| Pacotes Backend | `.github/diagrams/Pacotes/pacotes-backend.puml` |
-| Implantação | `.github/diagrams/Implantacao/implantacao.puml` |
-| Arquitetura | `.github/diagrams/Arquitetura/prompt-arquitetura.md` |
-
-Modo Update: detecta mudanças, regenera só o necessário. **Por que:** Diagramas versionáveis e atualizáveis.
-
-### /readme-updater
-
-**Propósito:** Manter READMEs atualizados. **Quando:** ~2 semanas. Pré-release. **Faz:** Escaneia codebase + schema.prisma → compara com README → reporta mudanças → pergunta → atualiza mantendo formato exato. Inclui seção de Banco dentro do Backend README. **Por que:** README desatualizado engana. O Updater mantém vivo.
+1. **Entenda o problema** com /project-architect.
+2. **Transforme ideias em trabalho executável** com /card-refiner.
+3. **Desenhe os diagramas** com /plantuml-diagram-generator.
+4. **Documente a base técnica** com os blueprints de arquitetura, exemplars e estrutura.
+5. **Feche as regras do Copilot** com /copilot-instructions-blueprint-generator.
+6. **Implemente por fases** usando o Implementation Plan.
+7. **Use o Sensei** sempre que algo precisar de explicação ou revisão conceitual.
+8. **Atualize a documentação periodicamente** com /readme-updater e /plantuml-diagram-generator em modo update.
 
 ---
 
-## 🤖 Catálogo de Agents
+## Fluxo recomendado em projeto existente
 
-### Implementation Plan & Execution Agent
+Se o código já existe, o caminho mais seguro é este:
 
-**Propósito:** Parceiro de implementação fase a fase. **Quando:** Toda vez que pega um card. **Como:** Cole o card → agent parseia → gera plano (REQ, TASK, BIZ, DEBT) → implementa fase a fase com testes → para entre fases → espera validação. **Regras:** Nunca programa sem permissão. Nunca avança sem validação. Nunca assume. Sempre testa.
-
-### Sensei — Developer Mentor
-
-**Propósito:** Mentor socrático com exemplos reais. **Quando:** Dúvidas, aprendizado, revisão, onboarding. **Como:** Guia com perguntas → aponta exemplars reais → adapta ao nível → técnicas: Rubber Duck, 5 Whys, Code Reading, Pattern Comparison, Architecture Walking → recap com temas pra estudar.
+1. Leia a arquitetura do projeto.
+2. Leia os exemplars para copiar padrões reais, não suposições.
+3. Leia a estrutura de pastas para não colocar arquivo no lugar errado.
+4. Leia as instruções do Copilot para respeitar as regras do projeto.
+5. Use o Sensei quando quiser entender o porquê de uma solução.
+6. Use o Implementation Plan quando precisar executar uma entrega com controle de fases.
+7. Use o README Updater quando a documentação ficar defasada.
 
 ---
 
-## 📁 Onde Salvar Cada Arquivo
+## Onde cada arquivo deve ficar
 
 | Arquivo | Caminho |
-|---------|---------|
+|---|---|
 | Architecture Blueprint | `.github/docs/Project_Architecture_Blueprint.md` |
 | Code Exemplars | `.github/docs/exemplars.md` |
-| Folder Structure | `.github/docs/Project_Folders_Structure_Blueprint.md` |
+| Folder Structure Blueprint | `.github/docs/Project_Folders_Structure_Blueprint.md` |
 | Copilot Instructions | `.github/instructions/copilot-instructions.md` |
-| README Frontend | `[projeto]/web/Documents/README.md` |
-| README Backend | `[projeto]/api/Documents/README.md` |
-| Implementation Plans | `.github/plans/implementations/[purpose]-[component]-[version].md` |
-| Refined Cards | `.github/plans/cards/[EPIC] Nome-do-Modulo.md` |
-| Diagramas PlantUML | `.github/diagrams/[Nome]/[arquivo].puml` |
-| Prompt Arquitetura | `.github/diagrams/Arquitetura/prompt-arquitetura.md` |
+| Card refinado | `.github/plans/cards/[EPIC] Nome-do-Modulo.md` |
+| Plano de implementação | `.github/plans/implementations/[purpose]-[component]-[version].md` |
+| Caso de uso | `.github/diagrams/Caso de Uso/caso-de-uso.puml` |
+| Componentes | `.github/diagrams/Componentes/componentes.puml` |
+| Classes do backend | `.github/diagrams/Classes/classes.puml` |
+| Pacotes do frontend | `.github/diagrams/Pacotes/pacotes-frontend.puml` |
+| Pacotes do backend | `.github/diagrams/Pacotes/pacotes-backend.puml` |
+| Implantação | `.github/diagrams/Implantação/implantacao.puml` |
+| Prompt de arquitetura | `.github/diagrams/Arquitetura/prompt-arquitetura.md` |
+
+Se o projeto tiver frontend e backend separados, os READMEs costumam ficar em:
+
+- `[projeto]/web/Documents/README.md`
+- `[projeto]/api/Documents/README.md`
 
 ---
 
-## ⏰ Frequência de Uso
+## Templates rápidos
 
-| Componente | Frequência | Trigger |
-|-----------|-----------|---------|
-| Project Architect | 1 vez | Início do projeto |
-| Architecture Blueprint | 1 vez + se mudar | Código existe |
-| Code Exemplars | 1 vez + se mudar | Após Blueprint |
-| Folder Structure | 1 vez + se mudar | Após Blueprint |
-| Copilot Instructions | 1 vez + se mudar | Após Skills 1-3 |
-| Card Refiner | Por épico | Novo módulo |
-| PlantUML Diagrams | 1 vez + ~2 sem | READMEs existem |
-| README Updater | ~2 semanas | Final de sprint |
-| Implementation Plan | Cada card | Dia a dia |
-| Sensei | Quando precisar | Dúvida/aprendizado |
+### Para pedir implementação
 
----
+Recebi esse card, quero que você monte o plano e me guie fase a fase. Contexto: [card + imagens + docs]
 
-## 📝 Templates Úteis
+### Para pedir explicação ao Sensei
 
-### Pedindo pro Agent implementar
+Me explique essa parte do código com foco em arquitetura, segurança e trade-offs. Mostre também quais arquivos eu deveria ler primeiro.
 
-Recebi esse card, vamos implementar juntos [CARD + IMAGENS]
+### Para revisar uma entrega manual
 
-### Pedindo pro Sensei explicar
+Implementei esta funcionalidade manualmente em [arquivo]. Revise se segue os padrões do projeto, se há riscos de segurança e o que eu deveria melhorar.
 
-Me explique as alterações em termos de código, arquitetura e segurança. Indique temas pra eu estudar.
+### Para atualizar documentação
 
-### Lógica Invertida
-
-Implementei [funcionalidade] manualmente em [arquivo]. Revise: segue os patterns? Problema de segurança? Edge cases? O que melhorar?
-
-### Rodando Skills de contexto
-
-1º /architecture-blueprint-generator → .github/docs/
-2º /code-exemplars-blueprint-generator → .github/docs/
-3º /folder-structure-blueprint-generator → .github/docs/
-4º /copilot-instructions-blueprint-generator → .github/instructions/
-
----
-
-## 🌾 Exemplos Práticos
-
-### Projeto Agrofarm (Node.js + React, Monorepo)
-
-INÍCIO: /project-architect → READMEs | /card-refiner → Cards | /plantuml → Diagramas
-
-CÓDIGO: Skills 1→2→4→3
-
-DIA A DIA: Agent Plan + Agent Sensei
-
-MANUTENÇÃO: /readme-updater + /plantuml (Update)
-
-### Sistema Aluguel de Carros (Java Micronaut + React, Monorepo)
-
-ENTRANDO: Skills 1→2→4→3 → Entendeu tudo
-
-DOCS FALTANTES: /plantuml → Diagramas
-
-DESENVOLVIMENTO: Agent Plan + Agent Sensei
-
-MANUTENÇÃO: /readme-updater + /plantuml (Update)
-
----
-
-## 👤 Autor
-
-**Matheus Felipe Correa**
-
-## 📄 Licença
-
-Este material é de uso livre para fins educacionais e profissionais. Credite o autor ao compartilhar.
+Atualize o README e os docs afetados com base no código atual, sem mudar o estilo do projeto e preservando o formato existente.
