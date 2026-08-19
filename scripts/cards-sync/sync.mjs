@@ -7,7 +7,8 @@ import {
   parseOnlyFilter,
   expandCardIdsWithParents,
   filterEdgesForCards,
-  filterExampleSampleCards,
+  filterKitSampleCards,
+  listCardsMarkdownFiles,
   discoverGitHubProjectNumber,
   resolveRepoConfig,
   writeSyncSummary,
@@ -242,26 +243,7 @@ function parseFrontmatter(content) {
 // ---------------------------------------------------------------------------
 
 async function listMarkdownFiles(dir) {
-  let entries;
-  try {
-    entries = await fs.readdir(dir, { withFileTypes: true });
-  } catch {
-    return [];
-  }
-
-  const files = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (entry.name === "config" || entry.name === "synced") continue;
-      files.push(...(await listMarkdownFiles(full)));
-    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
-      const lower = entry.name.toLowerCase();
-      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
-      files.push(full);
-    }
-  }
-  return files;
+  return listCardsMarkdownFiles(dir, { forSync: true });
 }
 
 // ---------------------------------------------------------------------------
@@ -1259,11 +1241,16 @@ function getFieldByName(project, fieldName) {
   return fields.find((f) => f?.name?.toLowerCase() === fieldName.toLowerCase()) || null;
 }
 
-function applyExampleSampleFilter(cards, onlyIds) {
-  const { cards: filtered, skipped } = filterExampleSampleCards(cards, onlyIds);
+function applyKitSampleFilter(cards, onlyIds) {
+  const { cards: filtered, skipped, ignoredOnlyTargets } = filterKitSampleCards(cards, onlyIds);
   if (skipped > 0) {
     log(
-      `Skipping ${skipped} EXAMPLE sample card(s) (kit reference only). Use --include-examples to sync them.`
+      `Skipping ${skipped} kit sample card(s) (EXAMPLE/TEMPLATE/SAMPLE — reference only). Real project cards sync normally.`
+    );
+  }
+  if (ignoredOnlyTargets.length) {
+    log(
+      `Ignored kit sample target(s): ${ignoredOnlyTargets.join(", ")} (use --include-samples only for kit maintenance).`
     );
   }
   return filtered;
@@ -1646,9 +1633,11 @@ async function runForwardSync() {
   }
 
   const onlyIds = parseOnlyFilter();
-  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  const syncableCards = applyKitSampleFilter(cards, onlyIds);
   if (!syncableCards.length) {
-    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    log(
+      "No cards to sync. Add project cards under .github/cards/{epics,features,stories,tasks}/ — kit samples in _examples/ and *.template.md are never synced."
+    );
     return;
   }
 
@@ -2014,9 +2003,11 @@ async function runForwardSyncJira(repoConfig, management) {
   }
 
   const onlyIds = parseOnlyFilter();
-  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  const syncableCards = applyKitSampleFilter(cards, onlyIds);
   if (!syncableCards.length) {
-    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    log(
+      "No cards to sync. Add project cards under .github/cards/{epics,features,stories,tasks}/ — kit samples in _examples/ and *.template.md are never synced."
+    );
     return;
   }
 
@@ -2201,9 +2192,11 @@ async function runForwardSyncAzure(repoConfig, management) {
   }
 
   const onlyIds = parseOnlyFilter();
-  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  const syncableCards = applyKitSampleFilter(cards, onlyIds);
   if (!syncableCards.length) {
-    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    log(
+      "No cards to sync. Add project cards under .github/cards/{epics,features,stories,tasks}/ — kit samples in _examples/ and *.template.md are never synced."
+    );
     return;
   }
 
@@ -2308,9 +2301,11 @@ async function runForwardSyncGitLab(repoConfig, management) {
   }
 
   const onlyIds = parseOnlyFilter();
-  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  const syncableCards = applyKitSampleFilter(cards, onlyIds);
   if (!syncableCards.length) {
-    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    log(
+      "No cards to sync. Add project cards under .github/cards/{epics,features,stories,tasks}/ — kit samples in _examples/ and *.template.md are never synced."
+    );
     return;
   }
 
@@ -2427,9 +2422,11 @@ async function runForwardSyncLinear(repoConfig, management) {
   }
 
   const onlyIds = parseOnlyFilter();
-  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  const syncableCards = applyKitSampleFilter(cards, onlyIds);
   if (!syncableCards.length) {
-    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    log(
+      "No cards to sync. Add project cards under .github/cards/{epics,features,stories,tasks}/ — kit samples in _examples/ and *.template.md are never synced."
+    );
     return;
   }
 

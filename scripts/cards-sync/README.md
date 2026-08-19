@@ -60,14 +60,18 @@ See **`.github/cards/CARD.template.md`** for the full friendly layout (emojis, c
 
 When you create a card with `card-refiner` and run sync, the issue body is formatted for readers on GitHub without hand-maintaining links.
 
-### EXAMPLE sample cards (not synced by default)
+### Kit reference vs project cards (never synced by default)
 
-The kit ships `EXAMPLE-*` cards under `.github/cards/` as **local reference** (validate passes; forward sync **skips** them).
+| Path / pattern | Purpose | Forward sync |
+|----------------|---------|--------------|
+| `CARD.template.md`, `*.template.md` | Blank template to copy | **Never** |
+| `.github/cards/_examples/**` | Sample cards for agents/docs | **Never** |
+| `card_id` `EXAMPLE-*`, `TEMPLATE-*`, `SAMPLE-*` | Misplaced kit samples (safety net) | **Never** |
+| `.github/cards/{epics,features,stories,tasks}/PROJ-*` | Your real work | **Yes** |
 
-- Default: `npm run cards:sync` syncs only your project cards (`PROJ-*`, `APP-*`, …)
-- To sync samples (e.g. demo): `npm run cards:sync -- --include-examples`
-- Or: `CARDS_SYNC_INCLUDE_EXAMPLES=true npm run cards:sync`
-- Explicit target still works: `npm run cards:sync -- --only EXAMPLE-STORY-001`
+Agents read `_examples/` and `CARD.template.md` for guidance. Only cards **you create** under `epics/`, `features/`, `stories/`, `tasks/` go to GitHub.
+
+Maintainers testing the kit itself: `--include-samples` (optional, not for normal adopters).
 
 ## File locations
 

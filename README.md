@@ -172,7 +172,7 @@ Em um **clone limpo** do DevForge, você recebe o kit base: agentes, skills, tem
 
 | Tipo | Exemplos | Quando aparece |
 |------|----------|----------------|
-| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `.github/cards/CARD.template.md`, `.github/cards/EXAMPLE-*`, `project.example.yml` | Clone inicial |
+| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `CARD.template.md`, `_examples/` (samples), `project.example.yml` | Clone inicial |
 | **Config do seu projeto** | `.github/project.yml`, `.env`, `.github/memory/PROJECT.md` preenchido | Após setup / `project-discovery` |
 | **Gerados por skills** | ADRs, retros, diagramas, specs, planos, resultados de auditoria | Quando a skill correspondente roda |
 | **Gerados por `project-architect`** | `Project_Architecture_Blueprint.md`, `Project_Folders_Structure_Blueprint.md` | Projetos greenfield — opcional em repos existentes |

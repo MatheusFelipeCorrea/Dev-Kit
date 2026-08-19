@@ -69,27 +69,74 @@ export function parseOnlyFilter(argv = process.argv) {
   return null;
 }
 
-/** Kit sample cards (EXAMPLE-*) are validated locally but skipped on forward sync by default. */
+/** Kit reference material — never forward-sync unless --include-samples (maintainers only). */
+export function isKitSampleCardId(cardId) {
+  return /^(EXAMPLE|TEMPLATE|SAMPLE)-/i.test(String(cardId || ""));
+}
+
+/** @deprecated use isKitSampleCardId */
 export function isExampleCardId(cardId) {
-  return /^EXAMPLE-/i.test(String(cardId || ""));
+  return isKitSampleCardId(cardId);
 }
 
-export function shouldIncludeExampleCards(argv = process.argv) {
-  if (argv.includes("--include-examples")) return true;
-  return String(process.env.CARDS_SYNC_INCLUDE_EXAMPLES || "").toLowerCase() === "true";
+export function isNonSyncCardPath(relativePath) {
+  const norm = String(relativePath || "").replace(/\\/g, "/").toLowerCase();
+  if (norm.endsWith(".template.md")) return true;
+  return /(^|\/)_examples(\/|$)/.test(norm);
 }
 
+export function shouldIncludeKitSamples(argv = process.argv) {
+  if (argv.includes("--include-samples") || argv.includes("--include-examples")) return true;
+  const env =
+    process.env.CARDS_SYNC_INCLUDE_SAMPLES || process.env.CARDS_SYNC_INCLUDE_EXAMPLES || "";
+  return String(env).toLowerCase() === "true";
+}
+
+/** @deprecated use shouldIncludeKitSamples */
+export function shouldIncludeExampleCards(argv) {
+  return shouldIncludeKitSamples(argv);
+}
+
+export function filterKitSampleCards(cards, onlyIds, options = {}) {
+  const includeSamples = options.includeSamples ?? shouldIncludeKitSamples(options.argv);
+  if (includeSamples) return { cards, skipped: 0, ignoredOnlyTargets: [] };
+
+  const filtered = cards.filter((c) => !isKitSampleCardId(c.cardId));
+  const skipped = cards.length - filtered.length;
+  const ignoredOnlyTargets = (onlyIds || []).filter((id) => isKitSampleCardId(id));
+  return { cards: filtered, skipped, ignoredOnlyTargets };
+}
+
+/** @deprecated use filterKitSampleCards */
 export function filterExampleSampleCards(cards, onlyIds, options = {}) {
-  const includeExamples =
-    options.includeExamples ?? shouldIncludeExampleCards(options.argv);
-  if (includeExamples) return { cards, skipped: 0 };
-  if (onlyIds?.some(isExampleCardId)) return { cards, skipped: 0 };
+  return filterKitSampleCards(cards, onlyIds, options);
+}
 
-  const skipped = cards.filter((c) => isExampleCardId(c.cardId)).length;
-  return {
-    cards: cards.filter((c) => !isExampleCardId(c.cardId)),
-    skipped,
-  };
+const CARD_LIST_SKIP_DIRS = new Set(["config", "synced"]);
+const CARD_LIST_SYNC_SKIP_DIRS = new Set(["_examples"]);
+
+export async function listCardsMarkdownFiles(dir, { forSync = false } = {}) {
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  const files = [];
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (CARD_LIST_SKIP_DIRS.has(entry.name)) continue;
+      if (forSync && CARD_LIST_SYNC_SKIP_DIRS.has(entry.name)) continue;
+      files.push(...(await listCardsMarkdownFiles(full, { forSync })));
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
+      const lower = entry.name.toLowerCase();
+      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
+      files.push(full);
+    }
+  }
+  return files;
 }
 
 export function expandCardIdsWithParents(cards, onlyIds) {

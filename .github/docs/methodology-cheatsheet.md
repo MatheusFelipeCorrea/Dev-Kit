@@ -9,7 +9,7 @@ Quick reference: **what each piece is**, **when to use it**, and **what is optio
 | **Script** | Deterministic CLI (`cards-sync`, validate, watch) | Sync cards, CI, automation | Yes (`scripts/cards-sync/`) |
 | **Runtime rule** | IDE-specific hints (Cursor, Copilot, Claude) | Always-on behavior for the assistant | Yes (`.cursor/rules/`, `CLAUDE.md`, `instructions/`) |
 | **Memory** | Persistent project context | Every session — stack, domain, decisions | Templates yes; content after setup |
-| **Card** | Markdown + YAML frontmatter for boards | Planning, refinement, sync | `CARD.template.md` + `EXAMPLE-*` samples |
+| **Card** | Markdown + YAML frontmatter for boards | Planning, refinement, sync | `CARD.template.md` + `_examples/` (reference only) |
 | **Blueprint** | Architecture / folder structure docs | Greenfield planning | **No** — created by `project-architect` |
 | **Exemplars** | Team reference file catalog | Point skills to "good" patterns | Optional — starter card examples only |
 | **ADR / Retro / Diagram** | Generated documentation artifacts | After explicit skill invocation | **No** — folders exist, files on demand |

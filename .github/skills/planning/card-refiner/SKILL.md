@@ -62,7 +62,7 @@ Cards are read in the IDE **and** rendered as GitHub Issues after sync. Use a co
 - Parent + Sub-issue links, optional section emoji polish, **🔄 DevForge sync** footer
 - After creating/editing cards: `npm run cards:validate` → `npm run cards:sync` (or `npm run cards:watch`)
 
-**EXAMPLE-* sample cards** in the kit are validated locally but **skipped on forward sync** (they never appear on the board unless you pass `--include-examples`).
+**Kit reference (`_examples/`, `CARD.template.md`):** validated locally for kit integrity; **never forward-synced**. Agents use them as guides when creating real cards under `epics/`, `features/`, etc.
 
 ## Language
 
@@ -243,7 +243,7 @@ For each card, create a file in `.github/cards/` with the proper frontmatter.
 
 ### Epic card example:
 
-File: `.github/cards/epics/EXAMPLE-EPIC-001.md`
+File: `.github/cards/_examples/epics/EXAMPLE-EPIC-001.md`
 
 ```markdown
 ---
@@ -283,7 +283,7 @@ categories:
 
 ### Story Backend card example:
 
-File: `.github/cards/stories/EXAMPLE-STORY-001.md`
+File: `.github/cards/_examples/stories/EXAMPLE-STORY-001.md`
 
 ```markdown
 ---

@@ -24,7 +24,7 @@ If backend is **not GitHub** (Jira, Azure DevOps, Linear, GitLab), route to `int
 |----------|------|
 | Sync configuration | `.github/cards/config/projects-map.json` |
 | Label presets (optional) | `.github/cards/config/labels.{locale}.json` |
-| Test card (optional) | Copy from `CARD.template.md` or adapt `EXAMPLE-EPIC-001.md` |
+| Reference samples | `.github/cards/_examples/` (read-only for agents; never synced) |
 | Last sync log (after init) | `.github/plans/cards/last-sync.md` |
 | Workflow confirmation | `.github/workflows/sync-cards.yml` (must exist) |
 

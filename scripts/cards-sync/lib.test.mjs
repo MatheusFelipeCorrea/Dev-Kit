@@ -7,8 +7,10 @@ import {
   parseOnlyFilter,
   cardIdFromRelativePath,
   isExampleCardId,
+  isKitSampleCardId,
+  filterKitSampleCards,
   filterExampleSampleCards,
-  shouldIncludeExampleCards,
+  shouldIncludeKitSamples,
 } from "./lib.mjs";
 
 test("pickBestGitHubProject prefers DevForge title", () => {
@@ -62,25 +64,27 @@ test("cardIdFromRelativePath extracts basename", () => {
   assert.equal(cardIdFromRelativePath("stories/PROJ-STORY-001.md"), "PROJ-STORY-001");
 });
 
-test("filterExampleSampleCards skips EXAMPLE-* by default", () => {
+test("filterKitSampleCards skips EXAMPLE/TEMPLATE/SAMPLE card IDs", () => {
   const cards = [
     { cardId: "EXAMPLE-EPIC-001" },
+    { cardId: "TEMPLATE-DRAFT-001" },
     { cardId: "PROJ-STORY-001" },
   ];
-  const result = filterExampleSampleCards(cards, null, { includeExamples: false });
-  assert.equal(result.skipped, 1);
+  const result = filterKitSampleCards(cards, null, { includeSamples: false });
+  assert.equal(result.skipped, 2);
   assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-STORY-001"]);
 });
 
-test("filterExampleSampleCards honors --only EXAMPLE explicit target", () => {
+test("filterKitSampleCards never syncs samples even with --only EXAMPLE", () => {
   const cards = [{ cardId: "EXAMPLE-STORY-001" }, { cardId: "PROJ-1" }];
-  const result = filterExampleSampleCards(cards, ["EXAMPLE-STORY-001"], { includeExamples: false });
-  assert.equal(result.skipped, 0);
-  assert.equal(result.cards.length, 2);
+  const result = filterKitSampleCards(cards, ["EXAMPLE-STORY-001"], { includeSamples: false });
+  assert.equal(result.skipped, 1);
+  assert.deepEqual(result.ignoredOnlyTargets, ["EXAMPLE-STORY-001"]);
+  assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-1"]);
 });
 
-test("shouldIncludeExampleCards respects flag and env", () => {
-  assert.equal(shouldIncludeExampleCards(["node", "sync.mjs", "--include-examples"]), true);
-  assert.equal(isExampleCardId("EXAMPLE-EPIC-001"), true);
-  assert.equal(isExampleCardId("PROJ-EPIC-001"), false);
+test("shouldIncludeKitSamples respects maintainer flag", () => {
+  assert.equal(shouldIncludeKitSamples(["node", "sync.mjs", "--include-samples"]), true);
+  assert.equal(isKitSampleCardId("SAMPLE-001"), true);
+  assert.equal(isKitSampleCardId("PROJ-EPIC-001"), false);
 });

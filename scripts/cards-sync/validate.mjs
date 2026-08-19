@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { listCardsMarkdownFiles } from "./lib.mjs";
 
 const workspaceRoot = process.cwd();
 const cardsRoot = path.join(workspaceRoot, ".github", "cards");
@@ -86,29 +87,6 @@ function parseFrontmatter(content) {
   return { meta, body };
 }
 
-async function listMarkdownFiles(dir) {
-  let entries;
-  try {
-    entries = await fs.readdir(dir, { withFileTypes: true });
-  } catch {
-    return [];
-  }
-
-  const files = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (entry.name === "config" || entry.name === "synced") continue;
-      files.push(...(await listMarkdownFiles(full)));
-    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
-      const lower = entry.name.toLowerCase();
-      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
-      files.push(full);
-    }
-  }
-  return files;
-}
-
 function extractCard(content, relativeFile) {
   const parsed = parseFrontmatter(content);
   if (!parsed?.meta?.card_id) return null;
@@ -133,7 +111,7 @@ function isValidDueDate(value) {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
 }
 
-const allMd = await listMarkdownFiles(cardsRoot);
+const allMd = await listCardsMarkdownFiles(cardsRoot);
 if (!allMd.length) {
   console.log("[validate] No card files found under .github/cards/");
   process.exit(0);
