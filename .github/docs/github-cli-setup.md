@@ -2,7 +2,7 @@
 
 **English:** [github-cli-setup-en.md](./github-cli-setup-en.md)
 
-O DevForge usa o **GitHub CLI** para automatizar quase tudo no backend **GitHub Projects**:
+O Dev-Kit usa o **GitHub CLI** para automatizar quase tudo no backend **GitHub Projects**:
 
 | Sem `gh` | Com `gh auth login` |
 |----------|---------------------|
@@ -89,7 +89,7 @@ gh auth login
 
 Responda ao assistente:
 
-| Pergunta | Recomendado para DevForge |
+| Pergunta | Recomendado para Dev-Kit |
 |----------|---------------------------|
 | GitHub.com ou Enterprise? | **GitHub.com** (ou sua instância Enterprise) |
 | Protocolo | **HTTPS** (mais simples no Windows) |
@@ -120,13 +120,13 @@ Se o Project estiver no **perfil do usuário** (não no repositório), crie um *
 
 ---
 
-## 4. Testar com o DevForge
+## 4. Testar com o Dev-Kit
 
 Pré-requisitos: kit copiado, `git remote` apontando para GitHub, Node 20+.
 
 ```bash
-# 1. Bootstrap completo (descobre repo, token, project → validate → sync)
-npm run cards:init -- --yes
+# 1. Bootstrap completo — ou peça /setup ao agente
+npm run devkit:setup -- --yes
 
 # 2. Modo contínuo (sync ao salvar cards)
 npm run cards:watch

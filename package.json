@@ -1,9 +1,14 @@
 {
-  "name": "devforge",
+  "name": "dev-kit",
   "private": true,
-  "description": "Portable AI agents and skills kit — cards-sync scripts",
+  "description": "Dev-Kit — portable AI agents and skills for software projects",
   "type": "module",
   "scripts": {
+    "devkit:help": "node scripts/devkit/help.mjs",
+    "devkit:doctor": "node scripts/devkit/doctor.mjs",
+    "devkit:setup": "node scripts/devkit/setup.mjs",
+    "devkit:sync": "node scripts/devkit/sync.mjs",
+    "devkit:cursor": "node scripts/devkit/install-cursor-rules.mjs",
     "cards:init": "node scripts/cards-sync/init.mjs",
     "cards:validate": "node scripts/cards-sync/validate.mjs",
     "cards:sync": "node scripts/cards-sync/sync.mjs",

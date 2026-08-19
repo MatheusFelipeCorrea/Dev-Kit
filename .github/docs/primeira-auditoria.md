@@ -2,7 +2,7 @@
 
 **English:** [first-audit-en.md](./first-audit-en.md)
 
-Guia passo a passo para rodar sua **primeira auditoria** com o DevForge.
+Guia passo a passo para rodar sua **primeira auditoria** com o Dev-Kit.
 
 Tempo estimado: 10–30 min (depende do tamanho do repo e se você pausa entre dimensões).
 
@@ -10,7 +10,7 @@ Tempo estimado: 10–30 min (depende do tamanho do repo e se você pausa entre d
 
 ## O que é uma auditoria aqui?
 
-O DevForge não altera código durante auditorias. Ele **lê o repo**, aplica checklists especializados e grava relatórios em `.github/audits/results/`.
+O Dev-Kit não altera código durante auditorias. Ele **lê o repo**, aplica checklists especializados e grava relatórios em `.github/audits/results/`.
 
 | Skill | Foco |
 |-------|------|
@@ -28,7 +28,7 @@ O DevForge não altera código durante auditorias. Ele **lê o repo**, aplica ch
 
 | Item | Obrigatório? |
 |------|--------------|
-| Kit DevForge copiado (`.github/`) | Sim |
+| Kit Dev-Kit copiado (`.github/`) | Sim |
 | `.github/project.yml` | Recomendado — peça *"project-discovery em Configure"* |
 | `.github/memory/PROJECT.md` | Opcional — melhora contexto |
 | Overlay de domínio | Opcional — `.github/audits/overlays/seu-projeto.md` |

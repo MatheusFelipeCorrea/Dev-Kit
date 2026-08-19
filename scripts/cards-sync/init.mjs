@@ -34,7 +34,7 @@ function runScript(scriptName, args = []) {
 }
 
 async function main() {
-  log("DevForge cards init (GitHub automation bootstrap)");
+  log("Dev-Kit cards init (GitHub automation bootstrap)");
   log("");
 
   const repositorySlug = process.env.GITHUB_REPOSITORY || detectRepoFromGit() || "unknown/unknown";
@@ -48,7 +48,7 @@ async function main() {
   const config = await readJsonIfExists(configPath);
   if (!config) {
     log("ERROR: missing .github/cards/config/projects-map.json");
-    log("Run cards-sync-setup skill or copy from DevForge kit.");
+    log("Run cards-sync-setup skill or copy from Dev-Kit.");
     process.exit(1);
   }
 
@@ -97,7 +97,7 @@ async function main() {
   }
 
   log("");
-  log("Step 2/6 — Reset repository labels (DevForge catalog)...");
+  log("Step 2/6 — Reset repository labels (Dev-Kit catalog)...");
   const labelsCode = runScript("labels-reset.mjs", argYes ? ["--yes"] : ["--dry-run"]);
   if (labelsCode !== 0) process.exit(labelsCode);
 

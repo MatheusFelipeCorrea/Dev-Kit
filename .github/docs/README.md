@@ -1,4 +1,4 @@
-# DevForge Documentation
+# Dev-Kit Documentation
 
 Central index. Use the table below to find **which document to read**.
 
@@ -8,9 +8,12 @@ Central index. Use the table below to find **which document to read**.
 
 | Your goal | Read in this order |
 |--------------|------------------|
-| **Never used DevForge** | [guide-complete-en.md](./guide-complete-en.md) · [PT](./guia-completo.md) |
+| **Never used Dev-Kit** | [guide-complete-en.md](./guide-complete-en.md) · [PT](./guia-completo.md) |
+| **Comandos rápidos (agente + npm)** | [comandos-rapidos.md](./comandos-rapidos.md) · [EN](./quick-commands-en.md) |
 | **Quick setup (basics understood)** | [setup-quickstart-en.md](./setup-quickstart-en.md) · [PT](./setup-quickstart.md) |
-| **GitHub cards sync only** | [github-cli-setup-en.md](./github-cli-setup-en.md) → `npm run cards:init -- --yes` |
+| **Armadilhas / gaps de aprendizado** | [armadilhas-comuns.md](./armadilhas-comuns.md) · [EN](./common-pitfalls-en.md) |
+| **Organização do kit** | [organizacao.md](./organizacao.md) · [STRUCTURE.md](../STRUCTURE.md) |
+| **GitHub cards sync only** | [github-cli-setup-en.md](./github-cli-setup-en.md) → `/setup` ou `npm run devkit:setup -- --yes` |
 | **Jira / Azure / Linear / GitLab** | [choose-backend-en.md](./choose-backend-en.md) · [PT](./escolher-backend.md) |
 | **Where generated files go** | [where-outputs-go-en.md](./where-outputs-go-en.md) · [PT](./onde-ficam-os-outputs.md) · [skill map](./skills-output-map.md) |
 | **Docs consistency / anti-duplication** | [doc-maintenance-policy.md](./doc-maintenance-policy.md) |
@@ -87,11 +90,11 @@ flowchart TB
 
 ## Fresh clone vs generated artifacts
 
-A **fresh DevForge clone** ships the kit (agents, skills, templates, example cards, guides). Many paths below are **empty until a skill runs** — do not treat them as missing prerequisites.
+A **fresh Dev-Kit clone** ships the kit (agents, skills, templates, example cards, guides). Many paths below are **empty until a skill runs** — do not treat them as missing prerequisites.
 
 | Category | Examples | Present on clone? |
 |----------|----------|-------------------|
-| **Kit (always)** | `agents/`, `skills/`, `memory/` templates, `EXAMPLE-*` cards, `project.example.yml` | Yes |
+| **Kit (always)** | `agents/`, `skills/`, `memory/` templates, `CARD.template.md`, `_examples/` samples, `project.example.yml` | Yes |
 | **Project config** | `project.yml`, filled `memory/PROJECT.md` | After setup / `project-discovery` |
 | **Skill outputs** | ADRs, retros, diagrams, specs, plans, audit results | Created on demand |
 | **Greenfield blueprints** | `Project_Architecture_Blueprint.md`, `Project_Folders_Structure_Blueprint.md` | Only after `project-architect` (optional for existing repos) |
@@ -112,5 +115,5 @@ Artifacts that skills and agents create at runtime — see [where-outputs-go-en.
 - Diagrams → `.github/diagrams/` ([README](../diagrams/README.md))
 - Audit reports → `.github/audits/results/`
 - Implementation plans → `.github/plans/implementations/`
-- Syncable cards → `.github/cards/`
+- Syncable cards → `.github/cards/{epics,features,stories,tasks}/` (reference: `_examples/`, `CARD.template.md` — never synced)
 - Last sync → `.github/plans/cards/last-sync.md`

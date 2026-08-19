@@ -1,4 +1,4 @@
-# Contribuindo com o DevForge
+# Contribuindo com o Dev-Kit
 
 Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 

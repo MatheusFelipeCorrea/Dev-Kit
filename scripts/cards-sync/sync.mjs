@@ -491,7 +491,7 @@ function buildIssueBody(card, linkContext = null) {
   const lines = [body, "", "---"];
 
   if (linkContext) {
-    lines.push("", "> **🔄 DevForge sync**", ">");
+    lines.push("", "> **🔄 Dev-Kit sync**", ">");
     lines.push(`> - **Card:** \`${card.cardId}\``);
     if (card.parent) {
       lines.push(
@@ -981,7 +981,7 @@ async function applySelectFieldColors(field, colorByName, label) {
   }
 }
 
-async function ensureDevForgeFieldColors(project, repoConfig) {
+async function ensureKitFieldColors(project, repoConfig) {
   const fieldMap = repoConfig.fieldMap || {};
   const typeField = getFieldByName(project, fieldMap.type || "Type")
     || getFieldByName(project, "Tipo");
@@ -997,7 +997,7 @@ const DEVFORGE_PROJECT_VIEWS = [
   { name: "Roadmap", layout: "ROADMAP_LAYOUT" },
 ];
 
-function isDevForgeViewsConfigured(views) {
+function isKitViewsConfigured(views) {
   return (
     views.length === 3 &&
     views[0]?.name === "Board" &&
@@ -1056,11 +1056,11 @@ async function updateProjectView(viewId, { name, layout }) {
   );
 }
 
-async function ensureDevForgeProjectViews(project) {
+async function ensureKitProjectViews(project) {
   if (!project?.id) return;
 
   let views = await listProjectViews(project.id);
-  if (isDevForgeViewsConfigured(views)) {
+  if (isKitViewsConfigured(views)) {
     log("  = Project views already configured (Board → Tabela → Roadmap)");
     return;
   }
@@ -1111,13 +1111,13 @@ async function ensureStatusFieldOptions(project, repoConfig) {
   const allPresent = DEFAULT_STATUS_OPTIONS.every((opt) => existing.has(normalizeText(opt)));
 
   if (allPresent && (statusField.options || []).length >= DEFAULT_STATUS_OPTIONS.length) {
-    log(`  = Status field already has DevForge workflow options`);
+    log(`  = Status field already has Dev-Kit workflow options`);
     return;
   }
 
   try {
     await updateSingleSelectFieldOptions(statusField.id, DEFAULT_STATUS_OPTIONS, "status");
-    log(`  ~ Status field updated with DevForge workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
+    log(`  ~ Status field updated with Dev-Kit workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
   } catch (error) {
     log(`  WARN: Could not update Status options automatically: ${error.message}`);
     log(`  Customize Status options manually in Project Settings.`);
@@ -1170,8 +1170,8 @@ async function autoCreateProject(owner, repoConfig) {
     throw new Error(`Cannot resolve owner node ID for "${owner}". Check permissions.`);
   }
 
-  // Name requirement: "[RepoName] DevForge Project"
-  const projectTitle = `${repoName} DevForge Project`;
+  // Name requirement: "[RepoName] Dev-Kit Project"
+  const projectTitle = `${repoName} Dev-Kit Project`;
   const repositoryId = await getRepositoryNodeId(repoOwner, repoName);
   const created = await createProjectV2(ownerId, projectTitle, repositoryId);
   log(`Project created: "${projectTitle}" (number ${created.number})`);
@@ -1210,8 +1210,8 @@ async function autoCreateProject(owner, repoConfig) {
 
   const refreshed = await getProject(owner, created.number);
   await ensureStatusFieldOptions(refreshed, repoConfig);
-  await ensureDevForgeFieldColors(refreshed, repoConfig);
-  await ensureDevForgeProjectViews(refreshed);
+  await ensureKitFieldColors(refreshed, repoConfig);
+  await ensureKitProjectViews(refreshed);
   await ensureSprintField(refreshed, repoConfig);
 
   // Auto-save projectNumber back to config
@@ -1229,7 +1229,7 @@ async function autoCreateProject(owner, repoConfig) {
   }
 
   log("");
-  log("NOTE: Status field configured with DevForge workflow columns.");
+  log("NOTE: Status field configured with Dev-Kit workflow columns.");
   log("Sprint iteration field configured (cards may keep sprint: null until sprints are defined).");
 
   return created;
@@ -1747,8 +1747,8 @@ async function runForwardSync() {
     } else {
       log(`Project found: owner=${projectOwner} number=${projectNumber}`);
       await ensureStatusFieldOptions(project, repoConfig);
-      await ensureDevForgeFieldColors(project, repoConfig);
-      await ensureDevForgeProjectViews(project);
+      await ensureKitFieldColors(project, repoConfig);
+      await ensureKitProjectViews(project);
       await ensureSprintField(project, repoConfig);
       project = await getProject(projectOwner, projectNumber);
     }

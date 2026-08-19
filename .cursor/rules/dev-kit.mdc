@@ -1,9 +1,9 @@
 ---
-description: DevForge kit integration rules for Cursor
+description: Dev-Kit integration rules for Cursor
 globs: "**/*"
 ---
 
-# DevForge — Cursor Rules
+# Dev-Kit — Cursor Rules
 
 You have access to a full AI development kit in `.github/`. Use it.
 
@@ -20,7 +20,7 @@ Before any task, read:
 Skills live in `.github/skills/` organized by category:
 
 - **planning/** — hypothesis-forge, acceptance-spec, card-refiner, project-architect, refactor-guide, sprint-retro
-- **setup/** — project-discovery, cards-sync-setup, integration-bridge
+- **setup/** — project-startup, project-discovery, cards-sync-setup, devkit-ops, integration-bridge
 - **quality/** — full-audit, security-audit, architecture-audit, devops-audit, code-review, po-audit, ux-audit, testing-strategy, tech-debt-tracker
 - **docs/** — adr-generator, plantuml-generator, readme-updater, changelog-generator
 
@@ -30,6 +30,41 @@ When the user asks for any of these capabilities, read the corresponding `SKILL.
 
 - `.github/agents/implementation-plan.agent.md` — for implementing cards/tickets
 - `.github/agents/mentoring.agent.md` — for teaching/explaining
+
+## Command shortcuts (run skills — prefer over asking user to use npm)
+
+**You should run terminal commands** via devkit-ops when the user wants sync/doctor/setup. Full reference: `.github/docs/comandos-rapidos.md`.
+
+| User says | Skill / action |
+|-----------|----------------|
+| `/help` or "lista comandos Dev-Kit" | `npm run devkit:help` + summarize |
+| `/setup` or "configura o Dev-Kit" | `project-startup` |
+| `/doctor` or "doctor do Dev-Kit" | `devkit-ops` → `npm run devkit:doctor` |
+| `/sync` or "sincroniza os cards" | `devkit-ops` → `npm run devkit:sync` |
+| `/discover` or "descobre esse projeto" | `project-discovery` |
+| `/refine` or "refina em cards" | `card-refiner` |
+| `/explore` | `hypothesis-forge` |
+| `/spec` | `acceptance-spec` |
+| `/architect` | `project-architect` |
+| `/adr` | `adr-generator` |
+| `/audit` or "auditoria completa" | `full-audit` |
+| `/security` | `security-audit` |
+| `/architecture` | `architecture-audit` |
+| `/devops` | `devops-audit` |
+| `/po` | `po-audit` |
+| `/ux` | `ux-audit` |
+| `/review` | `code-review` |
+| `/implement` | `implementation-plan` agent |
+| `/mentor` | `mentoring` agent |
+| `/refactor` | `refactor-guide` |
+| `/retro` | `sprint-retro` |
+| `/test-plan` | `testing-strategy` |
+| `/tech-debt` | `tech-debt-tracker` |
+| `/changelog` | `changelog-generator` |
+| `/connect` | `integration-bridge` |
+| `/cards-setup` | `cards-sync-setup` |
+| `/readme` | `readme-updater` |
+| `/diagram` | `plantuml-generator` |
 
 ## Key Principles
 
@@ -53,7 +88,7 @@ When the user asks to change a card in conversation (e.g. "move EXAMPLE-STORY-00
 
 1. Find the file under `.github/cards/` by `card_id`
 2. Edit frontmatter in place (`status`, `priority`, etc.) — never duplicate the card
-3. Run `node scripts/cards-sync/validate.mjs` then `node scripts/cards-sync/sync.mjs`
+3. Run `npm run devkit:sync` (via devkit-ops — do not ask user to run npm)
 4. Explicit `status` in frontmatter updates the GitHub Project Status column on sync (Jira/other: description metadata only today)
 
 Read `.github/skills/planning/card-refiner/SKILL.md` section "Card evolution during conversation" for status aliases and full workflow.

@@ -68,7 +68,7 @@ Use Conventional Commits:
 - Follow existing conventions discovered from the codebase.
 - When creating new files, reference `project.yml` for paths and existing patterns.
 - Never invent a new organizational pattern without checking what exists.
-- **DevForge outputs** — every skill writes to a defined folder (see `.github/docs/onde-ficam-os-outputs.md`):
+- **Dev-Kit outputs** — every skill writes to a defined folder (see `.github/docs/onde-ficam-os-outputs.md`):
   - Cards (sync) → `.github/cards/`
   - Specs → `.github/plans/specs/`
   - Plans → `.github/plans/implementations/`
@@ -98,10 +98,12 @@ Use Conventional Commits:
 
 ## Available Skills
 
-When a task maps to an existing skill, suggest using it:
+When a task maps to an existing skill, suggest using it — **or run npm yourself** via `devkit-ops` when the user wants sync/doctor without using the terminal.
 
-| Need | Skill |
-|------|-------|
+| Need | Skill / command |
+|------|-----------------|
+| **Full Dev-Kit setup** | `project-startup` — or user says `/setup` |
+| **Sync / doctor / validate cards** | `devkit-ops` — runs `npm run devkit:sync`, `devkit:doctor` |
 | Understand project structure | `project-discovery` |
 | Plan greenfield architecture | `project-architect` |
 | Refine ideas into cards | `card-refiner` |
@@ -133,7 +135,7 @@ If the user asks to move or update a card (e.g. "mova o card X para Done"):
 
 1. Edit the existing file in `.github/cards/{epics|features|stories|tasks}/` — update `status` or other frontmatter fields
 2. Keep `card_id` unchanged
-3. Run `node scripts/cards-sync/validate.mjs` and `node scripts/cards-sync/sync.mjs`
+3. Run `npm run devkit:sync` (or `devkit-ops` skill)
 4. **GitHub:** Project Status column updates. **Jira/other:** status in issue metadata (native board not mapped yet)
 5. Allowed status values: Backlog, Functional Refinement, Technical Refinement, In Progress, In Tests, In Revision, Done
 

@@ -97,12 +97,12 @@ test("enrichBodySubIssues replaces sub-issue bullets with GitHub links", () => {
     ["TEST-STORY-002", { number: 37 }],
   ]);
   const body = `## Sub-issues\n\n- TEST-STORY-001\n- TEST-STORY-002\n`;
-  const enriched = enrichBodySubIssues(body, issueByCardId, "MatheusFelipeCorrea", "DevForge-Kit");
-  assert.match(enriched, /\[TEST-STORY-001 \(#36\)\]\(https:\/\/github\.com\/MatheusFelipeCorrea\/DevForge-Kit\/issues\/36\)/);
+  const enriched = enrichBodySubIssues(body, issueByCardId, "acme-org", "Dev-Kit");
+  assert.match(enriched, /\[TEST-STORY-001 \(#36\)\]\(https:\/\/github\.com\/acme-org\/Dev-Kit\/issues\/36\)/);
   assert.match(enriched, /\[TEST-STORY-002 \(#37\)\]/);
 });
 
-test("buildIssueBody adds DevForge sync footer and parent links", () => {
+test("buildIssueBody adds Dev-Kit sync footer and parent links", () => {
   const card = {
     cardId: "TEST-FEATURE-001",
     relativeFile: ".github/cards/features/TEST-FEATURE-001.md",
@@ -115,14 +115,14 @@ test("buildIssueBody adds DevForge sync footer and parent links", () => {
   ]);
   const body = buildIssueBody(card, {
     issueByCardId,
-    owner: "MatheusFelipeCorrea",
-    name: "DevForge-Kit",
+    owner: "acme-org",
+    name: "Dev-Kit",
   });
 
   assert.match(body, /## 👆 Parent|## Parent/);
   assert.match(body, /\[TEST-EPIC-001 \(#32\)\]/);
   assert.match(body, /\[TEST-STORY-001 \(#36\)\]/);
-  assert.match(body, /🔄 DevForge sync/);
+  assert.match(body, /🔄 Dev-Kit sync/);
   assert.match(body, /CARD_ID: TEST-FEATURE-001/);
   assert.match(body, /PARENT_CARD_ID: TEST-EPIC-001/);
 });

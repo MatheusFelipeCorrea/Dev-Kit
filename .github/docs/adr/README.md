@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-This folder is **generated on demand** — it is empty in a fresh DevForge clone.
+This folder is **generated on demand** — it is empty in a fresh Dev-Kit clone.
 
 ## When files appear here
 

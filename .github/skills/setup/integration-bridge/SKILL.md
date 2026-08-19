@@ -1,7 +1,7 @@
 ---
 name: integration-bridge
 description: >-
-  Prepares DevForge integration with external project management tools (Jira,
+  Prepares Dev-Kit integration with external project management tools (Jira,
   Azure DevOps, Linear, GitLab) via MCP or API. It configures the bridge and
   maps fields. Current sync engine status: GitHub is full, Jira has forward
   + reverse adapter, and Azure/Linear/GitLab have forward best-effort adapters.
@@ -9,7 +9,7 @@ description: >-
 
 # Integration Bridge
 
-Configures and manages connections between DevForge cards and external project
+Configures and manages connections between Dev-Kit cards and external project
 management tools.
 
 ## Output
@@ -120,9 +120,9 @@ Already configured via `projects-map.json`. No extra setup needed.
 
 ## Step 3 — Field mapping
 
-Create a mapping between DevForge card frontmatter fields and the external tool's fields:
+Create a mapping between Dev-Kit card frontmatter fields and the external tool's fields:
 
-| DevForge field | GitHub | Jira | Azure DevOps | Linear | GitLab |
+| Dev-Kit field | GitHub | Jira | Azure DevOps | Linear | GitLab |
 |---------------|--------|------|--------------|--------|--------|
 | `card_id` | Issue title prefix | Issue key | Work Item ID | Issue ID | Issue IID |
 | `type` | Label | Issue Type | Work Item Type | Label | Label |
@@ -135,10 +135,10 @@ Create a mapping between DevForge card frontmatter fields and the external tool'
 
 ## Step 4 — Test connection
 
-1. Run a dry-run sync: `node scripts/cards-sync/sync.mjs --dry-run`
+1. Run a dry-run sync: `npm run devkit:sync -- --dry-run`
 2. For Jira backend, run:
-   - `CARDS_SYNC_BACKEND=jira node scripts/cards-sync/sync.mjs --dry-run`
-   - `CARDS_SYNC_BACKEND=jira node scripts/cards-sync/sync.mjs`
+   - `CARDS_SYNC_BACKEND=jira npm run devkit:sync -- --dry-run`
+   - `CARDS_SYNC_BACKEND=jira npm run devkit:sync`
 3. Verify card/frontmatter schema and field mapping consistency
 4. For Azure/Linear/GitLab backends, run dry-run forward sync; `doctor.mjs` remote checks cover GitHub/Jira only today
 

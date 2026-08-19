@@ -1,9 +1,12 @@
-# Audit results (generated, can be large)
-.github/audits/results/
+# Audit results (generated — keep folder scaffold)
+.github/audits/results/*
+!.github/audits/results/.gitkeep
 
-# Plans output (generated per-session)
-.github/plans/implementations/
-.github/plans/specs/
+# Plans output (generated per-session — keep folder scaffold)
+.github/plans/implementations/*
+!.github/plans/implementations/.gitkeep
+.github/plans/specs/*
+!.github/plans/specs/.gitkeep
 .github/plans/cards/last-sync.md
 
 # OS files

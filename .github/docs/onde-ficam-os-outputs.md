@@ -2,7 +2,7 @@
 
 **English:** [where-outputs-go-en.md](./where-outputs-go-en.md)
 
-Sim — **cada skill grava na pasta certa**. Este mapa mostra onde encontrar cada tipo de artefato depois que você usar o DevForge.
+Sim — **cada skill grava na pasta certa**. Este mapa mostra onde encontrar cada tipo de artefato depois que você usar o Dev-Kit.
 
 > **Clone limpo:** pastas como `adr/`, `retros/`, `diagrams/`, `plans/` e `audits/results/` podem estar vazias até a primeira execução da skill. Veja [README — clone vs artefatos gerados](../../README.md#clone-limpo-vs-artefatos-gerados).
 

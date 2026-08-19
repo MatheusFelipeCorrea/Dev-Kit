@@ -180,7 +180,7 @@ async function main() {
   }
 
   log(`Repository: ${repositorySlug}`);
-  log(`Locale: ${locale} (${canonical.size} DevForge labels)`);
+  log(`Locale: ${locale} (${canonical.size} Dev-Kit labels)`);
   log(`Keep Dependabot labels: ${keepDependabot ? "yes" : "no"}`);
   log("");
 
@@ -208,12 +208,12 @@ async function main() {
   log("");
 
   if (toDelete.length) {
-    log("Removing non-DevForge labels...");
+    log("Removing non-Dev-Kit labels...");
     for (const name of toDelete.sort()) deleteLabel(owner, repo, name, dryRun);
   }
 
   log("");
-  log("Ensuring DevForge catalog labels...");
+  log("Ensuring Dev-Kit catalog labels...");
   for (const name of [...canonical].sort()) createLabel(owner, repo, name, dryRun);
 
   log("");

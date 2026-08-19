@@ -4,13 +4,13 @@ import process from "node:process";
 
 const workspaceRoot = process.cwd();
 const hookPath = path.join(workspaceRoot, ".git", "hooks", "pre-commit");
-const marker = "# devforge-cards-validate";
+const marker = "# devkit-cards-validate";
 
 const hookBody = `#!/bin/sh
 ${marker}
 changed=$(git diff --cached --name-only --diff-filter=ACM | grep '^\\.github/cards/.*\\.md$' || true)
 if [ -n "$changed" ]; then
-  echo "[devforge] Validating staged card files..."
+  echo "[dev-kit] Validating staged card files..."
   node scripts/cards-sync/validate.mjs || exit 1
 fi
 `;
@@ -32,13 +32,13 @@ async function main() {
   } catch {}
 
   if (existing.includes(marker)) {
-    console.log("[install-hook] DevForge pre-commit hook already installed.");
+    console.log("[install-hook] Dev-Kit pre-commit hook already installed.");
     return;
   }
 
   if (existing.trim() && !argYes) {
     console.log("[install-hook] pre-commit hook already exists with custom content.");
-    console.log("[install-hook] Re-run with --yes to append DevForge validation block.");
+    console.log("[install-hook] Re-run with --yes to append Dev-Kit validation block.");
     process.exit(1);
   }
 

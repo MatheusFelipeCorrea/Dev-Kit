@@ -1,6 +1,6 @@
 # First repository audit
 
-Step-by-step guide to run your **first audit** with DevForge.
+Step-by-step guide to run your **first audit** with Dev-Kit.
 
 Estimated time: 10–30 min (depends on repo size and whether you pause between dimensions).
 
@@ -10,7 +10,7 @@ Estimated time: 10–30 min (depends on repo size and whether you pause between 
 
 ## What is an audit here?
 
-DevForge does **not** change code during audits. It **reads the repo**, applies specialized checklists, and writes reports to `.github/audits/results/`.
+Dev-Kit does **not** change code during audits. It **reads the repo**, applies specialized checklists, and writes reports to `.github/audits/results/`.
 
 | Skill | Focus |
 |-------|------|
@@ -28,7 +28,7 @@ DevForge does **not** change code during audits. It **reads the repo**, applies 
 
 | Item | Required? |
 |------|--------------|
-| DevForge kit copied (`.github/`) | Yes |
+| Dev-Kit copied (`.github/`) | Yes |
 | `.github/project.yml` | Recommended — ask *"project-discovery in Configure"* |
 | `.github/memory/PROJECT.md` | Optional — improves context |
 | Domain overlay | Optional — `.github/audits/overlays/your-project.md` |

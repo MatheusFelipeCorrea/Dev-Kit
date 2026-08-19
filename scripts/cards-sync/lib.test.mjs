@@ -13,10 +13,10 @@ import {
   shouldIncludeKitSamples,
 } from "./lib.mjs";
 
-test("pickBestGitHubProject prefers DevForge title", () => {
+test("pickBestGitHubProject prefers Dev-Kit title", () => {
   const projects = [
     { number: 1, title: "Random Board" },
-    { number: 7, title: "myrepo DevForge Project" },
+    { number: 7, title: "myrepo Dev-Kit Project" },
   ];
   const picked = pickBestGitHubProject(projects, "myrepo");
   assert.equal(picked.number, 7);

@@ -59,8 +59,8 @@ Cards are read in the IDE **and** rendered as GitHub Issues after sync. Use a co
 
 ### What sync adds on GitHub
 
-- Parent + Sub-issue links, optional section emoji polish, **🔄 DevForge sync** footer
-- After creating/editing cards: `npm run cards:validate` → `npm run cards:sync` (or `npm run cards:watch`)
+- Parent + Sub-issue links, optional section emoji polish, **🔄 Dev-Kit sync** footer
+- After creating/editing cards: run `npm run devkit:sync` via **devkit-ops** (agent) — or `npm run cards:watch` for auto-sync
 
 **Kit reference (`_examples/`, `CARD.template.md`):** validated locally for kit integrity; **never forward-synced**. Agents use them as guides when creating real cards under `epics/`, `features/`, etc.
 
@@ -407,21 +407,17 @@ The user may evolve cards **after creation** with natural language. Treat these 
    - Update frontmatter and/or body
    - Never change `card_id`
    - Use only allowed `status` values (see below)
-3. **Validate**
+3. **Validate + sync** (run via **devkit-ops** — agent executes npm; user should not need terminal)
    ```bash
-   npm run cards:validate
-   ```
-4. **Sync to remote**
-   ```bash
-   npm run cards:sync
+   npm run devkit:sync
    ```
    Or keep watch mode running while editing:
    ```bash
    npm run cards:watch
    ```
-   - For Jira backend: `CARDS_SYNC_BACKEND=jira npm run cards:sync`
+   - For Jira backend: `CARDS_SYNC_BACKEND=jira npm run devkit:sync`
    - Incremental: `npm run cards:sync -- --only CARD_ID`
-   - If sync cannot run (no token), edit the file anyway and tell the user to run sync or push
+   - If sync cannot run (no token), edit the file anyway and tell the user to run `/sync` after `gh auth login`
 5. **Confirm** what changed: card file path, field old → new, and backend effect:
    - **GitHub:** Project Status column updates on forward sync
    - **Jira/Azure/Linear/GitLab:** status stored in issue description metadata (native board column not updated yet)

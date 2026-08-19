@@ -1,6 +1,6 @@
 # START HERE — Setup em 5 minutos
 
-Guia rápido para usar o DevForge em um repositório novo.
+Guia rápido para usar o Dev-Kit em um repositório novo.
 
 **English:** [setup-quickstart-en.md](./setup-quickstart-en.md)
 
@@ -8,11 +8,23 @@ Guia rápido para usar o DevForge em um repositório novo.
 
 ---
 
+## Caminho mais fácil (sem terminal)
+
+Peça ao agente de IA:
+
+> **`/setup`** — ou *"Configura o Dev-Kit neste repo"*
+
+O agente roda `project-discovery`, preenche memória (com sua ajuda), executa `npm run devkit:setup` por você e oferece próximos passos.
+
+Outros atalhos: **`/sync`**, **`/doctor`**, **`/audit`**, **`/refine`** — lista completa em [comandos-rapidos.md](./comandos-rapidos.md).
+
+---
+
 ## O que você precisa
 
 | Item | Obrigatório? | Para quê |
 |------|--------------|----------|
-| Node.js 20+ | Sim | Rodar `validate`, `doctor`, `sync`, `cards:init` |
+| Node.js 20+ | Sim | Rodar `devkit:*`, `cards:*` |
 | Repositório GitHub | Sim (backend GitHub) | Issues + Projects |
 | **`gh` CLI + login** | **Sim para automação local** | Auto-detect de token, repo e Project — [tutorial](./github-cli-setup.md) |
 | GitHub Project existente | Não | Se não existir, o sync cria automaticamente |
@@ -30,15 +42,15 @@ Copie para a **raiz do seu repositório**:
 |-----------------|--------------|
 | `.github/` | Sim |
 | `scripts/` | Sim (cards-sync) |
-| `package.json` | Recomendado (`npm run cards:*`) |
+| `package.json` | Recomendado (`npm run devkit:*` e `cards:*`) |
 | `.env.example` | Recomendado (copie para `.env` se não usar `gh`) |
 | `CLAUDE.md` | Se usar Claude Code |
-| `.cursor/rules/` | Se usar Cursor |
+| `.cursor/rules/` | Se usar Cursor (incluso no kit completo) |
 
 ```
 .github/
 scripts/
-package.json       ← atalhos npm run cards:*
+package.json       ← atalhos npm run devkit:* e cards:*
 .env.example       ← alternativa ao gh auth login
 ```
 
@@ -81,11 +93,13 @@ gh auth login
 gh auth status
 ```
 
-3. Bootstrap do cards-sync:
+3. Bootstrap do Dev-Kit:
 
 ```bash
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
 ```
+
+Equivalente granular: `npm run cards:init -- --yes`. **Ou peça `/setup` ao agente.**
 
 Sem `gh`, configure `GITHUB_TOKEN` no `.env` — veja [`.env.example`](../../.env.example).
 
@@ -133,7 +147,7 @@ Deixe `projectNumber: null` e `autoCreateProject: true`.
 
 O sync cria automaticamente um Project chamado:
 
-**`[NomeDoRepositorio] DevForge Project`**
+**`[NomeDoRepositorio] Dev-Kit Project`**
 
 ---
 
@@ -229,7 +243,7 @@ Se você cria o Project manualmente, use estas colunas (EN):
 Se você fez o [Passo 2.5](#passo-25--github-cli-automação-local), o bootstrap já rodou validate + dry-run. Para repetir ou forçar sync:
 
 ```bash
-npm run cards:init -- --yes    # bootstrap completo + sync real
+npm run devkit:setup -- --yes    # bootstrap completo + sync real
 npm run cards:watch            # sync incremental ao salvar cards
 ```
 
@@ -276,7 +290,7 @@ npm run cards:sync
 npm run cards:watch
 ```
 
-O sync publica no GitHub com **links** (parent/sub-issues), seções mais legíveis e rodapé **🔄 DevForge sync**.
+O sync publica no GitHub com **links** (parent/sub-issues), seções mais legíveis e rodapé **🔄 Dev-Kit sync**.
 
 > **Referência ≠ board:** `_examples/`, `*.template.md` e IDs `EXAMPLE-*`/`TEMPLATE-*`/`SAMPLE-*` **nunca** vão pro GitHub Project. Só cards criados em `epics/`, `features/`, `stories/`, `tasks/` (ex.: `PROJ-EPIC-001`).
 
@@ -378,8 +392,8 @@ Lista completa: [`.env.example`](../../.env.example)
 Atalhos npm (opcional — requer `package.json` na raiz):
 
 ```bash
-npm run cards:init          # bootstrap completo (GitHub)
-npm run cards:init -- --yes # + sync real
+npm run devkit:setup -- --yes    # bootstrap completo (GitHub)
+npm run devkit:sync              # validate + sync
 npm run cards:validate
 npm run cards:sync
 npm run cards:watch         # sync incremental ao salvar cards

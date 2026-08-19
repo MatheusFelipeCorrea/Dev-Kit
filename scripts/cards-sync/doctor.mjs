@@ -174,11 +174,11 @@ function checkStatusOptions(statusField) {
   );
 
   if (!missing.length) {
-    ok("Status field options match DevForge flow (7 columns).");
+    ok("Status field options match Dev-Kit flow (7 columns).");
     return true;
   }
 
-  warn(`Status field is missing DevForge options: ${missing.join(", ")}.`);
+  warn(`Status field is missing Dev-Kit options: ${missing.join(", ")}.`);
   warn(
     `Current Status options: ${optionNames.join(", ") || "(none)"}`
   );

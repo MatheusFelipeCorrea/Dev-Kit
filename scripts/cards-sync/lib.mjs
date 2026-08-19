@@ -164,12 +164,12 @@ export function filterEdgesForCards(edges, cardIds) {
 export function pickBestGitHubProject(projects, repoName) {
   if (!Array.isArray(projects) || projects.length === 0) return null;
 
-  const devforgeTitle = `${repoName} DevForge Project`;
-  const exact = projects.find((p) => p.title === devforgeTitle);
+  const kitTitle = `${repoName} Dev-Kit Project`;
+  const exact = projects.find((p) => p.title === kitTitle);
   if (exact) return exact;
 
-  const devforge = projects.find((p) => /devforge/i.test(p.title || ""));
-  if (devforge) return devforge;
+  const kitMatch = projects.find((p) => /devforge|dev-kit/i.test(p.title || ""));
+  if (kitMatch) return kitMatch;
 
   if (projects.length === 1) return projects[0];
 

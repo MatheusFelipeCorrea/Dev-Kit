@@ -3,7 +3,7 @@
 This file is **optional** and acts as a quick catalog of representative files and patterns.
 Use it when a skill asks for an "exemplar" before creating or updating code/docs.
 
-In a fresh DevForge clone, only the starter examples below are pre-filled. Replace them with paths from **your** codebase as the team agrees on reference files.
+In a fresh Dev-Kit clone, only the starter examples below are pre-filled. Replace them with paths from **your** codebase as the team agrees on reference files.
 
 ## How to use
 
@@ -12,7 +12,7 @@ In a fresh DevForge clone, only the starter examples below are pre-filled. Repla
 - Prefer stable patterns (naming, error handling, folder conventions, tests).
 - If a section still points to a placeholder, skills must fall back to codebase search — never invent paths.
 
-## Starter examples (DevForge kit)
+## Starter examples (Dev-Kit)
 
 These ship with the kit and demonstrate **card format**, not application code:
 
