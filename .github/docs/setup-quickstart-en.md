@@ -1,6 +1,6 @@
 # START HERE — 5-minute setup
 
-Quick guide to use DevForge in a new repository.
+Quick guide to use Dev-Kit in a new repository.
 
 **Not sure where to start?** See [docs README](./README.md) — *Which doc to read?* table.
 
@@ -8,11 +8,23 @@ Quick guide to use DevForge in a new repository.
 
 ---
 
+## Easiest path (no terminal)
+
+Ask your AI agent:
+
+> **`/setup`** — or *"Set up Dev-Kit in this repo"*
+
+The agent runs project-discovery, helps fill memory, executes `npm run devkit:setup` for you, and suggests next steps.
+
+Other shortcuts: **`/sync`**, **`/doctor`**, **`/audit`**, **`/refine`** — full list in [quick-commands-en.md](./quick-commands-en.md).
+
+---
+
 ## What you need
 
 | Item | Required? | For what |
 |------|--------------|----------|
-| Node.js 20+ | Yes | Run `validate`, `doctor`, `sync`, `cards:init` |
+| Node.js 20+ | Yes | Run `devkit:*`, `cards:*` |
 | GitHub repository | Yes (GitHub backend) | Issues + Projects |
 | **`gh` CLI + login** | **Yes for local automation** | Auto-detect token, repo, Project — [tutorial](./github-cli-setup-en.md) |
 | Existing GitHub Project | No | Sync creates one automatically if missing |
@@ -30,15 +42,15 @@ Copy to your repository **root**:
 |-----------------|--------------|
 | `.github/` | Yes |
 | `scripts/` | Yes (cards-sync) |
-| `package.json` | Recommended (`npm run cards:*`) |
+| `package.json` | Recommended (`npm run devkit:*` and `cards:*`) |
 | `.env.example` | Recommended (copy to `.env` if not using `gh`) |
 | `CLAUDE.md` | If using Claude Code |
-| `.cursor/rules/` | If using Cursor |
+| `.cursor/rules/` | If using Cursor (included in full kit) |
 
 ```
 .github/
 scripts/
-package.json       ← npm run cards:* shortcuts
+package.json       ← npm run devkit:* and cards:* shortcuts
 .env.example       ← alternative to gh auth login
 ```
 
@@ -84,8 +96,10 @@ gh auth status
 3. Bootstrap cards-sync:
 
 ```bash
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
 ```
+
+Or ask the agent: **`/setup`**. Granular equivalent: `npm run cards:init -- --yes`.
 
 Without `gh`, configure `GITHUB_TOKEN` in `.env` — see [`.env.example`](../../.env.example).
 
@@ -133,7 +147,7 @@ Leave `projectNumber: null` and `autoCreateProject: true`.
 
 Sync automatically creates a Project named:
 
-**`[RepositoryName] DevForge Project`**
+**`[RepositoryName] Dev-Kit Project`**
 
 ---
 
@@ -220,7 +234,7 @@ If you create the Project manually, use these columns (EN):
 If you completed [Step 2.5](#step-25--github-cli-local-automation), bootstrap already ran validate + dry-run. To repeat or force sync:
 
 ```bash
-npm run cards:init -- --yes    # full bootstrap + real sync
+npm run devkit:setup -- --yes    # full bootstrap + real sync
 npm run cards:watch            # incremental sync on save
 ```
 
@@ -251,7 +265,25 @@ In CI, `.github/workflows/sync-cards.yml` runs automatically when cards change.
 
 ## Step 6 — Create your first card
 
-Create a file at `.github/cards/epics/PROJ-EPIC-001.md`:
+**Recommended:** ask the agent *"Refine my idea into cards"* (`card-refiner`) — it uses `.github/cards/CARD.template.md`.
+
+Or copy the template manually:
+
+1. Duplicate `.github/cards/CARD.template.md` → `.github/cards/epics/PROJ-EPIC-001.md`
+2. Adjust frontmatter (`card_id`, `title`, `categories`, …)
+3. Validate and sync:
+
+```bash
+npm run cards:validate
+npm run cards:dry-run
+npm run cards:sync
+# or while editing:
+npm run cards:watch
+```
+
+> **Reference ≠ board:** `_examples/`, `*.template.md`, and `EXAMPLE-*` / `TEMPLATE-*` / `SAMPLE-*` card IDs **never** go to GitHub Projects. Only cards you create under `epics/`, `features/`, `stories/`, `tasks/` sync (e.g. `PROJ-EPIC-001`).
+
+Minimal frontmatter example:
 
 ```yaml
 ---
@@ -269,8 +301,6 @@ categories:
   - Backend
 ---
 ```
-
-Then run `npm run cards:validate` → `npm run cards:dry-run` → `npm run cards:sync`.
 
 Or ask the agent: *"Refine my idea into cards"* (`card-refiner`).
 
@@ -353,8 +383,8 @@ Full list: [`.env.example`](../../.env.example)
 npm shortcuts (optional — requires `package.json` at root):
 
 ```bash
-npm run cards:init          # full bootstrap (GitHub)
-npm run cards:init -- --yes # + real sync
+npm run devkit:setup -- --yes    # full bootstrap (GitHub)
+npm run devkit:sync              # validate + sync
 npm run cards:validate
 npm run cards:sync
 npm run cards:watch         # incremental sync on save

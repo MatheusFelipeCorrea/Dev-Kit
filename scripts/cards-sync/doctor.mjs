@@ -174,16 +174,37 @@ function checkStatusOptions(statusField) {
   );
 
   if (!missing.length) {
-    ok("Status field options match DevForge flow (7 columns).");
+    ok("Status field options match Dev-Kit flow (7 columns).");
     return true;
   }
 
-  warn(`Status field is missing DevForge options: ${missing.join(", ")}.`);
+  warn(`Status field is missing Dev-Kit options: ${missing.join(", ")}.`);
   warn(
     `Current Status options: ${optionNames.join(", ") || "(none)"}`
   );
   warn("Fix in GitHub Project Settings -> Fields -> Status.");
   return false;
+}
+
+function checkSprintField(sprintField, configuredName) {
+  if (!sprintField) {
+    warn(`Sprint iteration field not found (expected: ${configuredName}).`);
+    warn("Run npm run cards:sync to auto-create it, or add manually in Project Settings.");
+    return false;
+  }
+
+  if (sprintField.__typename !== "ProjectV2IterationField") {
+    warn(`Sprint field "${sprintField.name}" should be Iteration type, found ${sprintField.__typename}.`);
+    return false;
+  }
+
+  const iterationCount = sprintField.configuration?.iterations?.length || 0;
+  if (iterationCount === 0) {
+    ok(`Sprint iteration field OK: ${sprintField.name} (0 iterations — add sprints in Project Settings when ready).`);
+  } else {
+    ok(`Sprint iteration field OK: ${sprintField.name} (${iterationCount} iteration(s)).`);
+  }
+  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -495,6 +516,10 @@ const statusCandidates = [required.status, ...(FIELD_NAME_ALIASES.status || [])]
 const statusField = findFieldByCandidates(byName, statusCandidates);
 const statusOk = checkStatusOptions(statusField);
 
+const sprintCandidates = [required.sprint, ...(FIELD_NAME_ALIASES.sprint || [])];
+const sprintField = findFieldByCandidates(byName, sprintCandidates);
+const sprintOk = checkSprintField(sprintField, required.sprint);
+
 ok("Doctor finished.");
-process.exit(missingFields.length || !statusOk ? 1 : 0);
+process.exit(missingFields.length || !statusOk || !sprintOk ? 1 : 0);
 

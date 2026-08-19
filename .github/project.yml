@@ -1,26 +1,25 @@
 # yaml-language-server: $schema=./project.schema.json
-# DevForge kit — project contract for agents and skills.
-# Copy/adapt this file when you add the kit to your own repository.
+# Project contract for Dev-Kit agents and skills.
+# Copy from project.example.yml and adapt to your product.
 
 version: 1
 
-name: DevForge
-locale: pt-BR
+name: My Project
+locale: en
 
 layout: single
 
 apps:
-  kit:
-    root: .
-    manifest: null
+  api:
+    root: src
+    manifest: package.json
     source_dirs:
-      - scripts
-      - .github
+      - src
 
 docs:
   requirements: null
   blueprints: .github/docs
-  diagrams: .github/diagrams
+  diagrams: null
 
 outputs:
   audits: .github/audits/results
@@ -28,10 +27,7 @@ outputs:
   implementations: .github/plans/implementations
   diagrams: .github/diagrams
 
-stack_hints:
-  - Node.js
-  - Markdown
-  - GitHub Actions
+stack_hints: []
 
 conventions:
   requirement_prefixes:
@@ -47,7 +43,6 @@ conventions:
 
 management:
   backend: github
-  # Switch to jira | azure-devops | linear | gitlab and configure .env — see .env.example
 
 audits:
   overlay: null

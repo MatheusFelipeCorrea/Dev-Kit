@@ -1,16 +1,17 @@
 # Documentation Maintenance Policy
 
-Guidelines to keep DevForge docs consistent while avoiding duplication.
+Guidelines to keep Dev-Kit docs consistent while avoiding duplication.
 
 ## Source of truth map
 
 | Topic | Source of truth | Secondary references |
 |------|------------------|----------------------|
 | Onboarding flow | `guia-completo.md` + `guide-complete-en.md` | `README.md`, `setup-quickstart*.md` |
-| Commands and scripts | `scripts/cards-sync/README.md` + `package.json` | `README.md`, quickstarts |
+| Commands and scripts | `comandos-rapidos.md` + `package.json` + `scripts/devkit/help.mjs` | `README.md`, quickstarts, `cards-sync/README.md` |
 | Output locations | `skills-output-map.md` | `onde-ficam-os-outputs.md`, `where-outputs-go-en.md`, `README.md` |
 | Audit directories | `.github/audits/manifest.yml` | `primeira-auditoria*.md`, `README.md` |
-| Runtime rules | `.github/instructions/copilot-instructions.md` | `.cursor/rules/devforge.mdc`, `CLAUDE.md` |
+| Learning gaps / pitfalls | `armadilhas-comuns.md` + `common-pitfalls-en.md` | `comandos-rapidos.md` |
+| Runtime rules | `.github/instructions/copilot-instructions.md` | `.cursor/rules/dev-kit.mdc`, `CLAUDE.md` |
 
 ## Anti-duplication rules
 

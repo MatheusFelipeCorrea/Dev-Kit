@@ -24,7 +24,7 @@ If backend is **not GitHub** (Jira, Azure DevOps, Linear, GitLab), route to `int
 |----------|------|
 | Sync configuration | `.github/cards/config/projects-map.json` |
 | Label presets (optional) | `.github/cards/config/labels.{locale}.json` |
-| Test card (optional) | `.github/cards/epics/TEST-EPIC-001.md` |
+| Reference samples | `.github/cards/_examples/` (read-only for agents; never synced) |
 | Last sync log (after init) | `.github/plans/cards/last-sync.md` |
 | Workflow confirmation | `.github/workflows/sync-cards.yml` (must exist) |
 
@@ -36,7 +36,7 @@ Before wizard questions, confirm GitHub CLI is ready for auto-detect:
 
 1. Point the user to `.github/docs/github-cli-setup.md` (install + `gh auth login`)
 2. Verify: `gh auth status` should show logged in
-3. Suggest: `npm run cards:init -- --yes` for one-shot bootstrap (discover project → validate → sync)
+3. Suggest: **`/setup`** or `npm run devkit:setup -- --yes` for one-shot bootstrap
 
 If the user cannot install `gh`, guide them to `GITHUB_TOKEN` in `.env` (see `.env.example`).
 
@@ -124,7 +124,7 @@ Write `.github/cards/config/projects-map.json`:
 ```
 
 Worst-case behavior: if the Project does not exist and `projectNumber` is `0/null` (and `autoCreateProject` is enabled),
-the sync will auto-create a Project named: `[RepoName] DevForge Project`.
+the sync will auto-create a Project named: `[RepoName] Dev-Kit Project` and **link it to the repository** (Default repository in Project Settings).
 
 (`RepoName` is the repository name detected from git.)
 
@@ -152,12 +152,14 @@ If user-level Project:
 ## Step 8: Test
 
 Instruct the user:
-1. Create a test card in `.github/cards/epics/TEST-EPIC-001.md` with proper frontmatter
-2. Run: `node scripts/cards-sync/doctor.mjs --interactive`
-3. Run: `node scripts/cards-sync/validate.mjs`
-4. Run: `node scripts/cards-sync/sync.mjs --dry-run`
-5. If dry-run looks good: `node scripts/cards-sync/sync.mjs`
-6. Check: Issue created? In Project? Fields populated? Labels applied?
+1. Copy `.github/cards/CARD.template.md` to `epics/` (or adapt a sample from `.github/cards/_examples/`)
+2. Run: `npm run cards:doctor`
+3. Run: `npm run cards:validate`
+4. Run: `npm run cards:dry-run`
+5. If dry-run looks good: `npm run devkit:sync` (or `/setup` / `devkit:setup -- --yes` on first setup)
+6. Check: Issue created? In Project? Fields populated? Labels applied? Issue body has parent/sub-issue **links**?
+
+Optional: `npm run cards:labels-reset -- --yes` to align repo labels with Dev-Kit catalog.
 
 ## Step 9: Workflow
 

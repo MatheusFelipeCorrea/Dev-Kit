@@ -6,12 +6,17 @@ import {
   filterEdgesForCards,
   parseOnlyFilter,
   cardIdFromRelativePath,
+  isExampleCardId,
+  isKitSampleCardId,
+  filterKitSampleCards,
+  filterExampleSampleCards,
+  shouldIncludeKitSamples,
 } from "./lib.mjs";
 
-test("pickBestGitHubProject prefers DevForge title", () => {
+test("pickBestGitHubProject prefers Dev-Kit title", () => {
   const projects = [
     { number: 1, title: "Random Board" },
-    { number: 7, title: "myrepo DevForge Project" },
+    { number: 7, title: "myrepo Dev-Kit Project" },
   ];
   const picked = pickBestGitHubProject(projects, "myrepo");
   assert.equal(picked.number, 7);
@@ -57,4 +62,29 @@ test("parseOnlyFilter reads --only argv", () => {
 
 test("cardIdFromRelativePath extracts basename", () => {
   assert.equal(cardIdFromRelativePath("stories/PROJ-STORY-001.md"), "PROJ-STORY-001");
+});
+
+test("filterKitSampleCards skips EXAMPLE/TEMPLATE/SAMPLE card IDs", () => {
+  const cards = [
+    { cardId: "EXAMPLE-EPIC-001" },
+    { cardId: "TEMPLATE-DRAFT-001" },
+    { cardId: "PROJ-STORY-001" },
+  ];
+  const result = filterKitSampleCards(cards, null, { includeSamples: false });
+  assert.equal(result.skipped, 2);
+  assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-STORY-001"]);
+});
+
+test("filterKitSampleCards never syncs samples even with --only EXAMPLE", () => {
+  const cards = [{ cardId: "EXAMPLE-STORY-001" }, { cardId: "PROJ-1" }];
+  const result = filterKitSampleCards(cards, ["EXAMPLE-STORY-001"], { includeSamples: false });
+  assert.equal(result.skipped, 1);
+  assert.deepEqual(result.ignoredOnlyTargets, ["EXAMPLE-STORY-001"]);
+  assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-1"]);
+});
+
+test("shouldIncludeKitSamples respects maintainer flag", () => {
+  assert.equal(shouldIncludeKitSamples(["node", "sync.mjs", "--include-samples"]), true);
+  assert.equal(isKitSampleCardId("SAMPLE-001"), true);
+  assert.equal(isKitSampleCardId("PROJ-EPIC-001"), false);
 });

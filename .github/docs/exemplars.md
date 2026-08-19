@@ -3,7 +3,7 @@
 This file is **optional** and acts as a quick catalog of representative files and patterns.
 Use it when a skill asks for an "exemplar" before creating or updating code/docs.
 
-In a fresh DevForge clone, only the starter examples below are pre-filled. Replace them with paths from **your** codebase as the team agrees on reference files.
+In a fresh Dev-Kit clone, only the starter examples below are pre-filled. Replace them with paths from **your** codebase as the team agrees on reference files.
 
 ## How to use
 
@@ -12,20 +12,20 @@ In a fresh DevForge clone, only the starter examples below are pre-filled. Repla
 - Prefer stable patterns (naming, error handling, folder conventions, tests).
 - If a section still points to a placeholder, skills must fall back to codebase search — never invent paths.
 
-## Starter examples (DevForge kit)
+## Starter examples (Dev-Kit)
 
 These ship with the kit and demonstrate **card format**, not application code:
 
 ### Card / planning exemplar
-- Path: `.github/cards/stories/EXAMPLE-STORY-001.md`
+- Path: `.github/cards/_examples/stories/EXAMPLE-STORY-001.md`
 - Why this file: YAML frontmatter, Gherkin acceptance criteria, task breakdown, and status fields — use as template when refining new stories.
 
 ### Epic hierarchy exemplar
-- Path: `.github/cards/epics/EXAMPLE-EPIC-001.md`
+- Path: `.github/cards/_examples/epics/EXAMPLE-EPIC-001.md`
 - Why this file: Epic-level scope, links to features, and backlog-oriented structure.
 
 ### Feature card exemplar
-- Path: `.github/cards/features/EXAMPLE-FEATURE-001.md`
+- Path: `.github/cards/_examples/features/EXAMPLE-FEATURE-001.md`
 - Why this file: Feature decomposition between epic and story layers.
 
 ## Replace with your project (suggested sections)

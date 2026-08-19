@@ -69,6 +69,76 @@ export function parseOnlyFilter(argv = process.argv) {
   return null;
 }
 
+/** Kit reference material — never forward-sync unless --include-samples (maintainers only). */
+export function isKitSampleCardId(cardId) {
+  return /^(EXAMPLE|TEMPLATE|SAMPLE)-/i.test(String(cardId || ""));
+}
+
+/** @deprecated use isKitSampleCardId */
+export function isExampleCardId(cardId) {
+  return isKitSampleCardId(cardId);
+}
+
+export function isNonSyncCardPath(relativePath) {
+  const norm = String(relativePath || "").replace(/\\/g, "/").toLowerCase();
+  if (norm.endsWith(".template.md")) return true;
+  return /(^|\/)_examples(\/|$)/.test(norm);
+}
+
+export function shouldIncludeKitSamples(argv = process.argv) {
+  if (argv.includes("--include-samples") || argv.includes("--include-examples")) return true;
+  const env =
+    process.env.CARDS_SYNC_INCLUDE_SAMPLES || process.env.CARDS_SYNC_INCLUDE_EXAMPLES || "";
+  return String(env).toLowerCase() === "true";
+}
+
+/** @deprecated use shouldIncludeKitSamples */
+export function shouldIncludeExampleCards(argv) {
+  return shouldIncludeKitSamples(argv);
+}
+
+export function filterKitSampleCards(cards, onlyIds, options = {}) {
+  const includeSamples = options.includeSamples ?? shouldIncludeKitSamples(options.argv);
+  if (includeSamples) return { cards, skipped: 0, ignoredOnlyTargets: [] };
+
+  const filtered = cards.filter((c) => !isKitSampleCardId(c.cardId));
+  const skipped = cards.length - filtered.length;
+  const ignoredOnlyTargets = (onlyIds || []).filter((id) => isKitSampleCardId(id));
+  return { cards: filtered, skipped, ignoredOnlyTargets };
+}
+
+/** @deprecated use filterKitSampleCards */
+export function filterExampleSampleCards(cards, onlyIds, options = {}) {
+  return filterKitSampleCards(cards, onlyIds, options);
+}
+
+const CARD_LIST_SKIP_DIRS = new Set(["config", "synced"]);
+const CARD_LIST_SYNC_SKIP_DIRS = new Set(["_examples"]);
+
+export async function listCardsMarkdownFiles(dir, { forSync = false } = {}) {
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  const files = [];
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (CARD_LIST_SKIP_DIRS.has(entry.name)) continue;
+      if (forSync && CARD_LIST_SYNC_SKIP_DIRS.has(entry.name)) continue;
+      files.push(...(await listCardsMarkdownFiles(full, { forSync })));
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
+      const lower = entry.name.toLowerCase();
+      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
+      files.push(full);
+    }
+  }
+  return files;
+}
+
 export function expandCardIdsWithParents(cards, onlyIds) {
   if (!onlyIds?.length) return cards;
 
@@ -94,12 +164,12 @@ export function filterEdgesForCards(edges, cardIds) {
 export function pickBestGitHubProject(projects, repoName) {
   if (!Array.isArray(projects) || projects.length === 0) return null;
 
-  const devforgeTitle = `${repoName} DevForge Project`;
-  const exact = projects.find((p) => p.title === devforgeTitle);
+  const kitTitle = `${repoName} Dev-Kit Project`;
+  const exact = projects.find((p) => p.title === kitTitle);
   if (exact) return exact;
 
-  const devforge = projects.find((p) => /devforge/i.test(p.title || ""));
-  if (devforge) return devforge;
+  const kitMatch = projects.find((p) => /devforge|dev-kit/i.test(p.title || ""));
+  if (kitMatch) return kitMatch;
 
   if (projects.length === 1) return projects[0];
 

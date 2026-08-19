@@ -1,4 +1,4 @@
-# DevForge Methodology Cheat Sheet
+# Dev-Kit Methodology Cheat Sheet
 
 Quick reference: **what each piece is**, **when to use it**, and **what is optional vs generated**.
 
@@ -7,9 +7,9 @@ Quick reference: **what each piece is**, **when to use it**, and **what is optio
 | **Agent** | Long, autonomous flow with human gates | "Implement this card", "Teach me X" | Yes (`.github/agents/`) |
 | **Skill** | On-demand capability (read `SKILL.md`, follow steps) | Natural-language trigger per skill | Yes (`.github/skills/`) |
 | **Script** | Deterministic CLI (`cards-sync`, validate, watch) | Sync cards, CI, automation | Yes (`scripts/cards-sync/`) |
-| **Runtime rule** | IDE-specific hints (Cursor, Copilot, Claude) | Always-on behavior for the assistant | Yes (`.cursor/rules/`, `CLAUDE.md`, `instructions/`) |
+| **Runtime rule** | IDE-specific hints (Cursor, Copilot, Claude) | Always-on behavior for the assistant | Yes (`.cursor/rules/dev-kit.mdc`, `CLAUDE.md`, `instructions/`) |
 | **Memory** | Persistent project context | Every session — stack, domain, decisions | Templates yes; content after setup |
-| **Card** | Markdown + YAML frontmatter for boards | Planning, refinement, sync | Examples yes; yours after `card-refiner` |
+| **Card** | Markdown + YAML frontmatter for boards | Planning, refinement, sync | `CARD.template.md` + `_examples/` (reference only) |
 | **Blueprint** | Architecture / folder structure docs | Greenfield planning | **No** — created by `project-architect` |
 | **Exemplars** | Team reference file catalog | Point skills to "good" patterns | Optional — starter card examples only |
 | **ADR / Retro / Diagram** | Generated documentation artifacts | After explicit skill invocation | **No** — folders exist, files on demand |

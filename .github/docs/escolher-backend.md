@@ -12,7 +12,7 @@ Use este guia para decidir **onde seus cards vão parar** e qual caminho de setu
 Você usa qual ferramenta de gestão?
 │
 ├── GitHub Projects (Issues + board no repo)
-│   └── → github-cli-setup.md + npm run cards:init -- --yes
+│   └── → github-cli-setup.md + /setup (ou devkit:setup -- --yes)
 │
 ├── Jira
 │   └── → integration-bridge (via agente) + setup-quickstart §3.1 Jira
@@ -50,7 +50,7 @@ Você usa qual ferramenta de gestão?
 **Setup:**
 
 1. [github-cli-setup.md](./github-cli-setup.md) — `gh auth login`
-2. `npm run cards:init -- --yes`
+2. **`/setup`** ou `npm run devkit:setup -- --yes`
 3. `npm run cards:watch` (opcional, sync ao salvar)
 
 **Peça ao agente:** *"Configura cards sync"* → skill `cards-sync-setup`

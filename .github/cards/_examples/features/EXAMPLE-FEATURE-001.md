@@ -16,18 +16,20 @@ categories:
 
 # [FEATURE] Credential authentication flow
 
-Define and align the end-to-end authentication flow using email and password,
+> **Context:** End-to-end login/logout with email and password, API contract, and UI feedback states.
+
+Define and align the authentication flow using email and password,
 including API contract, error handling, and UI states.
 
-## Sub-issues
+## 🔗 Sub-issues
 
 - EXAMPLE-STORY-001
 
-## Summary
+## 📋 Summary
 
-### DONE
+### ✅ Done
 - High-level scope drafted
 
-### TODO
+### ⏳ Pending
 - Finalize success/error UX behavior
 - Validate token/session strategy

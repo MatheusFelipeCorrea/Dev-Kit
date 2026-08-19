@@ -1,6 +1,6 @@
-# Guia completo DevForge — do zero ao uso diário
+# Guia completo Dev-Kit — do zero ao uso diário
 
-Este guia é para quem **nunca usou** o DevForge. Leia na ordem.
+Este guia é para quem **nunca usou** o Dev-Kit. Leia na ordem.
 
 **Atalhos:**
 - **Qual doc ler?** → [docs/README.md](./README.md)
@@ -15,9 +15,9 @@ Este guia é para quem **nunca usou** o DevForge. Leia na ordem.
 
 ---
 
-## 1. O que é o DevForge?
+## 1. O que é o Dev-Kit?
 
-DevForge é um **kit portátil** de instruções para assistentes de IA (Cursor, GitHub Copilot, Claude Code, etc.).
+Dev-Kit é um **kit portátil** de instruções para assistentes de IA (Cursor, GitHub Copilot, Claude Code, etc.).
 
 Ele não é um app que você abre — é uma pasta (`.github/` + `scripts/`) que você **copia para o seu repositório**. A IA lê esses arquivos e passa a:
 
@@ -26,7 +26,7 @@ Ele não é um app que você abre — é uma pasta (`.github/` + `scripts/`) que
 - Sincronizar cards com GitHub Projects, Jira, etc.
 - Rodar auditorias, gerar ADRs, planos de implementação, e mais
 
-**Analogia:** pense no DevForge como um "manual de operação + ferramentas" que a IA segue dentro do seu repo.
+**Analogia:** pense no Dev-Kit como um "manual de operação + ferramentas" que a IA segue dentro do seu repo.
 
 > **Clone limpo:** várias pastas (ADRs, retros, diagramas, planos, auditorias) começam vazias e são preenchidas quando você usa skills. Blueprints de arquitetura só existem após `project-architect`. Veja [README — clone vs artefatos gerados](../../README.md#clone-limpo-vs-artefatos-gerados).
 
@@ -35,11 +35,11 @@ Ele não é um app que você abre — é uma pasta (`.github/` + `scripts/`) que
 ## 2. O que vem no kit?
 
 ```
-DevForge/
+Dev-Kit/
 ├── .github/           ← agentes, skills, cards, memória, workflows
 ├── scripts/cards-sync/← engine que sincroniza cards com boards
 ├── .env.example       ← variáveis de ambiente (copie para .env)
-├── package.json       ← atalhos npm run cards:*
+├── package.json       ← atalhos npm run devkit:* e cards:*
 ├── CLAUDE.md          ← config para Claude Code
 └── README.md
 ```
@@ -51,7 +51,7 @@ DevForge/
 | **implementation-plan** | `.github/agents/implementation-plan.agent.md` | "Implementa o card X" — gera plano em fases com aprovação humana |
 | **mentoring** | `.github/agents/mentoring.agent.md` | "Me ensina X" — mentor socrático, adapta ao seu nível |
 
-### Skills (capacidades sob demanda — 22 no total)
+### Skills (capacidades sob demanda — 24 no total)
 
 Peça à IA usando linguagem natural. Ela deve ler o `SKILL.md` correspondente.
 
@@ -59,7 +59,6 @@ Peça à IA usando linguagem natural. Ela deve ler o `SKILL.md` correspondente.
 
 | Skill | Peça assim | O que faz |
 |-------|------------|-----------|
-| **project-discovery** | "Descobre esse projeto" | Mapeia stack, pastas, docs; cria `.github/project.yml` |
 | **hypothesis-forge** | "Explora essa ideia" | Persona, impacto, hipótese, decisão go/no-go |
 | **acceptance-spec** | "Escreve spec de aceite" | Given/When/Then estruturado |
 | **card-refiner** | "Refina isso em cards" / "mova card X para Done" | Cria **e evolui** cards; edita status, prioridade, critérios |
@@ -71,6 +70,9 @@ Peça à IA usando linguagem natural. Ela deve ler o `SKILL.md` correspondente.
 
 | Skill | Peça assim | O que faz |
 |-------|------------|-----------|
+| **project-startup** | **`/setup`** ou "Configura o Dev-Kit" | Orquestra setup completo (discovery → memory → cards) |
+| **project-discovery** | "Descobre esse projeto" / **`/discover`** | Mapeia stack, pastas, docs; cria `.github/project.yml` |
+| **devkit-ops** | **`/doctor`**, **`/sync`** | Agente roda `devkit:*` no terminal por você |
 | **cards-sync-setup** | "Configura cards sync" | Wizard GitHub Project + token + `projects-map.json` |
 | **integration-bridge** | "Conecta ao Jira/Azure/Linear/GitLab" | Ponte com ferramentas externas |
 
@@ -107,13 +109,13 @@ Copie para a **raiz do seu repositório**:
 
 1. A pasta `.github/` (merge com a existente se já tiver uma)
 2. A pasta `scripts/`
-3. Opcional: `CLAUDE.md`, `.cursor/rules/devforge.mdc`, `.env.example`, `package.json`
+3. Opcional: `CLAUDE.md`, `.cursor/rules/` (incluso), `.env.example`, `package.json`
 
 ### Passo 2 — Escolher seu runtime de IA
 
 | Ferramenta | O que configurar |
 |------------|------------------|
-| **Cursor** | Copie `.cursor/rules/devforge.mdc` — carrega regras automaticamente |
+| **Cursor** | `.cursor/rules/dev-kit.mdc` (incluso no kit) |
 | **GitHub Copilot** | Já lê `.github/instructions/copilot-instructions.md` |
 | **Claude Code** | Copie `CLAUDE.md` para a raiz — commands `/discover`, `/audit`, etc. |
 
@@ -136,8 +138,10 @@ Se você usa **GitHub Projects**, instale e faça login no CLI — é o único p
 Depois:
 
 ```bash
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
 ```
+
+Ou peça ao agente: **`/setup`**. Equivalente granular: `npm run cards:init -- --yes`.
 
 **Alternativa:** `GITHUB_TOKEN` no `.env` (sem `gh`).
 
@@ -195,20 +199,13 @@ Pastas:
 
 ### Sincronizar com o board
 
-```bash
-npm run cards:init          # bootstrap GitHub (recomendado na 1ª vez)
-npm run cards:init -- --yes   # + sync real
-npm run cards:validate
-npm run cards:sync
-```
-
-### Modo watch (sync incremental ao salvar)
+Peça **`/sync`** ao agente — ou, no terminal:
 
 ```bash
-npm run cards:watch
+npm run devkit:setup -- --yes   # 1ª vez
+npm run devkit:sync             # validate + sync
+npm run cards:watch               # incremental ao salvar
 ```
-
-Salva um `.md` em `.github/cards/` → valida → sincroniza automaticamente.
 
 ### Evolução conversacional
 
@@ -218,7 +215,7 @@ Depois de criar cards, você **não precisa editar manualmente** se preferir fal
 - *"coloca o card 001 em In Progress"*
 - *"adiciona critério de aceite no card de login"*
 
-A IA edita o **mesmo arquivo**, roda validate + sync, e o board atualiza.
+A IA edita o **mesmo arquivo**, roda `/sync` (ou `devkit:sync`), e o board atualiza.
 
 **Onde cada coisa fica:** [onde-ficam-os-outputs.md](./onde-ficam-os-outputs.md) — mapa completo de pastas por skill.
 
@@ -274,8 +271,9 @@ Para Jira, mapeie nomes de status em `projects-map.json` → `optionMapByLocale`
 
 | Comando | O que faz |
 |---------|-----------|
-| `npm run cards:init` | Bootstrap GitHub (discover + doctor + validate + dry-run) |
-| `npm run cards:init -- --yes` | Igual + sync real |
+| `npm run devkit:setup -- --yes` | Bootstrap completo (recomendado 1ª vez) |
+| `npm run devkit:sync` | Validate + sync |
+| `npm run cards:init -- --yes` | Equivalente granular ao setup |
 | `npm run cards:validate` | Valida frontmatter dos cards |
 | `npm run cards:sync` | Sync forward |
 | `npm run cards:sync -- --only ID` | Sync incremental (card + pais) |
@@ -312,7 +310,7 @@ Sim. O kit é modular — use só o que precisar.
 1. [Qual doc ler?](./README.md) — mapa da documentação
 2. [GitHub CLI — instalar e login](./github-cli-setup.md) (se usar GitHub Projects)
 3. [Setup em 5 minutos](./setup-quickstart.md)
-4. `npm run cards:init -- --yes`
+4. **`/setup`** ou `npm run devkit:setup -- --yes`
 5. Peça: *"Descobre esse projeto"* (project-discovery)
 6. Peça: *"Refina [sua ideia] em cards"* (card-refiner)
 7. [Primeira auditoria](./primeira-auditoria.md) ou *"Implementa PROJ-STORY-001"* (implementation-plan)

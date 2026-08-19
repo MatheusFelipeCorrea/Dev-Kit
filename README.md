@@ -1,4 +1,4 @@
-# DevForge
+# Dev-Kit
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Made for AI](https://img.shields.io/badge/Made%20for-AI%20Agents-blueviolet)
@@ -65,9 +65,12 @@ Skill names and paths use English identifiers. User guides are available in **PT
 
 | Objetivo | Documento |
 |----------|-----------|
-| **Primeira vez no DevForge** | [guia-completo.md](./.github/docs/guia-completo.md) |
+| **Primeira vez no Dev-Kit** | [guia-completo.md](./.github/docs/guia-completo.md) |
 | **Setup rápido** | [setup-quickstart.md](./.github/docs/setup-quickstart.md) |
-| **Sync cards no GitHub** | [github-cli-setup.md](./.github/docs/github-cli-setup.md) → `npm run cards:init -- --yes` |
+| **Comandos rápidos** | [comandos-rapidos.md](./.github/docs/comandos-rapidos.md) — `/setup`, `/sync`, `/audit` |
+| **Armadilhas comuns** | [armadilhas-comuns.md](./.github/docs/armadilhas-comuns.md) |
+| **Organização do kit** | [organizacao.md](./.github/docs/organizacao.md) · [STRUCTURE.md](./.github/STRUCTURE.md) |
+| **Sync cards no GitHub** | [github-cli-setup.md](./.github/docs/github-cli-setup.md) → `npm run devkit:setup -- --yes` ou `/setup` |
 | **Jira / Azure / Linear / GitLab** | [escolher-backend.md](./.github/docs/escolher-backend.md) |
 | **Auditar o repo** | [primeira-auditoria.md](./.github/docs/primeira-auditoria.md) |
 | **Referência técnica sync** | [scripts/cards-sync/README.md](./scripts/cards-sync/README.md) |
@@ -134,11 +137,13 @@ Organizadas em `.github/skills/` por categoria:
 |-----------|-------|-----------|
 | **planning/** | hypothesis-forge | Exploração de problema: persona, impacto, hipótese, decisão |
 | | acceptance-spec | Gerador de especificação de aceitação (Given/When/Then) |
-| | card-refiner | Cria e evolui cards (YAML frontmatter); aceita comandos conversacionais ("mova para Done") |
+| | card-refiner | Cria e evolui cards (YAML + corpo amigável); sync automático com links no GitHub |
 | | project-architect | Planejador de arquitetura greenfield com passos guiados |
 | | refactor-guide | Guia de refatoração segura e incremental |
 | | sprint-retro | Facilitador de retrospectiva de sprint |
-| **setup/** | project-discovery | Mapeia layout do repo, stack, docs; cria project.yml |
+| **setup/** | project-startup | Setup completo guiado (`/setup`) |
+| | devkit-ops | Agente roda doctor/sync/setup npm por você |
+| | project-discovery | Mapeia layout do repo, stack, docs; cria project.yml |
 | | cards-sync-setup | Wizard para configurar sync de cards com GitHub Issues + Projects |
 | | integration-bridge | Conecta a Jira, Azure DevOps, Linear ou GitLab via MCP/API |
 | **quality/** | full-audit | Orquestra todos os 6 tipos de auditoria abaixo |
@@ -168,11 +173,11 @@ Organizadas em `.github/skills/` por categoria:
 
 ### Clone limpo vs artefatos gerados
 
-Em um **clone limpo** do DevForge, você recebe o kit base: agentes, skills, templates, exemplos de cards e documentação. Várias pastas e arquivos **não vêm preenchidos** — são criados quando você (ou a IA) roda skills e agents.
+Em um **clone limpo** do Dev-Kit, você recebe o kit base: agentes, skills, templates, exemplos de cards e documentação. Várias pastas e arquivos **não vêm preenchidos** — são criados quando você (ou a IA) roda skills e agents.
 
 | Tipo | Exemplos | Quando aparece |
 |------|----------|----------------|
-| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `.github/cards/EXAMPLE-*`, `project.example.yml` | Clone inicial |
+| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `CARD.template.md`, `_examples/` (samples), `project.example.yml` | Clone inicial |
 | **Config do seu projeto** | `.github/project.yml`, `.env`, `.github/memory/PROJECT.md` preenchido | Após setup / `project-discovery` |
 | **Gerados por skills** | ADRs, retros, diagramas, specs, planos, resultados de auditoria | Quando a skill correspondente roda |
 | **Gerados por `project-architect`** | `Project_Architecture_Blueprint.md`, `Project_Folders_Structure_Blueprint.md` | Projetos greenfield — opcional em repos existentes |
@@ -208,7 +213,7 @@ Guia detalhado: **[Guia completo](./.github/docs/guia-completo.md)** · Setup: *
 Para o sync descobrir repo, token e Project sozinho:
 
 1. Instale e faça login — **[tutorial completo](./.github/docs/github-cli-setup.md)**
-2. Depois: `npm run cards:init -- --yes`
+2. Depois: **`/setup`** ou `npm run devkit:setup -- --yes`
 
 Sem `gh`, use `GITHUB_TOKEN` no `.env` (menos automático).
 
@@ -216,7 +221,7 @@ Sem `gh`, use `GITHUB_TOKEN` no `.env` (menos automático).
 
 Copie a pasta `.github/` e a pasta `scripts/` para o seu repositório.
 
-Opcional: `CLAUDE.md`, `.cursor/rules/`, `.env.example`, `package.json` (atalhos `npm run cards:*`).
+Opcional: `CLAUDE.md`, `.cursor/rules/` (incluso no kit), `.env.example`, `package.json` (atalhos `devkit:*` e `cards:*`).
 
 ### 2. Configure seu projeto
 
@@ -288,6 +293,10 @@ Fale com seu agente de IA naturalmente. Frases-chave que acionam cada skill:
 
 | Diga isso | Aciona | O que acontece |
 |-----------|--------|----------------|
+| **`/setup`** ou "Configura o Dev-Kit" | `project-startup` | Setup completo guiado (project.yml + memory + cards) |
+| **`/doctor`** ou "Rode o doctor" | `devkit-ops` | Verifica saúde do kit — agente roda npm por você |
+| **`/sync`** ou "Sincroniza os cards" | `devkit-ops` | Valida e sync cards — sem terminal manual |
+| **`/help`** ou "Lista comandos" | `devkit:help` | Referência de atalhos |
 | "Descobre esse projeto" | `project-discovery` | Mapeia layout, stack, cria project.yml |
 | "Configura cards sync" | `cards-sync-setup` | Wizard para integração com GitHub Projects |
 | "Conecta ao Jira/Azure/Linear/GitLab" | `integration-bridge` | Configura ponte com ferramenta externa |
@@ -295,7 +304,20 @@ Fale com seu agente de IA naturalmente. Frases-chave que acionam cada skill:
 | "Gera diagrama de arquitetura" | `plantuml-generator` | Diagramas PlantUML/Mermaid + C4 |
 | "Gera changelog" | `changelog-generator` | CHANGELOG.md a partir do git log |
 
-### Cards Sync (CLI)
+Referência completa: [comandos-rapidos.md](./.github/docs/comandos-rapidos.md)
+
+### Dev-Kit CLI (npm — opcional se usar agente)
+
+Pré-requisito GitHub: [`gh auth login`](./.github/docs/github-cli-setup.md)
+
+```bash
+npm run devkit:help              # lista todos os atalhos
+npm run devkit:doctor            # saúde kit + cards
+npm run devkit:setup -- --yes    # bootstrap completo
+npm run devkit:sync              # validate + sync
+```
+
+### Cards Sync (npm granular)
 
 Pré-requisito GitHub: [`gh auth login`](./.github/docs/github-cli-setup.md)
 
@@ -323,9 +345,9 @@ CARDS_SYNC_BACKEND=jira npm run cards:sync -- --reverse
 
 O kit inclui sync automatizado de Markdown cards para boards de gestão:
 
-1. Cards em `.github/cards/` com YAML frontmatter
+1. Cards em `.github/cards/` com YAML frontmatter (copie `CARD.template.md`)
 2. Push dispara workflow → cria/atualiza items remotos (Issues, work items, etc.)
-3. No GitHub: preenche campos do Project, labels e sub-issues automaticamente
+3. No GitHub: preenche campos do Project, labels, sub-issues e **corpo da issue com links**
 
 Veja `scripts/cards-sync/README.md` para documentação completa.
 
@@ -338,7 +360,8 @@ Veja `scripts/cards-sync/README.md` para documentação completa.
 gh auth login
 
 # 2. Bootstrap completo (discover project → doctor → validate → sync)
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
+# ou peça ao agente: /setup
 
 # 3. Dia a dia (opcional)
 npm run cards:watch
@@ -377,7 +400,7 @@ Pré-requisitos: kit copiado, `git remote` apontando para GitHub, [GitHub CLI co
 - Se `status` não vier:
   - cards novos nascem em `defaults.status` (geralmente `Backlog`)
   - cards existentes preservam status manual no board.
-- Se você editar o `status` na IDE e rodar `node scripts/cards-sync/sync.mjs`, o board é atualizado.
+- Se você editar o `status` na IDE e rodar `/sync` (ou `npm run devkit:sync`), o board é atualizado.
 - Em repositórios GitHub, o push também dispara `.github/workflows/sync-cards.yml` e sincroniza automaticamente.
 
 ## Automação GitHub (plug and play)
@@ -390,7 +413,7 @@ Pré-requisitos: kit copiado, `git remote` apontando para GitHub, [GitHub CLI co
 | `npm run cards:watch` | Sync **incremental** ao salvar `.md` em `.github/cards/` |
 | `npm run cards:sync -- --only ID1,ID2` | Sync só cards específicos (+ pais na hierarquia) |
 
-**Auto-discovery:** se `projectNumber` estiver vazio, o sync busca no GitHub um Project chamado `[RepoName] DevForge Project` (ou o único project do repo) e salva em `projects-map.json`.
+**Auto-discovery:** se `projectNumber` estiver vazio, o sync busca no GitHub um Project chamado `[RepoName] Dev-Kit Project` (ou o único project do repo) e salva em `projects-map.json`.
 
 **Resumo:** cada sync grava `.github/plans/cards/last-sync.md` com ações (criado/atualizado/movido).
 
@@ -474,7 +497,7 @@ flowchart LR
 | Runtime | Arquivo de config | Suporte |
 |---------|-------------------|---------|
 | GitHub Copilot | `.github/instructions/copilot-instructions.md` | Agents em `.github/agents/`, skills em `.github/skills/` |
-| Cursor | `.cursor/rules/devforge.mdc` | Rules carregam automaticamente, skills lidas de `.github/` |
+| Cursor | `.cursor/rules/dev-kit.mdc` (incluso) | Rules + skills em `.github/` |
 | Claude Code | `CLAUDE.md` (raiz) | Commands `/discover`, `/audit`, `/review`, etc. mapeados para skills |
 | Qualquer outro | — | Skills são markdown puro — qualquer LLM consegue seguir |
 
@@ -483,14 +506,14 @@ flowchart LR
 ## Estrutura do Kit
 
 ```
-DevForge/
+Dev-Kit/
 ├── README.md
 ├── CLAUDE.md                  → Config para Claude Code
 ├── CONTRIBUTING.md            → Guia de contribuição
 ├── .gitignore
-├── .cursor/rules/devforge.mdc → Config para Cursor
+├── .cursor/rules/dev-kit.mdc → Cursor (incluso no kit)
 ├── .env.example               → Variáveis de ambiente (alternativa ao gh)
-├── package.json               → Atalhos npm run cards:*
+├── package.json               → Atalhos npm run devkit:* e cards:*
 ├── scripts/cards-sync/        → Engine de sincronização
 └── .github/
     ├── INDEX.md               → Guia de navegação das pastas
@@ -531,7 +554,7 @@ DevForge/
     │   ├── cards/
     │   ├── implementations/
     │   └── specs/
-    ├── skills/                → 22 skills em 4 categorias
+    ├── skills/                → 24 skills em 4 categorias
     │   ├── planning/
     │   ├── setup/
     │   ├── quality/

@@ -15,9 +15,15 @@ jobs:
       - name: Detect package manager
         id: detect
         run: |
-          if [ -f "package-lock.json" ] || [ -f "package.json" ]; then
+          if [ -f "package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "install=npm ci" >> $GITHUB_OUTPUT
+            echo "lint=npm run lint --if-present" >> $GITHUB_OUTPUT
+            echo "test=npm test --if-present" >> $GITHUB_OUTPUT
+            echo "build=npm run build --if-present" >> $GITHUB_OUTPUT
+          elif [ -f "package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "install=npm install" >> $GITHUB_OUTPUT
             echo "lint=npm run lint --if-present" >> $GITHUB_OUTPUT
             echo "test=npm test --if-present" >> $GITHUB_OUTPUT
             echo "build=npm run build --if-present" >> $GITHUB_OUTPUT

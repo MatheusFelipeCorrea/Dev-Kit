@@ -17,19 +17,18 @@ categories:
 
 # [EPIC] User Authentication
 
-Complete authentication system with login, registration, password recovery, and session management.
+> **Context:** Complete authentication system with login, registration, password recovery, and session management.
 
-## Sub-issues
+## 🔗 Sub-issues
 
 - EXAMPLE-FEATURE-001
-- EXAMPLE-STORY-001
 
-## Resumo
+## 📋 Resumo
 
-### CONCLUIDO
+### ✅ Done
 - Requirements gathered
 - Database schema designed
 
-### PENDENTE
+### ⏳ Pending
 - OAuth integration decision
 - Rate limiting strategy

@@ -1,6 +1,6 @@
 # Where do generated files go?
 
-Yes — **every skill writes to the right folder**. This map shows where to find each artifact after using DevForge.
+Yes — **every skill writes to the right folder**. This map shows where to find each artifact after using Dev-Kit.
 
 > **Fresh clone:** folders such as `adr/`, `retros/`, `diagrams/`, `plans/`, and `audits/results/` may be empty until the first skill run. See [README — fresh clone vs generated artifacts](../../README.md#clone-limpo-vs-artefatos-gerados).
 

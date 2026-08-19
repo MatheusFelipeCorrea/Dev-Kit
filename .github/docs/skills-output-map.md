@@ -10,9 +10,9 @@ Config override: read `project.yml` → `outputs` and `docs.*` first; fall back 
 
 | Status | Count | Meaning |
 |--------|-------|---------|
-| ✅ | 22/22 | All skills have explicit `## Output` section |
-| ⚠️ | 3 | Path was ambiguous — fixed below |
-| 📁 | 4 | Folders added with `.gitkeep` so structure exists on clone |
+| ✅ | 24/24 | All skills have explicit `## Output` section |
+| ⚠️ | 0 | — |
+| 📁 | scaffold | Output folders ship with `.gitkeep`; contents gitignored |
 
 ---
 
@@ -32,6 +32,8 @@ Config override: read `project.yml` → `outputs` and `docs.*` first; fall back 
 | Skill | Primary output | Path |
 |-------|----------------|------|
 | **project-discovery** | Project contract (Configure mode) | `.github/project.yml` |
+| **project-startup** | Setup checklist (in-session) | *(orchestrator — no fixed file)* |
+| **devkit-ops** | Terminal ops (in-session) | *(runs npm — no fixed file)* |
 | **cards-sync-setup** | Sync config | `.github/cards/config/projects-map.json` |
 | **integration-bridge** | Integration summary | `.github/memory/DECISIONS.md` + `project.yml` → `management` |
 

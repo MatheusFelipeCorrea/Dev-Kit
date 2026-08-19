@@ -1,11 +1,11 @@
 # GitHub CLI (`gh`) — installation and login
 
-DevForge uses the **GitHub CLI** to automate almost everything on the **GitHub Projects** backend:
+Dev-Kit uses the **GitHub CLI** to automate almost everything on the **GitHub Projects** backend:
 
 | Without `gh` | With `gh auth login` |
 |----------|---------------------|
 | You must copy/paste token manually | Token detected automatically (`gh auth token`) |
-| Local sync may not update Issues/Projects | `npm run cards:init` and `cards:watch` work |
+| Local sync may not update Issues/Projects | `/setup` or `devkit:setup` and `cards:watch` work |
 | Limited Project auto-discovery | Finds and saves `projectNumber` automatically |
 
 **Alternative to `gh`:** set `GITHUB_TOKEN` or `PROJECT_SYNC_TOKEN` in `.env` (see [`.env.example`](../../.env.example)). The CLI is just the simplest path.
@@ -89,7 +89,7 @@ gh auth login
 
 Answer the wizard:
 
-| Question | Recommended for DevForge |
+| Question | Recommended for Dev-Kit |
 |----------|---------------------------|
 | GitHub.com or Enterprise? | **GitHub.com** (or your Enterprise instance) |
 | Protocol | **HTTPS** (simplest on Windows) |
@@ -120,13 +120,13 @@ If the Project is on the **user profile** (not the repository), create a **fine-
 
 ---
 
-## 4. Test with DevForge
+## 4. Test with Dev-Kit
 
 Prerequisites: kit copied, `git remote` pointing to GitHub, Node 20+.
 
 ```bash
 # 1. Full bootstrap (discover repo, token, project → validate → sync)
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
 
 # 2. Continuous mode (sync on save)
 npm run cards:watch

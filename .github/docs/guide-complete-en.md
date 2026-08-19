@@ -1,6 +1,6 @@
-# DevForge Complete Guide — from zero to daily use
+# Dev-Kit Complete Guide — from zero to daily use
 
-This guide is for anyone who has **never used** DevForge. Read it in order.
+This guide is for anyone who has **never used** Dev-Kit. Read it in order.
 
 **Shortcuts:**
 - **Which doc to read?** → [docs/README.md](./README.md)
@@ -15,9 +15,9 @@ This guide is for anyone who has **never used** DevForge. Read it in order.
 
 ---
 
-## 1. What is DevForge?
+## 1. What is Dev-Kit?
 
-DevForge is a **portable kit** of instructions for AI assistants (Cursor, GitHub Copilot, Claude Code, etc.).
+Dev-Kit is a **portable kit** of instructions for AI assistants (Cursor, GitHub Copilot, Claude Code, etc.).
 
 It is not an app you open — it is a folder (`.github/` + `scripts/`) that you **copy into your repository**. The AI reads these files and can:
 
@@ -26,7 +26,7 @@ It is not an app you open — it is a folder (`.github/` + `scripts/`) that you 
 - Sync cards with GitHub Projects, Jira, etc.
 - Run audits, generate ADRs, implementation plans, and more
 
-**Analogy:** think of DevForge as an "operations manual + tools" that the AI follows inside your repo.
+**Analogy:** think of Dev-Kit as an "operations manual + tools" that the AI follows inside your repo.
 
 > **Fresh clone:** folders such as ADRs, retros, diagrams, plans, and audit results start empty and are filled when you run skills. Architecture blueprints appear only after `project-architect`. See [README — fresh clone vs generated artifacts](../../README.md#clone-limpo-vs-artefatos-gerados).
 
@@ -35,11 +35,11 @@ It is not an app you open — it is a folder (`.github/` + `scripts/`) that you 
 ## 2. What comes in the kit?
 
 ```
-DevForge/
+Dev-Kit/
 ├── .github/           ← agents, skills, cards, memory, workflows
 ├── scripts/cards-sync/← engine that syncs cards with boards
 ├── .env.example       ← environment variables (copy to .env)
-├── package.json       ← npm run cards:* shortcuts
+├── package.json       ← npm run devkit:* and cards:* shortcuts
 ├── CLAUDE.md          ← config for Claude Code
 └── README.md
 ```
@@ -51,7 +51,7 @@ DevForge/
 | **implementation-plan** | `.github/agents/implementation-plan.agent.md` | "Implement card X" — phased plan with human approval gates |
 | **mentoring** | `.github/agents/mentoring.agent.md` | "Teach me X" — Socratic mentor, adapts to your level |
 
-### Skills (on-demand capabilities — 22 total)
+### Skills (on-demand capabilities — 24 total)
 
 Ask the AI in natural language. It should read the matching `SKILL.md`.
 
@@ -59,7 +59,6 @@ Ask the AI in natural language. It should read the matching `SKILL.md`.
 
 | Skill | Ask like this | What it does |
 |-------|------------|-----------|
-| **project-discovery** | "Discover this project" | Maps stack, folders, docs; creates `.github/project.yml` |
 | **hypothesis-forge** | "Explore this idea" | Persona, impact, hypothesis, go/no-go decision |
 | **acceptance-spec** | "Write acceptance spec" | Structured Given/When/Then |
 | **card-refiner** | "Refine this into cards" / "move card X to Done" | Creates **and evolves** cards; edits status, priority, criteria |
@@ -71,6 +70,9 @@ Ask the AI in natural language. It should read the matching `SKILL.md`.
 
 | Skill | Ask like this | What it does |
 |-------|------------|-----------|
+| **project-startup** | **`/setup`** or "Set up Dev-Kit" | Orchestrates full setup (discovery → memory → cards) |
+| **project-discovery** | "Discover this project" / **`/discover`** | Maps stack, folders, docs; creates `.github/project.yml` |
+| **devkit-ops** | **`/doctor`**, **`/sync`** | Agent runs `devkit:*` terminal commands for you |
 | **cards-sync-setup** | "Configure cards sync" | GitHub Project + token + `projects-map.json` wizard |
 | **integration-bridge** | "Connect to Jira/Azure/Linear/GitLab" | Bridge to external tools |
 
@@ -107,13 +109,13 @@ Copy to your repository **root**:
 
 1. The `.github/` folder (merge if one already exists)
 2. The `scripts/` folder
-3. Optional: `CLAUDE.md`, `.cursor/rules/devforge.mdc`, `.env.example`, `package.json`
+3. Optional: `CLAUDE.md`, `.cursor/rules/` (included), `.env.example`, `package.json`
 
 ### Step 2 — Choose your AI runtime
 
 | Tool | What to configure |
 |------------|------------------|
-| **Cursor** | Copy `.cursor/rules/devforge.mdc` — rules load automatically |
+| **Cursor** | `.cursor/rules/dev-kit.mdc` (included in kit) |
 | **GitHub Copilot** | Already reads `.github/instructions/copilot-instructions.md` |
 | **Claude Code** | Copy `CLAUDE.md` to root — `/discover`, `/audit`, etc. |
 
@@ -136,8 +138,10 @@ If you use **GitHub Projects**, install and log in to the CLI — the only real 
 Then:
 
 ```bash
-npm run cards:init -- --yes
+npm run devkit:setup -- --yes
 ```
+
+Or ask the agent: **`/setup`**.
 
 **Alternative:** `GITHUB_TOKEN` in `.env` (without `gh`).
 
@@ -195,20 +199,13 @@ Folders:
 
 ### Sync with the board
 
-```bash
-npm run cards:init          # GitHub bootstrap (recommended first time)
-npm run cards:init -- --yes   # + real sync
-npm run cards:validate
-npm run cards:sync
-```
-
-### Watch mode (incremental sync on save)
+Ask the agent for **`/sync`** — or in terminal:
 
 ```bash
+npm run devkit:setup -- --yes   # first time
+npm run devkit:sync
 npm run cards:watch
 ```
-
-Save a `.md` in `.github/cards/` → validate → sync automatically.
 
 ### Conversational evolution
 
@@ -274,8 +271,9 @@ For Jira, map status names in `projects-map.json` → `optionMapByLocale` if you
 
 | Command | What it does |
 |---------|-----------|
-| `npm run cards:init` | GitHub bootstrap (discover + doctor + validate + dry-run) |
-| `npm run cards:init -- --yes` | Same + real sync |
+| `npm run devkit:setup -- --yes` | Full bootstrap (recommended first time) |
+| `npm run devkit:sync` | Validate + sync |
+| `npm run cards:init -- --yes` | Granular equivalent |
 | `npm run cards:validate` | Validates card frontmatter |
 | `npm run cards:sync` | Forward sync |
 | `npm run cards:sync -- --only ID` | Incremental sync (card + parents) |
@@ -312,7 +310,7 @@ Yes. The kit is modular — use only what you need.
 1. [Which doc to read?](./README.md) — documentation map
 2. [GitHub CLI — install and login](./github-cli-setup-en.md) (if using GitHub Projects)
 3. [5-minute setup](./setup-quickstart-en.md)
-4. `npm run cards:init -- --yes`
+4. **`/setup`** or `npm run devkit:setup -- --yes`
 5. Ask: *"Discover this project"* (project-discovery)
 6. Ask: *"Refine [your idea] into cards"* (card-refiner)
 7. [First audit](./first-audit-en.md) or *"Implement PROJ-STORY-001"* (implementation-plan)

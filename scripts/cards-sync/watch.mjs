@@ -3,7 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { cardIdFromRelativePath } from "./lib.mjs";
+import { cardIdFromRelativePath, isNonSyncCardPath, isKitSampleCardId } from "./lib.mjs";
 
 const workspaceRoot = process.cwd();
 const cardsRoot = path.join(workspaceRoot, ".github", "cards");
@@ -75,8 +75,9 @@ function registerChange(filename) {
 
   if (filename.endsWith(".md")) {
     const normalized = filename.replace(/\\/g, "/");
+    if (isNonSyncCardPath(normalized)) return;
     const id = cardIdFromRelativePath(normalized);
-    if (id) pendingIds.add(id);
+    if (id && !isKitSampleCardId(id)) pendingIds.add(id);
   }
 }
 

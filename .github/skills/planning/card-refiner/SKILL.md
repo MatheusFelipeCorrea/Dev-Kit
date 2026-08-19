@@ -29,7 +29,40 @@ ${CARD_TYPES="All|Epic only|Frontend only|Backend only|Database only|Prototype o
 6. **ALWAYS mark files as (EXISTENTE — MODIFICAR) or (NOVO — CRIAR)** — based on what exists
 7. **ALWAYS generate ONE FILE PER CARD** in `.github/cards/` with YAML frontmatter for sync
 8. **ALWAYS generate CARD_ID** following the pattern `{PROJECT}-{TYPE}-{SEQ}` (e.g. EXAMPLE-EPIC-001)
-9. **ALWAYS end each card with a summary section** — CONCLUIDO and PENDENTE
+9. **ALWAYS end each card with a summary section** — Concluído and Pendente (see Card body style below)
+10. **Use the friendly body format** — emojis in section headers, **bold**, fenced code blocks; **never** emojis in YAML frontmatter
+11. **ALWAYS base new cards on** `.github/cards/CARD.template.md` unless the user specifies otherwise
+
+## Card body style (GitHub-friendly)
+
+Cards are read in the IDE **and** rendered as GitHub Issues after sync. Use a consistent, scannable layout.
+
+**Canonical template:** `.github/cards/CARD.template.md`
+
+### Section headers (emojis recommended)
+
+| Section | Header |
+|---------|--------|
+| Sub-issues | `## 🔗 Sub-issues` |
+| Description | `## 📝 Descrição` |
+| Acceptance | `## ✅ Critérios de Aceite` |
+| Implementation | `## 🛠️ Implementação` |
+| Business rules | `## 📐 Regras de Negócio` |
+| Summary | `## 📋 Resumo` with `### ✅ Concluído` / `### ⏳ Pendente` |
+
+### Formatting
+
+- Context under title: `> **Contexto:** …`
+- Endpoints/paths in backticks: `` `POST /api/...` ``
+- Payloads in ` ```json ` blocks
+- Sub-issues: plain `CARD_ID` bullets (sync adds GitHub links automatically)
+
+### What sync adds on GitHub
+
+- Parent + Sub-issue links, optional section emoji polish, **🔄 Dev-Kit sync** footer
+- After creating/editing cards: run `npm run devkit:sync` via **devkit-ops** (agent) — or `npm run cards:watch` for auto-sync
+
+**Kit reference (`_examples/`, `CARD.template.md`):** validated locally for kit integrity; **never forward-synced**. Agents use them as guides when creating real cards under `epics/`, `features/`, etc.
 
 ## Language
 
@@ -210,7 +243,7 @@ For each card, create a file in `.github/cards/` with the proper frontmatter.
 
 ### Epic card example:
 
-File: `.github/cards/epics/EXAMPLE-EPIC-001.md`
+File: `.github/cards/_examples/epics/EXAMPLE-EPIC-001.md`
 
 ```markdown
 ---
@@ -239,18 +272,18 @@ categories:
 - EXAMPLE-STORY-002
 - EXAMPLE-STORY-003
 
-## Resumo
+## 📋 Resumo
 
-### CONCLUIDO
+### ✅ Concluído
 [What is defined]
 
-### PENDENTE
+### ⏳ Pendente
 [Open questions]
 ```
 
 ### Story Backend card example:
 
-File: `.github/cards/stories/EXAMPLE-STORY-001.md`
+File: `.github/cards/_examples/stories/EXAMPLE-STORY-001.md`
 
 ```markdown
 ---
@@ -269,22 +302,24 @@ categories:
 
 # [STORY BACKEND] Gestão de Fazendas — Backend
 
-## Descrição
+> **Contexto:** Expor CRUD de fazendas para o frontend.
+
+## 📝 Descrição
 Como sistema, eu quero endpoints para CRUD de fazendas, para que o frontend possa gerenciar fazendas.
 
 ---
 
-## Critérios de Aceite
+## ✅ Critérios de Aceite
 
 ### Cenário 1 — Criar fazenda
-**Dado** que o usuário está autenticado,
-**Quando** POST /api/fazendas é chamado com payload válido,
-**Então** retorna 201 com a fazenda criada.
-* **Se** nome duplicado: Retorna 409 "Fazenda já existe".
+**Dado** que o usuário está autenticado,  
+**Quando** `POST /api/fazendas` é chamado com payload válido,  
+**Então** retorna `201` com a fazenda criada.  
+**Se** nome duplicado: retorna `409` "Fazenda já existe".
 
 ---
 
-## Implementação
+## 🛠️ Implementação
 
 ### fazenda.controller.js (EXISTENTE — MODIFICAR)
 Métodos existentes (não alterar):
@@ -296,23 +331,26 @@ Métodos NOVOS a adicionar:
 * atualizar() -> PUT /api/fazendas/:id
 
 ### fazenda.service.js (NOVO — CRIAR)
-Criar em: src/services/fazenda.service.js
+Criar em: `src/services/fazenda.service.js`  
 Seguir padrão de: arquivo de serviço equivalente listado em `.github/docs/exemplars.md`
-→ criarFazenda(dados)
-→ atualizarFazenda(id, dados)
+
+```javascript
+// criarFazenda(dados)
+// atualizarFazenda(id, dados)
+```
 
 ---
 
-## Regras de Negócio
+## 📐 Regras de Negócio
 * Nome da fazenda deve ser único por usuário
 * Área mínima: 0.1 hectares
 
-## Resumo
+## 📋 Resumo
 
-### CONCLUIDO
+### ✅ Concluído
 [Defined items]
 
-### PENDENTE
+### ⏳ Pendente
 [Open items]
 ```
 
@@ -369,16 +407,17 @@ The user may evolve cards **after creation** with natural language. Treat these 
    - Update frontmatter and/or body
    - Never change `card_id`
    - Use only allowed `status` values (see below)
-3. **Validate**
+3. **Validate + sync** (run via **devkit-ops** — agent executes npm; user should not need terminal)
    ```bash
-   node scripts/cards-sync/validate.mjs
+   npm run devkit:sync
    ```
-4. **Sync to remote**
+   Or keep watch mode running while editing:
    ```bash
-   node scripts/cards-sync/sync.mjs
+   npm run cards:watch
    ```
-   - For Jira backend: `CARDS_SYNC_BACKEND=jira node scripts/cards-sync/sync.mjs`
-   - If sync cannot run (no token), edit the file anyway and tell the user to run sync or push
+   - For Jira backend: `CARDS_SYNC_BACKEND=jira npm run devkit:sync`
+   - Incremental: `npm run cards:sync -- --only CARD_ID`
+   - If sync cannot run (no token), edit the file anyway and tell the user to run `/sync` after `gh auth login`
 5. **Confirm** what changed: card file path, field old → new, and backend effect:
    - **GitHub:** Project Status column updates on forward sync
    - **Jira/Azure/Linear/GitLab:** status stored in issue description metadata (native board column not updated yet)
@@ -429,7 +468,7 @@ On other backends, status is written to issue metadata until native workflow map
 
 Parent-child relationships are expressed via:
 - `parent` field in frontmatter (CARD_ID of the parent)
-- `## Sub-issues` section in parent card (list of child CARD_IDs)
+- `## 🔗 Sub-issues` section in parent card (list of child CARD_IDs — plain IDs; sync adds GitHub links)
 
 Both are used by the sync to create GitHub sub-issue links.
 

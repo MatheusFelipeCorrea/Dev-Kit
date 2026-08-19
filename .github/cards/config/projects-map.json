@@ -72,7 +72,12 @@
       }
     },
     "labelsFile": "labels.{locale}.json",
-    "createMissingLabels": true
+    "createMissingLabels": true,
+    "sprintField": {
+      "durationDays": 14,
+      "startDate": null,
+      "seedIterations": []
+    }
   },
   "repositories": {}
 }

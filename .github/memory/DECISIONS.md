@@ -1,6 +1,6 @@
 # Decisions Log
 
-<!-- Quick decisions that don't warrant a full ADR. For architectural decisions, use .github/docs/adr/ -->
+Quick decisions that do not warrant a full ADR. For architecture, use `.github/docs/adr/`.
 
 | ID | Date | Decision | Rationale |
 |----|------|----------|-----------|
