@@ -1,0 +1,78 @@
+{
+  "default": {
+    "projectOwner": null,
+    "projectNumber": null,
+    "autoCreateProject": true,
+    "autoDiscoverProject": true,
+    "locale": "en",
+    "backend": "github",
+    "fieldMap": {
+      "status": "Status",
+      "type": "Type",
+      "priority": "Priority",
+      "sprint": "Sprint",
+      "storyPoints": "Story Points",
+      "reporter": "Reporter",
+      "parent": "Parent (Epic/Feature)",
+      "dueDate": "Due Date"
+    },
+    "defaults": {
+      "status": "Backlog"
+    },
+    "optionMapByLocale": {
+      "en": {
+        "status": {
+          "Backlog": "Backlog",
+          "Functional Refinement": "Functional Refinement",
+          "Technical Refinement": "Technical Refinement",
+          "In Progress": "In Progress",
+          "In Tests": "In Tests",
+          "In Revision": "In Revision",
+          "Done": "Done"
+        },
+        "type": {
+          "Epic": "Epic",
+          "Feature": "Feature",
+          "Story": "Story",
+          "Task": "Task",
+          "Subtask": "Subtask",
+          "Bug": "Bug"
+        },
+        "priority": {
+          "Highest": "Highest",
+          "High": "High",
+          "Medium": "Medium",
+          "Low": "Low"
+        }
+      },
+      "pt-BR": {
+        "status": {
+          "Backlog": "Backlog",
+          "Functional Refinement": "Refinamento Funcional",
+          "Technical Refinement": "Refinamento Técnico",
+          "In Progress": "Em Progresso",
+          "In Tests": "Em Testes",
+          "In Revision": "Em Revisão",
+          "Done": "Concluído"
+        },
+        "type": {
+          "Epic": "Épico",
+          "Feature": "Funcionalidade",
+          "Story": "História",
+          "Task": "Tarefa",
+          "Subtask": "Subtarefa",
+          "Bug": "Bug"
+        },
+        "priority": {
+          "Highest": "Crítica",
+          "High": "Alta",
+          "Medium": "Média",
+          "Low": "Baixa"
+        }
+      }
+    },
+    "labelsFile": "labels.{locale}.json",
+    "createMissingLabels": true
+  },
+  "repositories": {}
+}

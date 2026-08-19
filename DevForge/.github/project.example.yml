@@ -1,0 +1,75 @@
+# yaml-language-server: $schema=./project.schema.json
+# Project contract for .github/ agents and skills.
+#
+# This file is the ONLY bridge between the generic kit and your specific
+# product. Copy the .github/ pack to any repo and rewrite only this YAML.
+#
+# Paths are POSIX-style, relative to repo root.
+
+version: 1
+
+name: My Project
+locale: en
+
+# Workspace shape: single | monorepo | multi-package
+layout: single
+
+# Applications / packages
+apps:
+  api:
+    root: src
+    manifest: package.json
+    source_dirs:
+      - src
+
+# Documentation paths (all optional — discovery fills what it finds)
+docs:
+  requirements: null
+  blueprints: .github/docs
+  diagrams: null
+
+# Where agents/skills write new artifacts
+outputs:
+  audits: .github/audits/results
+  cards: .github/plans/cards
+  implementations: .github/plans/implementations
+  diagrams: .github/diagrams
+
+# Stack hints (optional — discovery confirms via imports/configs)
+stack_hints:
+  - Node.js
+  - Express
+  - PostgreSQL
+
+# Conventions
+conventions:
+  requirement_prefixes:
+    - REQ
+    - BIZ
+  finding_prefixes:
+    product-owner: PO
+    application-security: SEC
+    devops: OPS
+    code-review: DEV
+    ux-design: UX
+    architecture: ARCH
+
+# Project management tool (optional — discovery auto-detects)
+management:
+  # backend: github | jira | azure-devops | linear | gitlab | none
+  backend: github
+  # For Jira:
+  #   url: https://your-org.atlassian.net
+  #   project_key: PROJ
+  # For Azure DevOps:
+  #   org: https://dev.azure.com/your-org
+  #   project: MyProject
+  # For Linear:
+  #   team: my-team
+  # For GitHub (default — auto-detected from git remote):
+  #   owner: auto
+  #   repo: auto
+
+# Audit overlay (optional — domain-specific context for audit prompts)
+audits:
+  overlay: null

@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/local/.github/project.schema.json",
+  "title": "Portable project contract for .github agents and skills",
+  "description": "Generic, optional-first contract so agents/skills work in any repository. Omit sections that do not apply; prefer discovery when a path is absent.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version of this contract."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable project or product name."
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 2,
+      "description": "BCP 47 / IETF language tag for agent output (e.g. pt-BR, en)."
+    },
+    "layout": {
+      "type": "string",
+      "enum": ["single", "monorepo", "multi-package"],
+      "description": "Workspace shape. Omit or use single for a simple app repo."
+    },
+    "apps": {
+      "type": "object",
+      "description": "Named applications or packages. Keys are free-form ids (api, web, mobile, …).",
+      "additionalProperties": {
+        "$ref": "#/$defs/app"
+      }
+    },
+    "docs": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Paths to documentation. All fields optional for simple repos.",
+      "properties": {
+        "root": {
+          "type": "string",
+          "description": "Documentation root directory."
+        },
+        "requirements": {
+          "type": "string",
+          "description": "Requirements backlog or index file."
+        },
+        "api_readme": {
+          "type": "string",
+          "description": "API / backend engineering README."
+        },
+        "web_readme": {
+          "type": "string",
+          "description": "Web / frontend engineering README."
+        },
+        "blueprints": {
+          "type": "string",
+          "description": "Directory (or file) for architecture/folder blueprints."
+        },
+        "diagrams": {
+          "type": "string",
+          "description": "Directory for diagrams (PlantUML, C4, etc.)."
+        },
+        "historical_audits": {
+          "type": "string",
+          "description": "Directory of past audit reports (read-only reference)."
+        },
+        "commits_guide": {
+          "type": "string",
+          "description": "Optional commit message / Refs guide."
+        },
+        "business_rules": {
+          "type": "string",
+          "description": "Optional business rules document."
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where agents write new artifacts. Relative POSIX paths.",
+      "properties": {
+        "audits": {
+          "type": "string",
+          "description": "Root for new audit reports (often .github/audits/results)."
+        },
+        "cards": {
+          "type": "string",
+          "description": "Epic / story cards directory."
+        },
+        "implementations": {
+          "type": "string",
+          "description": "Phased implementation plans directory."
+        },
+        "diagrams": {
+          "type": "string",
+          "description": "Override for generated diagrams if distinct from docs.diagrams."
+        }
+      }
+    },
+    "stack_hints": {
+      "type": "array",
+      "description": "Optional technology hints. Never treat as hard requirements.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "conventions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requirement_prefixes": {
+          "type": "array",
+          "description": "Prefixes for requirement IDs (e.g. RF, RNF, US).",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "finding_prefixes": {
+          "type": "object",
+          "description": "Map audit id (from audits/manifest.yml) → finding ID prefix.",
+          "additionalProperties": {
+            "type": ["string", "null"],
+            "minLength": 1
+          }
+        },
+        "commit_refs_style": {
+          "type": "string",
+          "description": "Optional note on how Refs appear in commits."
+        }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overlay": {
+          "type": "string",
+          "description": "Optional markdown with project-specific audit context."
+        },
+        "manifest": {
+          "type": "string",
+          "description": "Override path to audits manifest (default .github/audits/manifest.yml)."
+        }
+      }
+    },
+    "management": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional project management backend contract (used by integration-bridge and cards-sync multi-backend adapters).",
+      "properties": {
+        "backend": {
+          "type": "string",
+          "enum": ["github", "jira", "azure-devops", "linear", "gitlab", "none"],
+          "description": "Target project management backend."
+        },
+        "url": {
+          "type": "string",
+          "description": "Jira base URL."
+        },
+        "project_key": {
+          "type": "string",
+          "description": "Jira project key."
+        },
+        "email": {
+          "type": "string",
+          "description": "Optional email used for some auth flows."
+        },
+        "org": {
+          "type": "string",
+          "description": "Azure DevOps organization URL."
+        },
+        "project": {
+          "type": "string",
+          "description": "Azure DevOps project name."
+        },
+        "team": {
+          "type": "string",
+          "description": "Linear team identifier."
+        },
+        "project_url": {
+          "type": "string",
+          "description": "GitLab project URL."
+        },
+        "owner": {
+          "type": "string",
+          "description": "GitHub owner/login (optional; can be auto-detected)."
+        },
+        "repo": {
+          "type": "string",
+          "description": "GitHub repository name (optional; can be auto-detected)."
+        }
+      },
+      "required": ["backend"]
+    }
+  },
+  "$defs": {
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "root": {
+          "type": "string",
+          "description": "Application root directory."
+        },
+        "manifest": {
+          "type": "string",
+          "description": "Primary package/project manifest (package.json, pyproject.toml, …)."
+        },
+        "source_dirs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Source directories under this app."
+        },
+        "test_dirs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional test directories."
+        },
+        "orm": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "ORM / data-layer kind (prisma, drizzle, sequelize, django, …)."
+            },
+            "schema": {
+              "type": "string",
+              "description": "Path to schema or models entry file."
+            },
+            "migrations": {
+              "type": "string",
+              "description": "Optional migrations directory."
+            }
+          }
+        }
+      }
+    }
+  }
+}

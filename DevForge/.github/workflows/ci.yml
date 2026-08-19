@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect package manager
+        id: detect
+        run: |
+          if [ -f "package-lock.json" ] || [ -f "package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "install=npm ci" >> $GITHUB_OUTPUT
+            echo "lint=npm run lint --if-present" >> $GITHUB_OUTPUT
+            echo "test=npm test --if-present" >> $GITHUB_OUTPUT
+            echo "build=npm run build --if-present" >> $GITHUB_OUTPUT
+          elif [ -f "yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "install=yarn install --frozen-lockfile" >> $GITHUB_OUTPUT
+            echo "lint=yarn lint" >> $GITHUB_OUTPUT
+            echo "test=yarn test" >> $GITHUB_OUTPUT
+            echo "build=yarn build" >> $GITHUB_OUTPUT
+          elif [ -f "pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "install=pnpm install --frozen-lockfile" >> $GITHUB_OUTPUT
+            echo "lint=pnpm lint" >> $GITHUB_OUTPUT
+            echo "test=pnpm test" >> $GITHUB_OUTPUT
+            echo "build=pnpm build" >> $GITHUB_OUTPUT
+          elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+            echo "manager=python" >> $GITHUB_OUTPUT
+            echo "install=pip install -r requirements.txt 2>/dev/null || pip install -e . 2>/dev/null || true" >> $GITHUB_OUTPUT
+            echo "lint=python -m flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics 2>/dev/null || true" >> $GITHUB_OUTPUT
+            echo "test=python -m pytest 2>/dev/null || true" >> $GITHUB_OUTPUT
+            echo "build=echo 'No build step for Python'" >> $GITHUB_OUTPUT
+          else
+            echo "manager=unknown" >> $GITHUB_OUTPUT
+            echo "install=echo 'No install step detected'" >> $GITHUB_OUTPUT
+            echo "lint=echo 'No lint step detected'" >> $GITHUB_OUTPUT
+            echo "test=echo 'No test step detected'" >> $GITHUB_OUTPUT
+            echo "build=echo 'No build step detected'" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Setup Python
+        if: steps.detect.outputs.manager == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: ${{ steps.detect.outputs.install }}
+
+      - name: Lint
+        run: ${{ steps.detect.outputs.lint }}
+
+      - name: Test
+        run: ${{ steps.detect.outputs.test }}
+
+      - name: Build
+        run: ${{ steps.detect.outputs.build }}
+
+      - name: Validate cards (frontmatter + hierarchy)
+        run: node scripts/cards-sync/validate.mjs
+
+      - name: Cards sync unit tests
+        run: node --test scripts/cards-sync/*.test.mjs
+
+      - name: Sync cards (dry-run)
+        run: node scripts/cards-sync/sync.mjs --dry-run

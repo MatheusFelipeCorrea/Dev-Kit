@@ -1,0 +1,17 @@
+# Audit results (generated, can be large)
+.github/audits/results/
+
+# Plans output (generated per-session)
+.github/plans/implementations/
+.github/plans/specs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Environment
+.env
+.env.local

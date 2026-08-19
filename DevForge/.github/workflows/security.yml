@@ -1,0 +1,32 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect and audit (Node)
+        if: hashFiles('package-lock.json') != '' || hashFiles('package.json') != ''
+        run: |
+          npm audit --audit-level=high || true
+
+      - name: Detect and audit (Python)
+        if: hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != ''
+        run: |
+          pip install pip-audit 2>/dev/null
+          pip-audit -r requirements.txt 2>/dev/null || pip-audit 2>/dev/null || true
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified

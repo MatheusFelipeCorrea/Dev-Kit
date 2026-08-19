@@ -1,0 +1,61 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import process from "node:process";
+
+const workspaceRoot = process.cwd();
+const hookPath = path.join(workspaceRoot, ".git", "hooks", "pre-commit");
+const marker = "# devforge-cards-validate";
+
+const hookBody = `#!/bin/sh
+${marker}
+changed=$(git diff --cached --name-only --diff-filter=ACM | grep '^\\.github/cards/.*\\.md$' || true)
+if [ -n "$changed" ]; then
+  echo "[devforge] Validating staged card files..."
+  node scripts/cards-sync/validate.mjs || exit 1
+fi
+`;
+
+async function main() {
+  const argYes = process.argv.includes("--yes");
+  const gitDir = path.join(workspaceRoot, ".git");
+
+  try {
+    await fs.stat(gitDir);
+  } catch {
+    console.error("[install-hook] Not a git repository — init git first.");
+    process.exit(1);
+  }
+
+  let existing = "";
+  try {
+    existing = await fs.readFile(hookPath, "utf8");
+  } catch {}
+
+  if (existing.includes(marker)) {
+    console.log("[install-hook] DevForge pre-commit hook already installed.");
+    return;
+  }
+
+  if (existing.trim() && !argYes) {
+    console.log("[install-hook] pre-commit hook already exists with custom content.");
+    console.log("[install-hook] Re-run with --yes to append DevForge validation block.");
+    process.exit(1);
+  }
+
+  const merged = existing.trim()
+    ? `${existing.trimEnd()}\n\n${hookBody}`
+    : hookBody;
+
+  await fs.writeFile(hookPath, merged, "utf8");
+
+  try {
+    await fs.chmod(hookPath, 0o755);
+  } catch {}
+
+  console.log("[install-hook] ✅ pre-commit hook installed (validates .github/cards/*.md on commit)");
+}
+
+main().catch((error) => {
+  console.error("[install-hook] FATAL:", error.message);
+  process.exit(1);
+});

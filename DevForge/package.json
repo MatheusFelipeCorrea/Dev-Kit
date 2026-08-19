@@ -1,0 +1,20 @@
+{
+  "name": "devforge",
+  "private": true,
+  "description": "Portable AI agents and skills kit — cards-sync scripts",
+  "type": "module",
+  "scripts": {
+    "cards:init": "node scripts/cards-sync/init.mjs",
+    "cards:validate": "node scripts/cards-sync/validate.mjs",
+    "cards:sync": "node scripts/cards-sync/sync.mjs",
+    "cards:dry-run": "node scripts/cards-sync/sync.mjs --dry-run",
+    "cards:reverse": "node scripts/cards-sync/sync.mjs --reverse",
+    "cards:doctor": "node scripts/cards-sync/doctor.mjs --interactive",
+    "cards:watch": "node scripts/cards-sync/watch.mjs",
+    "cards:hook": "node scripts/cards-sync/install-hook.mjs",
+    "cards:test": "node --test scripts/cards-sync/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
