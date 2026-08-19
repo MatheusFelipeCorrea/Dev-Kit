@@ -69,6 +69,29 @@ export function parseOnlyFilter(argv = process.argv) {
   return null;
 }
 
+/** Kit sample cards (EXAMPLE-*) are validated locally but skipped on forward sync by default. */
+export function isExampleCardId(cardId) {
+  return /^EXAMPLE-/i.test(String(cardId || ""));
+}
+
+export function shouldIncludeExampleCards(argv = process.argv) {
+  if (argv.includes("--include-examples")) return true;
+  return String(process.env.CARDS_SYNC_INCLUDE_EXAMPLES || "").toLowerCase() === "true";
+}
+
+export function filterExampleSampleCards(cards, onlyIds, options = {}) {
+  const includeExamples =
+    options.includeExamples ?? shouldIncludeExampleCards(options.argv);
+  if (includeExamples) return { cards, skipped: 0 };
+  if (onlyIds?.some(isExampleCardId)) return { cards, skipped: 0 };
+
+  const skipped = cards.filter((c) => isExampleCardId(c.cardId)).length;
+  return {
+    cards: cards.filter((c) => !isExampleCardId(c.cardId)),
+    skipped,
+  };
+}
+
 export function expandCardIdsWithParents(cards, onlyIds) {
   if (!onlyIds?.length) return cards;
 

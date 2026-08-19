@@ -62,6 +62,8 @@ Cards are read in the IDE **and** rendered as GitHub Issues after sync. Use a co
 - Parent + Sub-issue links, optional section emoji polish, **🔄 DevForge sync** footer
 - After creating/editing cards: `npm run cards:validate` → `npm run cards:sync` (or `npm run cards:watch`)
 
+**EXAMPLE-* sample cards** in the kit are validated locally but **skipped on forward sync** (they never appear on the board unless you pass `--include-examples`).
+
 ## Language
 
 - Generate all card content in ${OUTPUT_LANGUAGE}

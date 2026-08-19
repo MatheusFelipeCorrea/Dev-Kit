@@ -6,6 +6,9 @@ import {
   filterEdgesForCards,
   parseOnlyFilter,
   cardIdFromRelativePath,
+  isExampleCardId,
+  filterExampleSampleCards,
+  shouldIncludeExampleCards,
 } from "./lib.mjs";
 
 test("pickBestGitHubProject prefers DevForge title", () => {
@@ -57,4 +60,27 @@ test("parseOnlyFilter reads --only argv", () => {
 
 test("cardIdFromRelativePath extracts basename", () => {
   assert.equal(cardIdFromRelativePath("stories/PROJ-STORY-001.md"), "PROJ-STORY-001");
+});
+
+test("filterExampleSampleCards skips EXAMPLE-* by default", () => {
+  const cards = [
+    { cardId: "EXAMPLE-EPIC-001" },
+    { cardId: "PROJ-STORY-001" },
+  ];
+  const result = filterExampleSampleCards(cards, null, { includeExamples: false });
+  assert.equal(result.skipped, 1);
+  assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-STORY-001"]);
+});
+
+test("filterExampleSampleCards honors --only EXAMPLE explicit target", () => {
+  const cards = [{ cardId: "EXAMPLE-STORY-001" }, { cardId: "PROJ-1" }];
+  const result = filterExampleSampleCards(cards, ["EXAMPLE-STORY-001"], { includeExamples: false });
+  assert.equal(result.skipped, 0);
+  assert.equal(result.cards.length, 2);
+});
+
+test("shouldIncludeExampleCards respects flag and env", () => {
+  assert.equal(shouldIncludeExampleCards(["node", "sync.mjs", "--include-examples"]), true);
+  assert.equal(isExampleCardId("EXAMPLE-EPIC-001"), true);
+  assert.equal(isExampleCardId("PROJ-EPIC-001"), false);
 });

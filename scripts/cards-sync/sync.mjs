@@ -7,6 +7,7 @@ import {
   parseOnlyFilter,
   expandCardIdsWithParents,
   filterEdgesForCards,
+  filterExampleSampleCards,
   discoverGitHubProjectNumber,
   resolveRepoConfig,
   writeSyncSummary,
@@ -1258,6 +1259,16 @@ function getFieldByName(project, fieldName) {
   return fields.find((f) => f?.name?.toLowerCase() === fieldName.toLowerCase()) || null;
 }
 
+function applyExampleSampleFilter(cards, onlyIds) {
+  const { cards: filtered, skipped } = filterExampleSampleCards(cards, onlyIds);
+  if (skipped > 0) {
+    log(
+      `Skipping ${skipped} EXAMPLE sample card(s) (kit reference only). Use --include-examples to sync them.`
+    );
+  }
+  return filtered;
+}
+
 const FIELD_NAME_ALIASES = {
   status: ["Status"],
   type: ["Type", "Tipo"],
@@ -1635,12 +1646,18 @@ async function runForwardSync() {
   }
 
   const onlyIds = parseOnlyFilter();
-  const cardsToSync = onlyIds?.length ? expandCardIdsWithParents(cards, onlyIds) : cards;
+  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  if (!syncableCards.length) {
+    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    return;
+  }
+
+  const cardsToSync = onlyIds?.length ? expandCardIdsWithParents(syncableCards, onlyIds) : syncableCards;
   if (onlyIds?.length) {
     log(`Incremental sync: ${onlyIds.length} target(s) → ${cardsToSync.length} card(s) including parents`);
   }
 
-  log(`Valid cards: ${cardsToSync.length}${onlyIds?.length ? ` (of ${cards.length} total)` : ""}`);
+  log(`Valid cards: ${cardsToSync.length}${onlyIds?.length ? ` (of ${syncableCards.length} syncable)` : ""}`);
 
   const edges = filterEdgesForCards(buildEdges(cardsToSync), cardsToSync.map((c) => c.cardId));
   log(`Parent-child links: ${edges.length}`);
@@ -1996,12 +2013,19 @@ async function runForwardSyncJira(repoConfig, management) {
     return;
   }
 
-  const edges = buildEdges(cards);
-  log(`Valid cards: ${cards.length}`);
+  const onlyIds = parseOnlyFilter();
+  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  if (!syncableCards.length) {
+    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    return;
+  }
+
+  const edges = buildEdges(syncableCards);
+  log(`Valid cards: ${syncableCards.length}`);
   log(`Parent-child links: ${edges.length}`);
 
   if (dryRun) {
-    printDryRunTable(cards, edges);
+    printDryRunTable(syncableCards, edges);
     log("Dry-run in Jira mode: no remote changes applied.");
     return;
   }
@@ -2009,7 +2033,7 @@ async function runForwardSyncJira(repoConfig, management) {
   const actions = [];
   const issueByCardId = new Map();
 
-  for (const card of cards) {
+  for (const card of syncableCards) {
     const existing = await jiraSearchIssueByCardId(management, management.jiraProjectKey, card.cardId);
     let issueKey;
     if (existing) {
@@ -2176,10 +2200,17 @@ async function runForwardSyncAzure(repoConfig, management) {
     return;
   }
 
+  const onlyIds = parseOnlyFilter();
+  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  if (!syncableCards.length) {
+    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    return;
+  }
+
   log("Dry-run in Azure mode depends on your DRY_RUN/--dry-run env; no GitHub side-effects.");
 
   const actions = [];
-  for (const card of cards) {
+  for (const card of syncableCards) {
     const existingId = await azureFindWorkItemIdByCardId(card.cardId);
     if (dryRun) {
       actions.push({ action: existingId ? "UPDATE" : "CREATE", cardId: card.cardId, workItemId: existingId || null });
@@ -2276,8 +2307,15 @@ async function runForwardSyncGitLab(repoConfig, management) {
     return;
   }
 
+  const onlyIds = parseOnlyFilter();
+  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  if (!syncableCards.length) {
+    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    return;
+  }
+
   const actions = [];
-  for (const card of cards) {
+  for (const card of syncableCards) {
     const existing = await gitlabFindIssueByCardId(card);
     if (dryRun) {
       actions.push({ action: existing ? "UPDATE" : "CREATE", cardId: card.cardId, gitlabIssueIid: existing?.iid || null });
@@ -2388,8 +2426,15 @@ async function runForwardSyncLinear(repoConfig, management) {
     return;
   }
 
+  const onlyIds = parseOnlyFilter();
+  const syncableCards = applyExampleSampleFilter(cards, onlyIds);
+  if (!syncableCards.length) {
+    log("No cards to sync (only EXAMPLE samples present — add project cards or pass --include-examples).");
+    return;
+  }
+
   const actions = [];
-  for (const card of cards) {
+  for (const card of syncableCards) {
     const existingId = await linearFindIssueIdByCardId(card.cardId);
     if (dryRun) {
       actions.push({ action: existingId ? "UPDATE" : "CREATE", cardId: card.cardId, linearIssueId: existingId || null });

@@ -278,6 +278,8 @@ npm run cards:watch
 
 O sync publica no GitHub com **links** (parent/sub-issues), seções mais legíveis e rodapé **🔄 DevForge sync**.
 
+> **EXAMPLE-* não vão pro board:** os 3 cards de exemplo do kit são só referência local. O sync ignora `EXAMPLE-*` por padrão — só entram cards do seu projeto (`PROJ-*`, etc.). Para demo: `npm run cards:sync -- --include-examples`.
+
 Exemplo mínimo de frontmatter:
 
 ```yaml

@@ -60,6 +60,15 @@ See **`.github/cards/CARD.template.md`** for the full friendly layout (emojis, c
 
 When you create a card with `card-refiner` and run sync, the issue body is formatted for readers on GitHub without hand-maintaining links.
 
+### EXAMPLE sample cards (not synced by default)
+
+The kit ships `EXAMPLE-*` cards under `.github/cards/` as **local reference** (validate passes; forward sync **skips** them).
+
+- Default: `npm run cards:sync` syncs only your project cards (`PROJ-*`, `APP-*`, …)
+- To sync samples (e.g. demo): `npm run cards:sync -- --include-examples`
+- Or: `CARDS_SYNC_INCLUDE_EXAMPLES=true npm run cards:sync`
+- Explicit target still works: `npm run cards:sync -- --only EXAMPLE-STORY-001`
+
 ## File locations
 
 - Epics: `.github/cards/epics/{CARD_ID}.md`
