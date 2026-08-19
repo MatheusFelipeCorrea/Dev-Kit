@@ -4,10 +4,17 @@ import {
   parseFrontmatter,
   parseCardFile,
   parseSubIssueIds,
+  extractCardIdFromReference,
+  formatCardReference,
+  enrichBodySubIssues,
+  beautifyCardBodyForDisplay,
+  buildIssueBody,
   buildEdges,
   resolveMappedOptionValue,
   buildOptionCandidates,
   pickSingleSelectOption,
+  pickIterationOption,
+  resolveSprintFieldConfig,
   pickJiraTransition,
   buildJiraDescription,
   parseSyncMetadataFromDescription,
@@ -66,6 +73,67 @@ test("parseSubIssueIds reads bullet IDs under Sub-issues section", () => {
 `;
   const ids = parseSubIssueIds(body);
   assert.deepEqual(ids, ["EXAMPLE-CHILD-1", "EXAMPLE-CHILD-2"]);
+});
+
+test("parseSubIssueIds reads card IDs from markdown issue links", () => {
+  const body = `
+## Sub-issues
+- [EXAMPLE-CHILD-1 (#12)](https://github.com/o/r/issues/12)
+`;
+  assert.deepEqual(parseSubIssueIds(body), ["EXAMPLE-CHILD-1"]);
+});
+
+test("extractCardIdFromReference supports plain IDs and markdown links", () => {
+  assert.equal(extractCardIdFromReference("TEST-STORY-001"), "TEST-STORY-001");
+  assert.equal(
+    extractCardIdFromReference("[TEST-STORY-001 (#36)](https://github.com/o/r/issues/36)"),
+    "TEST-STORY-001"
+  );
+});
+
+test("enrichBodySubIssues replaces sub-issue bullets with GitHub links", () => {
+  const issueByCardId = new Map([
+    ["TEST-STORY-001", { number: 36 }],
+    ["TEST-STORY-002", { number: 37 }],
+  ]);
+  const body = `## Sub-issues\n\n- TEST-STORY-001\n- TEST-STORY-002\n`;
+  const enriched = enrichBodySubIssues(body, issueByCardId, "MatheusFelipeCorrea", "DevForge-Kit");
+  assert.match(enriched, /\[TEST-STORY-001 \(#36\)\]\(https:\/\/github\.com\/MatheusFelipeCorrea\/DevForge-Kit\/issues\/36\)/);
+  assert.match(enriched, /\[TEST-STORY-002 \(#37\)\]/);
+});
+
+test("buildIssueBody adds DevForge sync footer and parent links", () => {
+  const card = {
+    cardId: "TEST-FEATURE-001",
+    relativeFile: ".github/cards/features/TEST-FEATURE-001.md",
+    parent: "TEST-EPIC-001",
+    body: "# Feature\n\n## Sub-issues\n\n- TEST-STORY-001\n",
+  };
+  const issueByCardId = new Map([
+    ["TEST-EPIC-001", { number: 32 }],
+    ["TEST-STORY-001", { number: 36 }],
+  ]);
+  const body = buildIssueBody(card, {
+    issueByCardId,
+    owner: "MatheusFelipeCorrea",
+    name: "DevForge-Kit",
+  });
+
+  assert.match(body, /## 👆 Parent|## Parent/);
+  assert.match(body, /\[TEST-EPIC-001 \(#32\)\]/);
+  assert.match(body, /\[TEST-STORY-001 \(#36\)\]/);
+  assert.match(body, /🔄 DevForge sync/);
+  assert.match(body, /CARD_ID: TEST-FEATURE-001/);
+  assert.match(body, /PARENT_CARD_ID: TEST-EPIC-001/);
+});
+
+test("beautifyCardBodyForDisplay adds section emojis when missing", () => {
+  const body = "## Sub-issues\n- A\n\n## Resumo\n\n### CONCLUIDO\n- ok\n\n### PENDENTE\n- todo";
+  const pretty = beautifyCardBodyForDisplay(body);
+  assert.match(pretty, /## 🔗 Sub-issues/);
+  assert.match(pretty, /## 📋 Resumo/);
+  assert.match(pretty, /### ✅ Concluído/);
+  assert.match(pretty, /### ⏳ Pendente/);
 });
 
 test("buildEdges merges parent field and body sub-issues without duplicates", () => {
@@ -296,4 +364,39 @@ test("pickJiraTransition matches canonical and localized status names", () => {
 
   const missing = pickJiraTransition(transitions, "Backlog", repoConfig);
   assert.equal(missing, null);
+});
+
+test("pickIterationOption matches iteration title exactly and fuzzily", () => {
+  const field = {
+    __typename: "ProjectV2IterationField",
+    configuration: {
+      iterations: [
+        { id: "it-1", title: "Sprint 1" },
+        { id: "it-2", title: "Sprint 2" },
+      ],
+    },
+  };
+
+  assert.equal(pickIterationOption(field, "Sprint 1"), "it-1");
+  assert.equal(pickIterationOption(field, "sprint 2"), "it-2");
+  assert.equal(pickIterationOption(field, null), "");
+  assert.equal(pickIterationOption(field, "Sprint 99"), "");
+});
+
+test("resolveSprintFieldConfig applies defaults and seed iterations", () => {
+  const defaults = resolveSprintFieldConfig({});
+  assert.equal(defaults.durationDays, 14);
+  assert.match(defaults.startDate, /^\d{4}-\d{2}-\d{2}$/);
+  assert.deepEqual(defaults.seedIterations, []);
+
+  const custom = resolveSprintFieldConfig({
+    sprintField: {
+      durationDays: 21,
+      startDate: "2026-01-01",
+      seedIterations: [{ title: "Sprint 1", startDate: "2026-01-01" }],
+    },
+  });
+  assert.equal(custom.durationDays, 21);
+  assert.equal(custom.startDate, "2026-01-01");
+  assert.equal(custom.seedIterations.length, 1);
 });

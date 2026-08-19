@@ -12,6 +12,7 @@
     "cards:doctor": "node scripts/cards-sync/doctor.mjs --interactive",
     "cards:watch": "node scripts/cards-sync/watch.mjs",
     "cards:hook": "node scripts/cards-sync/install-hook.mjs",
+    "cards:labels-reset": "node scripts/cards-sync/labels-reset.mjs",
     "cards:test": "node --test scripts/cards-sync/*.test.mjs"
   },
   "engines": {

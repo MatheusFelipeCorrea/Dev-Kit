@@ -97,7 +97,12 @@ async function main() {
   }
 
   log("");
-  log("Step 2/5 — Doctor (local + remote checks)...");
+  log("Step 2/6 — Reset repository labels (DevForge catalog)...");
+  const labelsCode = runScript("labels-reset.mjs", argYes ? ["--yes"] : ["--dry-run"]);
+  if (labelsCode !== 0) process.exit(labelsCode);
+
+  log("");
+  log("Step 3/6 — Doctor (local + remote checks)...");
   const doctorCode = runScript("doctor.mjs", ["--yes"]);
   if (doctorCode !== 0) {
     log("Doctor reported issues — fix them and re-run cards:init");
@@ -105,29 +110,29 @@ async function main() {
   }
 
   log("");
-  log("Step 3/5 — Validate cards...");
+  log("Step 3/6 — Validate cards...");
   const validateCode = runScript("validate.mjs");
   if (validateCode !== 0) process.exit(validateCode);
 
   log("");
-  log("Step 4/5 — Dry-run sync...");
+  log("Step 4/6 — Dry-run sync...");
   const dryRunCode = runScript("sync.mjs", ["--dry-run"]);
   if (dryRunCode !== 0) process.exit(dryRunCode);
 
   if (argSkipSync) {
     log("");
-    log("Step 5/5 — Skipped real sync (--skip-sync)");
+    log("Step 5/6 — Skipped real sync (--skip-sync)");
   } else if (!token) {
     log("");
-    log("Step 5/5 — Skipped real sync (no token). Run: npm run cards:sync");
+    log("Step 5/6 — Skipped real sync (no token). Run: npm run cards:sync");
   } else if (argYes) {
     log("");
-    log("Step 5/5 — Real sync (--yes)...");
+    log("Step 5/6 — Real sync (--yes)...");
     const syncCode = runScript("sync.mjs");
     if (syncCode !== 0) process.exit(syncCode);
   } else {
     log("");
-    log("Step 5/5 — Real sync skipped.");
+    log("Step 5/6 — Real sync skipped.");
     log("Run `npm run cards:sync` or `npm run cards:init -- --yes` to push to GitHub.");
   }
 

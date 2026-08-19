@@ -134,7 +134,7 @@ Organizadas em `.github/skills/` por categoria:
 |-----------|-------|-----------|
 | **planning/** | hypothesis-forge | Exploração de problema: persona, impacto, hipótese, decisão |
 | | acceptance-spec | Gerador de especificação de aceitação (Given/When/Then) |
-| | card-refiner | Cria e evolui cards (YAML frontmatter); aceita comandos conversacionais ("mova para Done") |
+| | card-refiner | Cria e evolui cards (YAML + corpo amigável); sync automático com links no GitHub |
 | | project-architect | Planejador de arquitetura greenfield com passos guiados |
 | | refactor-guide | Guia de refatoração segura e incremental |
 | | sprint-retro | Facilitador de retrospectiva de sprint |
@@ -172,7 +172,7 @@ Em um **clone limpo** do DevForge, você recebe o kit base: agentes, skills, tem
 
 | Tipo | Exemplos | Quando aparece |
 |------|----------|----------------|
-| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `.github/cards/EXAMPLE-*`, `project.example.yml` | Clone inicial |
+| **Sempre no kit** | `.github/agents/`, `.github/skills/`, `.github/memory/` (templates), `.github/cards/CARD.template.md`, `.github/cards/EXAMPLE-*`, `project.example.yml` | Clone inicial |
 | **Config do seu projeto** | `.github/project.yml`, `.env`, `.github/memory/PROJECT.md` preenchido | Após setup / `project-discovery` |
 | **Gerados por skills** | ADRs, retros, diagramas, specs, planos, resultados de auditoria | Quando a skill correspondente roda |
 | **Gerados por `project-architect`** | `Project_Architecture_Blueprint.md`, `Project_Folders_Structure_Blueprint.md` | Projetos greenfield — opcional em repos existentes |
@@ -323,9 +323,9 @@ CARDS_SYNC_BACKEND=jira npm run cards:sync -- --reverse
 
 O kit inclui sync automatizado de Markdown cards para boards de gestão:
 
-1. Cards em `.github/cards/` com YAML frontmatter
+1. Cards em `.github/cards/` com YAML frontmatter (copie `CARD.template.md`)
 2. Push dispara workflow → cria/atualiza items remotos (Issues, work items, etc.)
-3. No GitHub: preenche campos do Project, labels e sub-issues automaticamente
+3. No GitHub: preenche campos do Project, labels, sub-issues e **corpo da issue com links**
 
 Veja `scripts/cards-sync/README.md` para documentação completa.
 

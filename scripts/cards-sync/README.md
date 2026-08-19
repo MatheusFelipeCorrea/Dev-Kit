@@ -46,7 +46,19 @@ categories:
 # [EPIC] Feature Name
 
 Card body content here...
+
+See **`.github/cards/CARD.template.md`** for the full friendly layout (emojis, code blocks, acceptance criteria).
 ```
+
+### Card body style
+
+| Where | Format |
+|-------|--------|
+| Local `.md` files | Human-friendly: `## 📋 Resumo`, backticks for APIs, `(EXISTENTE \| NOVO)` markers |
+| YAML frontmatter | Canonical English values only — **no emojis** |
+| GitHub Issue (after sync) | Auto-enriched: parent/sub-issue **links**, section polish, **🔄 DevForge sync** footer |
+
+When you create a card with `card-refiner` and run sync, the issue body is formatted for readers on GitHub without hand-maintaining links.
 
 ## File locations
 
@@ -99,6 +111,7 @@ Worst-case behavior (Project auto-create):
 - If the Project does not exist and `projects-map.json.default.projectNumber` is `0/null` (and `autoCreateProject` is enabled),
   the sync will auto-create a Project named: `[RepoName] DevForge Project`
   (where `RepoName` is the repository name detected from git).
+- The new Project is **linked to the repository** (`repositoryId` on create + `linkProjectV2ToRepository` on existing projects) so **Default repository** is set in Project Settings.
 
 ### 2. Edit projects-map.json
 
@@ -201,7 +214,29 @@ For GitLab backend, provide:
 Labels come from `.github/cards/config/labels.{locale}.json` (for example
 `labels.en.json` or `labels.pt-BR.json`) based on the configured locale.
 
-Set `CREATE_MISSING_LABELS=true` (default) to auto-create missing labels.
+Set `CREATE_MISSING_LABELS=true` (default) to auto-create missing labels used in card `categories`.
+
+**Reset labels (recommended on first setup):** GitHub repos ship default labels (`bug`, `enhancement`, …) and sync may accumulate orphans. Use the DevForge catalog for your locale only:
+
+```bash
+npm run cards:labels-reset -- --dry-run   # preview
+npm run cards:labels-reset -- --yes       # apply
+```
+
+This removes GitHub defaults + orphan labels, keeps Dependabot labels (`dependencies`, `github_actions`) by default, and ensures labels from `labels.{locale}.json`. Card `categories` should use names from that same file.
+
+`cards:init -- --yes` runs label reset automatically before sync.
+
+**Project views:** on create/sync, DevForge configures tabs in order: **Board** → **Tabela** → **Roadmap** (user can customize filters/grouping in the UI afterward).
+
+**Sprint field:** auto-created as GitHub **Iteration** (`Sprint` / `Número da Sprint`). Cards may keep `sprint: null`; define sprint dates in Project Settings. Configure defaults in `projects-map.json` → `sprintField` (`durationDays`, optional `seedIterations`).
+
+**Issue body enrichment (GitHub forward sync):** after create/update, sync rewrites the issue body with:
+- Clickable **Parent** and **Sub-issues** links (`[CARD_ID (#n)](url)`)
+- Optional section emoji headers (`## Resumo` → `## 📋 Resumo`) if not already present
+- **🔄 DevForge sync** blockquote (card id, parent, source path) + machine-readable `CARD_ID` metadata
+
+**Unit tests:** `npm run cards:test` (27+ tests for parsers, mapping, body enrichment).
 
 ## Commands
 
@@ -262,8 +297,9 @@ node scripts/cards-sync/watch.mjs
 | Auto-detect repo | `git remote get-url origin` |
 | Auto-detect token | `gh auth token` |
 | Auto-discover Project | Lists repo Projects; picks `[RepoName] DevForge Project`, any DevForge title, or sole project; saves `projectNumber` |
-| Auto-create Project | When none exists and `autoCreateProject: true` |
-| Incremental sync | `--only CARD_ID,...` or `CARDS_SYNC_ONLY` env (watch uses this) |
+| Auto-create Project | When none exists and `autoCreateProject: true` — links repo as default |
+| Issue body links | Parent, sub-issues, DevForge footer on forward sync |
+| Incremental sync | `--only CARD_ID,...` or `CARDS_SYNC_ONLY` env (watch uses this); loads all issues for link resolution |
 | Sync summary | Writes `.github/plans/cards/last-sync.md` after each forward sync |
 | Pre-commit hook | `npm run cards:hook` validates staged `.github/cards/*.md` |
 

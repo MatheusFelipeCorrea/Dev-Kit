@@ -260,7 +260,25 @@ No CI, `.github/workflows/sync-cards.yml` roda automaticamente ao alterar cards.
 
 ## Passo 6 — Criar seu primeiro card
 
-Crie um arquivo em `.github/cards/epics/PROJ-EPIC-001.md`:
+**Recomendado:** peça ao agente *"Refina minha ideia em cards"* (`card-refiner`) — ele usa `.github/cards/CARD.template.md` (layout amigável com emojis, negrito e blocos de código).
+
+Ou copie o template manualmente:
+
+1. Duplique `.github/cards/CARD.template.md` → `.github/cards/epics/PROJ-EPIC-001.md`
+2. Ajuste frontmatter (`card_id`, `title`, `categories`, …)
+3. Valide e sincronize:
+
+```bash
+npm run cards:validate
+npm run cards:dry-run
+npm run cards:sync
+# ou, enquanto edita:
+npm run cards:watch
+```
+
+O sync publica no GitHub com **links** (parent/sub-issues), seções mais legíveis e rodapé **🔄 DevForge sync**.
+
+Exemplo mínimo de frontmatter:
 
 ```yaml
 ---
@@ -278,10 +296,6 @@ categories:
   - Backend
 ---
 ```
-
-Depois rode `npm run cards:validate` → `npm run cards:dry-run` → `npm run cards:sync`.
-
-Ou peça ao agente: *"Refina minha ideia em cards"* (`card-refiner`).
 
 ---
 

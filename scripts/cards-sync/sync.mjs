@@ -255,7 +255,8 @@ async function listMarkdownFiles(dir) {
       if (entry.name === "config" || entry.name === "synced") continue;
       files.push(...(await listMarkdownFiles(full)));
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
-      if (entry.name.toLowerCase() === "readme.md") continue;
+      const lower = entry.name.toLowerCase();
+      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
       files.push(full);
     }
   }
@@ -300,9 +301,24 @@ function extractTitleFromBody(body) {
 // Sub-issues detection from body
 // ---------------------------------------------------------------------------
 
+function splitBodyLines(body) {
+  return String(body || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .split("\n");
+}
+
+function extractCardIdFromReference(text) {
+  const value = String(text || "").trim();
+  const linkMatch = value.match(/^\[([A-Z0-9][A-Z0-9_-]*)\s*(?:\(#\d+\))?\]/i);
+  if (linkMatch) return linkMatch[1];
+  const plainMatch = value.match(/^([A-Z0-9][A-Z0-9_-]*)/i);
+  return plainMatch ? plainMatch[1] : value;
+}
+
 function parseSubIssueIds(body) {
   const results = [];
-  const lines = body.split("\n");
+  const lines = splitBodyLines(body);
   let inSection = false;
 
   for (const line of lines) {
@@ -315,7 +331,7 @@ function parseSubIssueIds(body) {
 
     const bullet = line.match(/^[-*]\s+(.+)$/);
     if (!bullet) continue;
-    const id = bullet[1].trim();
+    const id = extractCardIdFromReference(bullet[1]);
     if (id) results.push(id);
   }
   return results;
@@ -366,15 +382,143 @@ function buildIssueTitle(card) {
   return `[${typeTag}] ${baseTitle || card.cardId}`;
 }
 
+function issueUrl(owner, name, number) {
+  return `https://github.com/${owner}/${name}/issues/${number}`;
+}
+
+function formatCardReference(cardId, issueByCardId, owner, name) {
+  const issue = issueByCardId?.get(cardId);
+  if (!issue?.number) return cardId;
+  const url = issueUrl(owner, name, issue.number);
+  return `[${cardId} (#${issue.number})](${url})`;
+}
+
+function formatParentFieldValue(cardId, issueByCardId, owner, name) {
+  if (!cardId) return "";
+  const issue = issueByCardId?.get(cardId);
+  if (!issue?.number) return cardId;
+  return `${issueUrl(owner, name, issue.number)} (${cardId})`;
+}
+
+function enrichBodySubIssues(body, issueByCardId, owner, name) {
+  const lines = splitBodyLines(body);
+  let inSection = false;
+
+  return lines
+    .map((line) => {
+      if (/^##\s+.*[Ss]ub-issues/i.test(line)) {
+        inSection = true;
+        return line;
+      }
+      if (inSection && /^##\s+/.test(line)) inSection = false;
+      if (!inSection) return line;
+
+      const bullet = line.match(/^([-*]\s+)(.+)$/);
+      if (!bullet) return line;
+      const ref = bullet[2].trim();
+      if (/^\[[^\]]+\]\([^)]+\)/.test(ref)) return line;
+
+      const cardId = extractCardIdFromReference(ref);
+      if (!issueByCardId?.has(cardId)) return line;
+      return `${bullet[1]}${formatCardReference(cardId, issueByCardId, owner, name)}`;
+    })
+    .join("\n");
+}
+
+function enrichBodyWithParentSection(body, card, issueByCardId, owner, name) {
+  if (!card.parent || !issueByCardId?.has(card.parent)) return body;
+
+  if (/^##\s+.*\b[Pp]arent\b/i.test(body)) {
+    const lines = splitBodyLines(body);
+    let inSection = false;
+    return lines
+      .map((line) => {
+        if (/^##\s+.*\b[Pp]arent\b/i.test(line)) {
+          inSection = true;
+          return line;
+        }
+        if (inSection && /^##\s+/.test(line)) inSection = false;
+        if (!inSection) return line;
+
+        const bullet = line.match(/^([-*]\s+)(.+)$/);
+        if (!bullet) return line;
+        const cardId = extractCardIdFromReference(bullet[2]);
+        if (!issueByCardId.has(cardId)) return line;
+        return `${bullet[1]}${formatCardReference(cardId, issueByCardId, owner, name)}`;
+      })
+      .join("\n");
+  }
+
+  const parentLink = formatCardReference(card.parent, issueByCardId, owner, name);
+  const block = `## 👆 Parent\n\n- ${parentLink}\n\n`;
+  const subMatch = body.match(/\n##\s+.*[Ss]ub-issues/i);
+  if (subMatch?.index !== undefined) {
+    return `${body.slice(0, subMatch.index)}\n${block}${body.slice(subMatch.index + 1)}`;
+  }
+  const resumoMatch = body.match(/\n##\s+Resumo/i);
+  if (resumoMatch?.index !== undefined) {
+    return `${body.slice(0, resumoMatch.index)}\n${block}${body.slice(resumoMatch.index + 1)}`;
+  }
+  return `${body.trim()}\n\n${block}`;
+}
+
+const DISPLAY_SECTION_REPLACEMENTS = [
+  [/^##\s+Sub-issues\s*$/i, "## 🔗 Sub-issues"],
+  [/^##\s+Parent\s*$/i, "## 👆 Parent"],
+  [/^##\s+Resumo\s*$/i, "## 📋 Resumo"],
+  [/^##\s+Descrição\s*$/i, "## 📝 Descrição"],
+  [/^##\s+Critérios de Aceite\s*$/i, "## ✅ Critérios de Aceite"],
+  [/^##\s+Implementação\s*$/i, "## 🛠️ Implementação"],
+  [/^##\s+Regras de Negócio\s*$/i, "## 📐 Regras de Negócio"],
+  [/^##\s+Protótipo e UX\/UI\s*$/i, "## 🎨 Protótipo e UX/UI"],
+  [/^###\s+CONCLUIDO\s*$/i, "### ✅ Concluído"],
+  [/^###\s+Concluído\s*$/i, "### ✅ Concluído"],
+  [/^###\s+PENDENTE\s*$/i, "### ⏳ Pendente"],
+  [/^###\s+Pendente\s*$/i, "### ⏳ Pendente"],
+];
+
+function lineHasDisplayEmoji(line) {
+  return /[\u{1F300}-\u{1FAFF}]/u.test(line);
+}
+
+function beautifyCardBodyForDisplay(body) {
+  return splitBodyLines(body)
+    .map((line) => {
+      if (lineHasDisplayEmoji(line)) return line;
+      for (const [pattern, replacement] of DISPLAY_SECTION_REPLACEMENTS) {
+        if (pattern.test(line.trim())) return replacement;
+      }
+      return line;
+    })
+    .join("\n");
+}
+
 // ---------------------------------------------------------------------------
 // Issue body with sync metadata
 // ---------------------------------------------------------------------------
 
-function buildIssueBody(card) {
-  const lines = [];
-  lines.push(card.body.trim());
-  lines.push("");
-  lines.push("---");
+function buildIssueBody(card, linkContext = null) {
+  let body = card.body.trim();
+  if (linkContext) {
+    body = beautifyCardBodyForDisplay(body);
+    body = enrichBodySubIssues(body, linkContext.issueByCardId, linkContext.owner, linkContext.name);
+    body = enrichBodyWithParentSection(body, card, linkContext.issueByCardId, linkContext.owner, linkContext.name);
+  }
+
+  const lines = [body, "", "---"];
+
+  if (linkContext) {
+    lines.push("", "> **🔄 DevForge sync**", ">");
+    lines.push(`> - **Card:** \`${card.cardId}\``);
+    if (card.parent) {
+      lines.push(
+        `> - **Parent:** ${formatCardReference(card.parent, linkContext.issueByCardId, linkContext.owner, linkContext.name)}`
+      );
+    }
+    lines.push(`> - **Source:** \`${card.relativeFile}\``);
+    lines.push("");
+  }
+
   lines.push("<!-- SYNC_METADATA — do not edit below this line -->");
   lines.push(`CARD_ID: ${card.cardId}`);
   lines.push(`SOURCE_FILE: ${card.relativeFile}`);
@@ -444,6 +588,35 @@ async function searchIssueByCardId(owner, name, cardId) {
     { query: q }
   );
   return data.search.nodes[0] || null;
+}
+
+async function loadIssueMapByCardId(owner, name) {
+  const map = new Map();
+  const q = `repo:${owner}/${name} in:body "CARD_ID:" is:issue`;
+  let endCursor = null;
+  let hasNextPage = true;
+
+  while (hasNextPage) {
+    const data = await graphql(
+      `query($query: String!, $endCursor: String) {
+        search(type: ISSUE, query: $query, first: 50, after: $endCursor) {
+          pageInfo { hasNextPage endCursor }
+          nodes { ... on Issue { id number title url body } }
+        }
+      }`,
+      { query: q, endCursor }
+    );
+
+    for (const issue of data.search?.nodes || []) {
+      const cardId = issue.body?.match(/CARD_ID:\s*(\S+)/)?.[1];
+      if (cardId) map.set(cardId, issue);
+    }
+
+    hasNextPage = Boolean(data.search?.pageInfo?.hasNextPage);
+    endCursor = data.search?.pageInfo?.endCursor || null;
+  }
+
+  return map;
 }
 
 async function createIssue(repositoryId, title, body) {
@@ -573,6 +746,20 @@ async function getProject(owner, projectNumber) {
 
 const DEFAULT_TYPE_OPTIONS = ["Epic", "Feature", "Story", "Task", "Subtask", "Bug"];
 const DEFAULT_PRIORITY_OPTIONS = ["Highest", "High", "Medium", "Low"];
+const TYPE_OPTION_COLORS = {
+  Epic: "PURPLE",
+  Feature: "BLUE",
+  Story: "GREEN",
+  Task: "YELLOW",
+  Subtask: "GRAY",
+  Bug: "RED",
+};
+const PRIORITY_OPTION_COLORS = {
+  Highest: "RED",
+  High: "ORANGE",
+  Medium: "YELLOW",
+  Low: "GRAY",
+};
 const DEFAULT_STATUS_OPTIONS = [
   "Backlog",
   "Functional Refinement",
@@ -583,19 +770,55 @@ const DEFAULT_STATUS_OPTIONS = [
   "Done",
 ];
 
-async function createProjectV2(ownerId, title) {
+async function createProjectV2(ownerId, title, repositoryId = null) {
   const data = await graphql(
-    `mutation($ownerId: ID!, $title: String!) {
-      createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+    `mutation($ownerId: ID!, $title: String!, $repositoryId: ID) {
+      createProjectV2(input: { ownerId: $ownerId, title: $title, repositoryId: $repositoryId }) {
         projectV2 { id number }
       }
     }`,
-    { ownerId, title }
+    { ownerId, title, repositoryId }
   );
   return data.createProjectV2.projectV2;
 }
 
-async function addSingleSelectField(projectId, name, options) {
+async function getProjectLinkedRepositorySlugs(projectId) {
+  const data = await graphql(
+    `query($projectId: ID!) {
+      node(id: $projectId) {
+        ... on ProjectV2 {
+          repositories(first: 20) { nodes { nameWithOwner } }
+        }
+      }
+    }`,
+    { projectId }
+  );
+  return (data.node?.repositories?.nodes || []).map((r) => r.nameWithOwner).filter(Boolean);
+}
+
+async function linkProjectToRepository(projectId, repositoryId) {
+  await graphql(
+    `mutation($projectId: ID!, $repositoryId: ID!) {
+      linkProjectV2ToRepository(input: { projectId: $projectId, repositoryId: $repositoryId }) {
+        repository { nameWithOwner }
+      }
+    }`,
+    { projectId, repositoryId }
+  );
+}
+
+async function ensureProjectRepositoryLink(project, repositoryId, repositorySlug) {
+  if (!project?.id || !repositoryId) return false;
+
+  const linked = await getProjectLinkedRepositorySlugs(project.id);
+  if (linked.includes(repositorySlug)) return false;
+
+  await linkProjectToRepository(project.id, repositoryId);
+  log(`  + Project linked to repository: ${repositorySlug}`);
+  return true;
+}
+
+async function addSingleSelectField(projectId, name, options, fieldKey = null) {
   const data = await graphql(
     `mutation($projectId: ID!, $name: String!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
       createProjectV2Field(input: {
@@ -608,7 +831,11 @@ async function addSingleSelectField(projectId, name, options) {
     {
       projectId,
       name,
-      options: options.map((o, i) => ({ name: o, color: singleSelectColor(i) })),
+      options: options.map((o, i) => ({
+        name: o,
+        color: optionColorForField(fieldKey, o, i),
+        description: "",
+      })),
     }
   );
   return data.createProjectV2Field.projectV2Field;
@@ -647,19 +874,241 @@ async function addDateField(projectId, name) {
   );
 }
 
-async function updateSingleSelectFieldOptions(fieldId, options) {
+function formatDateISO(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function resolveSprintFieldConfig(repoConfig) {
+  const sprintField = repoConfig.sprintField || {};
+  const durationDays = Number(sprintField.durationDays || 14);
+  const startDate = sprintField.startDate || formatDateISO(new Date());
+  const seedIterations = Array.isArray(sprintField.seedIterations) ? sprintField.seedIterations : [];
+  return { durationDays, startDate, seedIterations };
+}
+
+async function addIterationField(projectId, name, repoConfig) {
+  const { durationDays, startDate, seedIterations } = resolveSprintFieldConfig(repoConfig);
+  const iterations = seedIterations.map((it) => ({
+    title: String(it.title),
+    startDate: String(it.startDate),
+    duration: Number(it.duration || durationDays),
+  }));
+
+  await graphql(
+    `mutation($projectId: ID!, $name: String!, $config: ProjectV2IterationFieldConfigurationInput!) {
+      createProjectV2Field(input: {
+        projectId: $projectId,
+        dataType: ITERATION,
+        name: $name,
+        iterationConfiguration: $config
+      }) {
+        projectV2Field { ... on ProjectV2IterationField { id name } }
+      }
+    }`,
+    {
+      projectId,
+      name,
+      config: {
+        duration: durationDays,
+        startDate,
+        iterations,
+      },
+    }
+  );
+}
+
+async function ensureSprintField(project, repoConfig) {
+  const fieldMap = repoConfig.fieldMap || {};
+  const configuredName = fieldMap.sprint || "Sprint";
+  const candidates = [configuredName, ...(FIELD_NAME_ALIASES.sprint || [])];
+
+  let sprintField = null;
+  for (const candidate of candidates) {
+    const found = getFieldByName(project, candidate);
+    if (found) {
+      sprintField = found;
+      break;
+    }
+  }
+
+  if (sprintField) {
+    if (sprintField.__typename !== "ProjectV2IterationField") {
+      log(`  WARN: Sprint field "${sprintField.name}" exists but is not Iteration type`);
+      return;
+    }
+    const count = sprintField.configuration?.iterations?.length || 0;
+    log(
+      `  = Sprint iteration field exists: ${sprintField.name}${
+        count ? ` (${count} iteration(s))` : " (no iterations yet — configure in Project Settings)"
+      }`
+    );
+    return;
+  }
+
+  try {
+    await addIterationField(project.id, configuredName, repoConfig);
+    log(`  + Sprint iteration field created: ${configuredName}`);
+  } catch (error) {
+    log(`  WARN: Could not create Sprint iteration field: ${error.message}`);
+    log("  Create an Iteration field manually in Project Settings if needed.");
+  }
+}
+
+async function updateSingleSelectFieldOptions(fieldId, options, fieldKey = null) {
   const data = await graphql(
     `mutation($fieldId: ID!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
       updateProjectV2Field(input: { fieldId: $fieldId, singleSelectOptions: $options }) {
-        projectV2Field { ... on ProjectV2SingleSelectField { id name options { id name } } }
+        projectV2Field { ... on ProjectV2SingleSelectField { id name options { id name color } } }
       }
     }`,
     {
       fieldId,
-      options: options.map((o, i) => ({ name: o, color: singleSelectColor(i) })),
+      options: options.map((o, i) => ({
+        name: o,
+        color: optionColorForField(fieldKey, o, i),
+        description: "",
+      })),
     }
   );
   return data.updateProjectV2Field.projectV2Field;
+}
+
+async function applySelectFieldColors(field, colorByName, label) {
+  if (!field || field.__typename !== "ProjectV2SingleSelectField") return;
+
+  const options = (field.options || []).map((opt, i) => ({
+    id: opt.id,
+    name: opt.name,
+    color: colorByName[opt.name] || singleSelectColor(i),
+    description: "",
+  }));
+
+  try {
+    await graphql(
+      `mutation($fieldId: ID!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
+        updateProjectV2Field(input: { fieldId: $fieldId, singleSelectOptions: $options }) {
+          projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+        }
+      }`,
+      { fieldId: field.id, options }
+    );
+    log(`  ~ ${label} colors updated (${options.length} options)`);
+  } catch (error) {
+    log(`  WARN: Could not update ${label} colors: ${error.message}`);
+  }
+}
+
+async function ensureDevForgeFieldColors(project, repoConfig) {
+  const fieldMap = repoConfig.fieldMap || {};
+  const typeField = getFieldByName(project, fieldMap.type || "Type")
+    || getFieldByName(project, "Tipo");
+  const priorityField = getFieldByName(project, fieldMap.priority || "Priority");
+
+  await applySelectFieldColors(typeField, TYPE_OPTION_COLORS, "Type/Tipo");
+  await applySelectFieldColors(priorityField, PRIORITY_OPTION_COLORS, "Priority");
+}
+
+const DEVFORGE_PROJECT_VIEWS = [
+  { name: "Board", layout: "BOARD_LAYOUT" },
+  { name: "Tabela", layout: "TABLE_LAYOUT" },
+  { name: "Roadmap", layout: "ROADMAP_LAYOUT" },
+];
+
+function isDevForgeViewsConfigured(views) {
+  return (
+    views.length === 3 &&
+    views[0]?.name === "Board" &&
+    views[0]?.layout === "BOARD_LAYOUT" &&
+    views[1]?.name === "Tabela" &&
+    views[1]?.layout === "TABLE_LAYOUT" &&
+    views[2]?.name === "Roadmap" &&
+    views[2]?.layout === "ROADMAP_LAYOUT"
+  );
+}
+
+async function listProjectViews(projectId) {
+  const data = await graphql(
+    `query($id: ID!) {
+      node(id: $id) {
+        ... on ProjectV2 {
+          views(first: 20, orderBy: { field: POSITION, direction: ASC }) {
+            nodes { id name layout }
+          }
+        }
+      }
+    }`,
+    { id: projectId }
+  );
+  return data.node?.views?.nodes || [];
+}
+
+async function deleteProjectView(viewId) {
+  await graphql(
+    `mutation($viewId: ID!) {
+      deleteProjectV2View(input: { viewId: $viewId }) { projectV2View { id } }
+    }`,
+    { viewId }
+  );
+}
+
+async function createProjectView(projectId, name, layout) {
+  await graphql(
+    `mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
+      createProjectV2View(input: { projectId: $projectId, name: $name, layout: $layout }) {
+        projectV2View { id name layout }
+      }
+    }`,
+    { projectId, name, layout }
+  );
+}
+
+async function updateProjectView(viewId, { name, layout }) {
+  await graphql(
+    `mutation($viewId: ID!, $name: String, $layout: ProjectV2ViewLayout) {
+      updateProjectV2View(input: { viewId: $viewId, name: $name, layout: $layout }) {
+        projectV2View { id name layout }
+      }
+    }`,
+    { viewId, name, layout }
+  );
+}
+
+async function ensureDevForgeProjectViews(project) {
+  if (!project?.id) return;
+
+  let views = await listProjectViews(project.id);
+  if (isDevForgeViewsConfigured(views)) {
+    log("  = Project views already configured (Board → Tabela → Roadmap)");
+    return;
+  }
+
+  log("  Configuring project views (Board → Tabela → Roadmap)...");
+
+  try {
+    if (!views.length) {
+      for (const spec of DEVFORGE_PROJECT_VIEWS) {
+        await createProjectView(project.id, spec.name, spec.layout);
+      }
+      log("  + Project views created");
+      return;
+    }
+
+    await updateProjectView(views[0].id, {
+      name: DEVFORGE_PROJECT_VIEWS[0].name,
+      layout: DEVFORGE_PROJECT_VIEWS[0].layout,
+    });
+
+    for (let i = views.length - 1; i >= 1; i--) {
+      await deleteProjectView(views[i].id);
+    }
+
+    await createProjectView(project.id, DEVFORGE_PROJECT_VIEWS[1].name, DEVFORGE_PROJECT_VIEWS[1].layout);
+    await createProjectView(project.id, DEVFORGE_PROJECT_VIEWS[2].name, DEVFORGE_PROJECT_VIEWS[2].layout);
+    log("  + Project views configured");
+  } catch (error) {
+    log(`  WARN: Could not configure project views automatically: ${error.message}`);
+    log("  Customize views manually: Board (first) → Tabela → Roadmap");
+  }
 }
 
 async function ensureStatusFieldOptions(project, repoConfig) {
@@ -684,7 +1133,7 @@ async function ensureStatusFieldOptions(project, repoConfig) {
   }
 
   try {
-    await updateSingleSelectFieldOptions(statusField.id, DEFAULT_STATUS_OPTIONS);
+    await updateSingleSelectFieldOptions(statusField.id, DEFAULT_STATUS_OPTIONS, "status");
     log(`  ~ Status field updated with DevForge workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
   } catch (error) {
     log(`  WARN: Could not update Status options automatically: ${error.message}`);
@@ -697,25 +1146,22 @@ function singleSelectColor(index) {
   return colors[index % colors.length];
 }
 
-async function getOwnerNodeId(owner) {
-  // Try repository node first (repo-level project creation).
-  // Fallback to user/org id if repo id isn't available.
-  try {
-    const data = await graphql(
-      `query($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { id } }`,
-      { owner, name: repoName }
-    );
-    return data.repository.id;
-  } catch {}
+function optionColorForField(fieldKey, optionName, index) {
+  if (fieldKey === "type") return TYPE_OPTION_COLORS[optionName] || singleSelectColor(index);
+  if (fieldKey === "priority") return PRIORITY_OPTION_COLORS[optionName] || singleSelectColor(index);
+  return singleSelectColor(index);
+}
 
+async function getOwnerNodeId(owner) {
+  // createProjectV2 requires a User or Organization node — not a Repository node.
   try {
     const data = await graphql(`query($login: String!) { user(login: $login) { id } }`, { login: owner });
-    return data.user.id;
+    if (data.user?.id) return data.user.id;
   } catch {}
 
   try {
     const data = await graphql(`query($login: String!) { organization(login: $login) { id } }`, { login: owner });
-    return data.organization.id;
+    if (data.organization?.id) return data.organization.id;
   } catch {}
 
   return null;
@@ -726,6 +1172,7 @@ async function getOwnerNodeId(owner) {
 const REQUIRED_FIELDS = [
   { key: "type", defaultName: "Type", kind: "single_select", options: DEFAULT_TYPE_OPTIONS },
   { key: "priority", defaultName: "Priority", kind: "single_select", options: DEFAULT_PRIORITY_OPTIONS },
+  { key: "sprint", defaultName: "Sprint", kind: "iteration" },
   { key: "storyPoints", defaultName: "Story Points", kind: "number" },
   { key: "reporter", defaultName: "Reporter", kind: "text" },
   { key: "parent", defaultName: "Parent (Epic/Feature)", kind: "text" },
@@ -742,8 +1189,12 @@ async function autoCreateProject(owner, repoConfig) {
 
   // Name requirement: "[RepoName] DevForge Project"
   const projectTitle = `${repoName} DevForge Project`;
-  const created = await createProjectV2(ownerId, projectTitle);
+  const repositoryId = await getRepositoryNodeId(repoOwner, repoName);
+  const created = await createProjectV2(ownerId, projectTitle, repositoryId);
   log(`Project created: "${projectTitle}" (number ${created.number})`);
+  if (repositoryId) {
+    log(`  + Default repository: ${repoOwner}/${repoName}`);
+  }
 
   // Fetch newly created project to see existing fields (Status is auto-created by GitHub)
   const project = await getProject(owner, created.number);
@@ -761,19 +1212,24 @@ async function autoCreateProject(owner, repoConfig) {
     }
 
     if (spec.kind === "single_select") {
-      await addSingleSelectField(project.id, name, spec.options);
+      await addSingleSelectField(project.id, name, spec.options, spec.key);
     } else if (spec.kind === "number") {
       await addNumberField(project.id, name);
     } else if (spec.kind === "text") {
       await addTextField(project.id, name);
     } else if (spec.kind === "date") {
       await addDateField(project.id, name);
+    } else if (spec.kind === "iteration") {
+      await addIterationField(project.id, name, repoConfig);
     }
     log(`  + Field created: ${name}`);
   }
 
   const refreshed = await getProject(owner, created.number);
   await ensureStatusFieldOptions(refreshed, repoConfig);
+  await ensureDevForgeFieldColors(refreshed, repoConfig);
+  await ensureDevForgeProjectViews(refreshed);
+  await ensureSprintField(refreshed, repoConfig);
 
   // Auto-save projectNumber back to config
   try {
@@ -791,7 +1247,7 @@ async function autoCreateProject(owner, repoConfig) {
 
   log("");
   log("NOTE: Status field configured with DevForge workflow columns.");
-  log("'Sprint' (iteration) field must be created manually in Project Settings if needed.");
+  log("Sprint iteration field configured (cards may keep sprint: null until sprints are defined).");
 
   return created;
 }
@@ -960,7 +1416,7 @@ async function updateProjectField(projectId, itemId, field, value, context = {})
 
 async function findProjectItem(projectId, issueId) {
   const data = await graphql(
-    `query($projectId: ID!) { node(id: $projectId) { ... on ProjectV2 { items(first: 200) { nodes { id content { ... on Issue { id } } } } } } }`,
+    `query($projectId: ID!) { node(id: $projectId) { ... on ProjectV2 { items(first: 100) { nodes { id content { ... on Issue { id } } } } } } }`,
     { projectId }
   );
   const nodes = data.node?.items?.nodes || [];
@@ -1236,6 +1692,30 @@ async function runForwardSync() {
     }
   }
 
+  if (!dryRun && issueByCardId.size) {
+    try {
+      const fullIssueMap = await loadIssueMapByCardId(repoOwner, repoName);
+      for (const [cardId, issue] of fullIssueMap) {
+        if (!issueByCardId.has(cardId)) issueByCardId.set(cardId, issue);
+      }
+    } catch (e) {
+      log(`Could not load full issue map for link enrichment: ${e.message}`);
+    }
+
+    const linkContext = { issueByCardId, owner: repoOwner, name: repoName };
+    for (const card of cardsToSync) {
+      const issue = issueByCardId.get(card.cardId);
+      if (!issue?.id) continue;
+      try {
+        const enrichedBody = buildIssueBody(card, linkContext);
+        await updateIssue(issue.id, buildIssueTitle(card), enrichedBody);
+        actions.push({ action: "BODY_ENRICHED", cardId: card.cardId, number: issue.number });
+      } catch (e) {
+        actions.push({ action: "BODY_ENRICH_FAILED", cardId: card.cardId, reason: e.message });
+      }
+    }
+  }
+
   // Link sub-issues
   for (const edge of edges) {
     const parentIssue = issueByCardId.get(edge.parentCardId);
@@ -1260,6 +1740,11 @@ async function runForwardSync() {
       log(`Project not found: owner=${projectOwner} number=${projectNumber}`);
     } else {
       log(`Project found: owner=${projectOwner} number=${projectNumber}`);
+      await ensureStatusFieldOptions(project, repoConfig);
+      await ensureDevForgeFieldColors(project, repoConfig);
+      await ensureDevForgeProjectViews(project);
+      await ensureSprintField(project, repoConfig);
+      project = await getProject(projectOwner, projectNumber);
     }
   }
 
@@ -1277,6 +1762,13 @@ async function runForwardSync() {
   }
 
   if (project && !dryRun) {
+    try {
+      await ensureProjectRepositoryLink(project, repositoryId, repositorySlug);
+    } catch (e) {
+      actions.push({ action: "PROJECT_LINK_FAILED", reason: e.message });
+      log(`  WARN: Could not link project to repository: ${e.message}`);
+    }
+
     const fStatus = resolveProjectField(project, "status", fieldMap);
     const fType = resolveProjectField(project, "type", fieldMap);
     const fPriority = resolveProjectField(project, "priority", fieldMap);
@@ -1319,7 +1811,12 @@ async function runForwardSync() {
         await updateProjectField(project.id, itemId, fSprint, card.sprint);
         await updateProjectField(project.id, itemId, fStoryPoints, card.storyPoints);
         await updateProjectField(project.id, itemId, fReporter, card.reporter);
-        await updateProjectField(project.id, itemId, fParent, card.parent);
+        await updateProjectField(
+          project.id,
+          itemId,
+          fParent,
+          formatParentFieldValue(card.parent, issueByCardId, repoOwner, repoName)
+        );
         await updateProjectField(project.id, itemId, fDueDate, card.dueDate);
       } catch (e) {
         actions.push({ action: "FIELD_UPDATE_FAILED", cardId: card.cardId, reason: e.message });
@@ -2171,11 +2668,18 @@ export {
   parseFrontmatter,
   parseCardFile,
   parseSubIssueIds,
+  extractCardIdFromReference,
+  formatCardReference,
+  beautifyCardBodyForDisplay,
+  enrichBodySubIssues,
+  buildIssueBody,
   buildEdges,
   normalizeText,
   resolveMappedOptionValue,
   buildOptionCandidates,
   pickSingleSelectOption,
+  pickIterationOption,
+  resolveSprintFieldConfig,
   pickJiraTransition,
   buildJiraDescription,
   parseSyncMetadataFromDescription,

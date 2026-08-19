@@ -101,7 +101,8 @@ async function listMarkdownFiles(dir) {
       if (entry.name === "config" || entry.name === "synced") continue;
       files.push(...(await listMarkdownFiles(full)));
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
-      if (entry.name.toLowerCase() === "readme.md") continue;
+      const lower = entry.name.toLowerCase();
+      if (lower === "readme.md" || lower.endsWith(".template.md")) continue;
       files.push(full);
     }
   }

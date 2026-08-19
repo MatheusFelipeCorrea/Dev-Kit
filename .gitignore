@@ -4,6 +4,7 @@
 # Plans output (generated per-session)
 .github/plans/implementations/
 .github/plans/specs/
+.github/plans/cards/last-sync.md
 
 # OS files
 .DS_Store

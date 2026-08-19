@@ -7,34 +7,41 @@ priority: Highest
 sprint: null
 story_points: 5
 reporter: null
-parent: EXAMPLE-EPIC-001
+parent: EXAMPLE-FEATURE-001
 due_date: null
 categories:
   - Backend
 ---
 
-# [STORY BACKEND] Login endpoint
+# [STORY] Login endpoint
 
-## Descrição
-As a user, I want to log in with email and password, so that I can access my account.
+> **Context:** REST login with JWT for authenticated sessions.
 
-## Critérios de Aceite
+## 📝 Description
 
-### Cenário 1 — Login válido
-**Given** a registered user with email "user@test.com",
-**When** POST /api/auth/login is called with valid credentials,
-**Then** returns 200 with JWT token and user data.
+As a **user**, I want to log in with email and password, so that I can access my account.
 
-### Cenário 2 — Credenciais inválidas
-**Given** a registered user,
-**When** POST /api/auth/login is called with wrong password,
-**Then** returns 401 "Invalid credentials".
+## ✅ Acceptance criteria
 
-## Resumo
+### Scenario 1 — Valid login
+**Given** a registered user with email `user@example.com`,  
+**When** `POST /api/auth/login` is called with valid credentials,  
+**Then** returns `200` with JWT token and user data.
 
-### CONCLUIDO
+### Scenario 2 — Invalid credentials
+**Given** a registered user,  
+**When** `POST /api/auth/login` is called with wrong password,  
+**Then** returns `401` with `"Invalid credentials"`.
+
+```json
+{ "error": "invalid_credentials" }
+```
+
+## 📋 Summary
+
+### ✅ Done
 - Spec defined
 
-### PENDENTE
+### ⏳ Pending
 - Implementation
 - Tests
