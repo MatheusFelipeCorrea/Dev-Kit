@@ -1,12 +1,18 @@
 ---
-name: plantuml-diagram-generator
-description: 'Generates PlantUML and Mermaid diagram sources for software projects based on project documentation (Architecture Blueprint, READMEs, Folder Structure, Exemplars). Supports Use Case, Component, Class (backend only), Package (frontend + backend), and Deployment diagrams. Generates adaptive C4 Model Level 2 Container-Level AI prompts for visual architecture diagram images that adapt to any architecture style. Creates organized diagram files in a .github/diagrams/ folder structure. Can detect significant changes and update only what changed. Adapts to any tech stack. Extensible for new diagram types.'
+name: plantuml-generator
+description: >-
+  Generates the full software documentation diagram set: Use Case, Component,
+  Class, Package, Deployment, Sequence, Activity, State, ER (data model), Data
+  Flow, and C4 Level 2 architecture prompts. Outputs PlantUML (.puml) and optional
+  Mermaid (.mmd) under .github/diagrams/. Uses blueprints, READMEs, specs, and
+  codebase discovery. One diagram at a time with approval gates; supports full
+  package mode and incremental Update.
 ---
 
 # PlantUML Diagram Generator
 
 ## Configuration Variables
-${DIAGRAM_SELECTION="All|Use Case|Component|Class|Package|Deployment|Architecture Prompt|Custom selection"} <!-- Which diagrams to generate -->
+${DIAGRAM_SELECTION="All|Complete package|Use Case|Component|Class|Package|Deployment|Sequence|Activity|State|ER|Data Flow|Architecture Prompt|Custom selection"} <!-- Which diagrams to generate -->
 ${PROJECT_TYPE="Auto-detect|Provided by user"} <!-- Technology stack -->
 ${OUTPUT_LANGUAGE="pt-BR|en"} <!-- Language for diagram labels and notes -->
 ${MODE="Generate|Update"} <!-- Generate from scratch or update existing diagrams -->
@@ -52,9 +58,25 @@ ${MODE="Generate|Update"} <!-- Generate from scratch or update existing diagrams
 - Extract: key patterns and representative files
 - Use for: Class diagrams (show the exemplar classes in detail)
 
+### .github/plans/specs/{story-id}/ *(if present)*
+- Extract: user flows, Given/When/Then scenarios, optional `blueprint.mermaid`
+- Use for: Sequence (happy path + alternates), Activity (business steps), State (transitions implied by scenarios)
+
+### .github/cards/stories/*.md *(if present)*
+- Extract: acceptance criteria, status values, domain entities
+- Use for: Use Case scope, State diagrams (lifecycle), Sequence (story-level flows)
+
+### Database artifacts *(if present)*
+- Migrations, Prisma schema, TypeORM entities, SQL files, Database README
+- Use for: ER diagram, Class diagram attributes, State enums
+
 ### .github/instructions/copilot-instructions.md
 - Extract: architectural rules, layer boundaries
 - Use for: Component diagrams (dependency arrows), notes on diagrams
+
+### Codebase discovery *(fallback)*
+- Scan routes, controllers, models, migrations when blueprints are missing
+- Use for: all diagram types — never invent; if evidence is thin, ask the user
 
 ## Output
 
@@ -80,25 +102,62 @@ Classes/
 Pacotes/
   pacotes-frontend.puml
   pacotes-backend.puml
+Modelo de Dados/
+  modelo-dados.puml          # ER (entities, PK/FK, cardinality)
 Implantacao/
   implantacao.puml
+Fluxo de Dados/
+  fluxo-dados.puml           # system-level data movement
+Sequencia/
+  sequencia-{operacao}.puml  # one file per critical operation
+Atividade/
+  atividade-{processo}.puml  # business / workflow processes
+Estado/
+  estado-{entidade}.puml     # entity lifecycles (status enums)
 Arquitetura/
-  prompt-arquitetura.md
+  prompt-arquitetura.md      # C4 L2 image prompt (optional)
+README.md                    # index of generated diagrams (optional)
 ```
+
+### Complete package (recommended order)
+
+When the user selects **Complete package** or **All**, generate in this order (still **one at a time**, approval between each):
+
+| # | Type | Folder | Typical file(s) |
+|---|------|--------|-----------------|
+| 1 | Use Case | `Caso de Uso/` | `caso-de-uso.puml` |
+| 2 | Component | `Componentes/` | `componentes.puml` |
+| 3 | Package | `Pacotes/` | `pacotes-frontend.puml`, `pacotes-backend.puml` |
+| 4 | Class (backend) | `Classes/` | `classes.puml` |
+| 5 | ER / Data model | `Modelo de Dados/` | `modelo-dados.puml` |
+| 6 | Deployment | `Implantacao/` | `implantacao.puml` |
+| 7 | Data Flow | `Fluxo de Dados/` | `fluxo-dados.puml` |
+| 8 | Sequence | `Sequencia/` | one `.puml` per critical operation (max 5 unless user asks more) |
+| 9 | Activity | `Atividade/` | one `.puml` per major business process |
+| 10 | State | `Estado/` | one `.puml` per entity with lifecycle/status |
+| 11 | Architecture prompt | `Arquitetura/` | `prompt-arquitetura.md` |
+
+Before starting the package, present an **inventory** of what will be generated (operations, processes, entities) and **WAIT for approval** of the list.
 
 ## Step 1: Understand What to Generate
 
 Ask the user:
 - 'Which diagrams do you want me to generate?'
 - Present the available options:
-1. Diagrama de Caso de Uso
-2. Diagrama de Componentes
-3. Diagrama de Classes (Backend)
+1. **Pacote completo** — all 11 types above in recommended order
+2. Diagrama de Caso de Uso
+3. Diagrama de Componentes
 4. Diagrama de Pacotes (Frontend + Backend)
-5. Diagrama de Implantação
-6. Prompt para Diagrama de Arquitetura (imagem IA — C4 Model Level 2)
-7. Todos
-- 'Do you have project documentation available (Blueprint, READMEs, Folder Structure)?'
+5. Diagrama de Classes (Backend)
+6. Diagrama ER / Modelo de Dados
+7. Diagrama de Implantação
+8. Diagrama de Fluxo de Dados
+9. Diagrama de Sequência (per operation — ask which)
+10. Diagrama de Atividade (per process — ask which)
+11. Diagrama de Estado (per entity — ask which)
+12. Prompt para Diagrama de Arquitetura (imagem IA — C4 Model Level 2)
+13. Todos — alias for **Pacote completo**
+- 'Do you have project documentation available (Blueprint, READMEs, specs, Folder Structure)?'
 - **WAIT for selection**
 
 ## Step 2: Generate Selected Diagrams
@@ -238,6 +297,113 @@ PlantUML structure:
 
 After generating:
 - 'Here is the Deployment diagram. Review it. Want to adjust anything?'
+- **WAIT for approval**
+
+### Diagram Type: ER / Data Model (Modelo de Dados)
+
+File: `.github/diagrams/Modelo de Dados/modelo-dados.puml`
+
+Extract from project docs and codebase:
+- Entities/tables and columns with types
+- Primary keys, foreign keys, unique constraints
+- Cardinality (1:1, 1:N, N:M) — use junction tables for N:M
+- Enums and status fields (cross-link to State diagrams)
+- Sources: Database README, migrations, ORM schema (Prisma, TypeORM, Sequelize, EF), Blueprint data section
+
+PlantUML structure:
+- Prefer `@startuml` with `entity` blocks (PlantUML IE notation) OR `class` with `<<table>>` stereotype
+- Show PK with `*` prefix, FK relationships with crow's foot labels
+- Group related entities in packages by domain/module
+- Add notes for soft-delete, audit columns, JSON columns when documented
+- Optional companion: `modelo-dados.mmd` (Mermaid `erDiagram`) if user prefers Mermaid
+
+After generating:
+- 'Here is the ER / data model diagram. Review it. Want to adjust anything?'
+- **WAIT for approval**
+
+### Diagram Type: Data Flow (Fluxo de Dados)
+
+File: `.github/diagrams/Fluxo de Dados/fluxo-dados.puml`
+
+System-level view of how data moves between actors, apps, services, queues, databases, and external APIs.
+
+Extract from:
+- Blueprint data-flow section, integration list, deployment diagram inputs
+- READMEs (sync direction, webhooks, batch jobs)
+- Specs and cards describing integrations
+
+PlantUML structure:
+- Use `rectangle`, `database`, `cloud`, `queue` (component with `<<queue>>`) as needed
+- Label every arrow with data artifact (JSON payload, event name, file type) and protocol
+- Distinguish sync (solid) vs async (dashed) flows
+- Include legend note for arrow styles
+- Optional: numbered steps for main E2E flows (1 → 2 → 3)
+
+After generating:
+- 'Here is the Data Flow diagram. Review it. Want to adjust anything?'
+- **WAIT for approval**
+
+### Diagram Type: Sequence (Sequência)
+
+Files: `.github/diagrams/Sequencia/sequencia-{operacao}.puml` (one per operation)
+
+**Before generating:** list candidate operations from routes/READMEs/specs; user picks or approves top N (default max 5 in complete package).
+
+Extract from:
+- Endpoint handler chain: Client → API Gateway → Controller → Service → Repository → DB
+- External API calls, auth checks, cache hits, message publish
+- Matching `acceptance-spec` scenarios and `blueprint.mermaid` if present
+
+PlantUML structure:
+- `@startuml` with `autonumber` for step clarity
+- Participants match real layer/component names from docs
+- Show alt/opt blocks for error paths documented in specs
+- Return arrows for sync responses; async as `-->` with note
+- Title: operation name + HTTP method/route when applicable
+
+After each sequence file:
+- 'Here is the Sequence diagram for [operation]. Review it. Want to adjust anything?'
+- **WAIT for approval**
+
+### Diagram Type: Activity (Atividade)
+
+Files: `.github/diagrams/Atividade/atividade-{processo}.puml`
+
+Business or technical workflows: onboarding, checkout, approval pipeline, CI deploy, card sync flow, etc.
+
+Extract from:
+- Blueprint business rules, card acceptance criteria, BPM-like descriptions in specs
+- Background job steps documented in READMEs
+- User journeys from Use Case diagram
+
+PlantUML structure:
+- Activity diagram syntax: start/stop, `:action;`, `if/else/endif`, `fork/fork again/end fork` for parallel steps
+- Swimlanes (`|Actor|`) when multiple roles participate
+- Decision nodes only when documented — do not invent branches
+
+After each activity file:
+- 'Here is the Activity diagram for [process]. Review it. Want to adjust anything?'
+- **WAIT for approval**
+
+### Diagram Type: State (Estado)
+
+Files: `.github/diagrams/Estado/estado-{entidade}.puml`
+
+Entity or aggregate lifecycles: order status, card status, subscription state, job state, etc.
+
+Extract from:
+- Enum/status fields in models and card frontmatter allowed values
+- Blueprint state machines, business rules ("when X then Y")
+- GitHub Project columns / Jira workflow names if documented in `project.yml` or cards-sync config
+
+PlantUML structure:
+- `[*] --> StateName` initial state from docs or default
+- `-->` transitions labeled with trigger (user action, system event, cron)
+- `note on state` for invariants when documented
+- One diagram per entity — do not merge unrelated lifecycles
+
+After each state file:
+- 'Here is the State diagram for [entity]. Review it. Want to adjust anything?'
 - **WAIT for approval**
 
 ### Diagram Type: Architecture Prompt (Prompt para Imagem IA — C4 Model Level 2)
@@ -446,6 +612,9 @@ ${MODE == "Update" ? "When running in Update mode:
 - Hosting or deployment changed
 - New background job added
 - New service file added or removed
+- New status value or lifecycle transition
+- New critical user flow (sequence/activity)
+- Schema migration altering ER diagram
 
 ### What does NOT count as significant:
 - New methods added to existing classes (unless it is a major feature)
@@ -453,6 +622,7 @@ ${MODE == "Update" ? "When running in Update mode:
 - Style changes
 - Config changes
 - Test additions
+- Wording-only doc edits
 
 ### Update output:
 Present a change report:
@@ -460,10 +630,15 @@ Present a change report:
 'Update scan complete. Results:
 - Diagrama de Caso de Uso: [changes or ✅]
 - Diagrama de Componentes: [changes or ✅]
-- Diagrama de Classes: [changes or ✅]
 - Diagrama de Pacotes Frontend: [changes or ✅]
 - Diagrama de Pacotes Backend: [changes or ✅]
+- Diagrama de Classes: [changes or ✅]
+- Diagrama ER / Modelo de Dados: [changes or ✅]
 - Diagrama de Implantação: [changes or ✅]
+- Diagrama de Fluxo de Dados: [changes or ✅]
+- Diagramas de Sequência: [list files + changes or ✅]
+- Diagramas de Atividade: [list files + changes or ✅]
+- Diagramas de Estado: [list files + changes or ✅]
 - Prompt de Arquitetura: [changes or ✅]
 
 Want me to regenerate the changed diagrams?'
@@ -532,18 +707,51 @@ skinparam databaseBackgroundColor #FFF3E0
 skinparam cloudBackgroundColor #F3E5F5
 skinparam artifactBackgroundColor #E8F5E9
 
+Sequence:
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceLifeLineBorderColor #616161
+skinparam sequenceParticipantBackgroundColor #E3F2FD
+skinparam sequenceParticipantBorderColor #1565C0
+
+Activity:
+skinparam activityBackgroundColor #E8F5E9
+skinparam activityBorderColor #2E7D32
+skinparam activityDiamondBackgroundColor #FFF3E0
+skinparam activityStartColor #1565C0
+skinparam activityEndColor #C62828
+
+State:
+skinparam stateBorderColor #333333
+skinparam stateBackgroundColor #FAFAFA
+skinparam stateArrowColor #555555
+
+ER / Entity:
+skinparam entityBackgroundColor #FFF3E0
+skinparam entityBorderColor #E65100
+
+## Optional: diagrams index
+
+After completing a **Complete package**, offer to write `.github/diagrams/README.md` listing each file, type, and last-updated date — helps teams navigate 10+ diagrams.
+
+## Optional PNG export (repo-adaptive)
+
+After writing `.mmd` sources, offer PNG export when the host repo supports it:
+
+1. Read `project.yml` → `docs.diagrams` or `outputs.diagrams` for output root
+2. **Mermaid** (`.mmd`): if `@mermaid-js/mermaid-cli` or `npx @mermaid-js/mermaid-cli` works:
+   ```bash
+   npx --yes @mermaid-js/mermaid-cli -i path/to/diagram.mmd -o path/to/diagram.png
+   ```
+3. **PlantUML** (`.puml`): if `plantuml` jar or Docker available — document manual step if not
+4. Skip export silently on headless/CI when CLI missing — sources remain canonical
+
+Kit docs use pre-rendered PNGs in `.github/docs/assets/`; **product repos** store PNGs beside sources under their configured diagrams path.
+
 ## Extensibility
 
-This skill supports adding new diagram types in the future. When the user requests a diagram type not listed above:
+For diagram types **not** listed above (timing, network, Gantt, custom C4 PlantUML):
 
 1. Ask what the diagram should show
-2. Determine the PlantUML diagram type that best fits (sequence, activity, state, timing, etc.)
-3. Follow the same pattern: extract from docs → generate .puml → save in .github/diagrams/[Name]/ → present for approval
-4. Apply the same style guide
-
-Common future additions:
-- **Diagrama de Sequência**: Request flow through layers for a specific operation
-- **Diagrama de Atividade**: Business process or workflow visualization
-- **Diagrama de Estado**: Entity lifecycle (e.g., order status transitions)
-- **Diagrama ER**: Entity-Relationship from database schema
-- **Diagrama de Fluxo de Dados**: Data flow between systems"
+2. Pick PlantUML or Mermaid syntax that fits
+3. Create `.github/diagrams/{Category}/` following the same approval workflow
+4. Apply the style guide

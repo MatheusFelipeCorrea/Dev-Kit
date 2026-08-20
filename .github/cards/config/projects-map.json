@@ -1,7 +1,7 @@
 {
   "default": {
-    "projectOwner": null,
-    "projectNumber": null,
+    "projectOwner": "MatheusFelipeCorrea",
+    "projectNumber": 25,
     "autoCreateProject": true,
     "autoDiscoverProject": true,
     "locale": "en",

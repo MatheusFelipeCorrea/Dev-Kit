@@ -112,6 +112,23 @@ Map the discovered context to the contract, keeping only verified entries:
 - `conventions`: requirement/finding prefixes if the repo already uses them
 - `management`: only when you have evidence of the project management tool (Jira/Azure/Linear/GitLab/GitHub). Include `management.backend` and minimal required fields; otherwise omit it.
 - `audits.overlay`: only if a domain overlay exists
+- `ci`: run `npm run hyperion:pipeline-detect` mentally or via terminal — persist `provider`, `policy: detect`, `stack`, `existing` (product CI paths), and `hyperion` flags. **Never** set policy to overwrite existing product CI.
+
+Example `ci` block (adjust from detection):
+
+```yaml
+ci:
+  provider: github-actions
+  policy: detect
+  stack: node-npm
+  existing:
+    - ".github/workflows/deploy.yml"
+  hyperion:
+    cards_sync: true
+    kit_validation: false
+    security_scan: true
+    product_ci: auto
+```
 
 Then: validate against `project.schema.json`, show the user the file (or a diff if
 one already exists), and confirm before saving.

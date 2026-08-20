@@ -1,0 +1,127 @@
+﻿# Comandos rápidos Hyperion
+
+Referência única: **npm** (terminal) e **agente** (sem terminal).  
+**English:** [quick-commands-en.md](../reference/quick-commands-en.md)
+
+---
+
+## Preferência: fale com o agente
+
+Se você usa Cursor, Copilot ou Claude Code, **não precisa rodar npm**. Diga:
+
+| Diga isto | O que acontece |
+|-----------|----------------|
+| **`/setup`** ou *"Configura o Hyperion neste repo"* | Setup completo guiado (`project-startup`) |
+| **`/doctor`** ou *"Rode o doctor do Hyperion"* | Verifica saúde do kit + cards |
+| **`/sync`** ou *"Sincroniza os cards"* | Valida e sobe cards pro GitHub |
+| **`/discover`** ou *"Descobre esse projeto"* | Mapeia repo, cria/atualiza `project.yml` |
+| **`/migrate`** ou *"Adapta Hyperion a este repo"* | Repo legado → project.yml + memory + pipeline |
+| **`/refine`** ou *"Refina em cards"* | Gera cards estruturados |
+| **`/audit`** ou *"Auditoria completa"* | 6 dimensões de auditoria |
+| **`/review`** | Code review |
+| **`/pr-review`** | Revisão de PR aberto (diff + testes) |
+| **`/deps`** | Saúde de dependências (audit + outdated) |
+| **`/implement`** | Plano de implementação de um card |
+| **`/execute`** | Executa fase aprovada do plano (+ testes) |
+| **`/spec-review`** | Gate de spec/card antes de codar |
+| **`/audit-run`** | Auditoria orquestrada (6 dimensões) |
+| **`/release`** | Changelog, versão e tag |
+| **`/diagram`** ou *"Pacote completo de diagramas"* | 11 tipos UML em `.github/diagrams/` |
+| **`/spec`** | Spec BDD + flowchart opcional por story |
+| **`/help`** ou *"Lista comandos Hyperion"* | Mostra atalhos |
+
+Slash commands funcionam nativamente no **Claude Code** (`CLAUDE.md`). No **Cursor**, `.cursor/rules/hyperion.mdc` mapeia os mesmos triggers.
+
+---
+
+## npm — one-liners
+
+Requer Node 20+ na raiz do repo.
+
+```bash
+npm run hyperion:help              # lista tudo
+npm run hyperion:doctor            # saúde kit + cards
+npm run hyperion:setup -- --yes    # bootstrap completo (cards)
+npm run hyperion:sync              # validate + sync
+npm run hyperion:sync -- --dry-run # simula sem escrever
+```
+
+### Primeira vez (GitHub)
+
+```bash
+gh auth login
+npm run hyperion:setup -- --yes
+# ou peça ao agente: /setup
+```
+
+### Dia a dia
+
+```bash
+npm run hyperion:sync              # após editar cards
+npm run cards:watch                # sync ao salvar (opcional)
+```
+
+---
+
+## Auditorias (só agente)
+
+Auditorias são **read-only** — o agente lê o repo e grava relatórios em `.github/audits/results/`.
+
+| Frase | Skill |
+|-------|-------|
+| *"Auditoria completa"* | `full-audit` |
+| *"Revisão de segurança"* | `security-audit` |
+| *"Revisa a arquitetura"* | `architecture-audit` |
+| *"Revisão de DevOps"* | `devops-audit` |
+| *"Code review"* | `code-review` |
+| *"Alinhamento de produto"* | `po-audit` |
+| *"Revisão de UX"* | `ux-audit` |
+
+Guia: [primeira-auditoria.md](../quality/primeira-auditoria.md)
+
+---
+
+## Diagramas (`/diagram`)
+
+Skill `plantuml-generator` — gera **fontes** `.puml` / `.mmd` (PNG é export manual).
+
+| Diga isto | Resultado |
+|-----------|-----------|
+| **`/diagram`** + *"Pacote completo"* | 11 diagramas na ordem recomendada (aprovação entre cada um) |
+| *"Diagrama de sequência do login"* | `Sequencia/sequencia-login.puml` |
+| *"Modelo ER do banco"* | `Modelo de Dados/modelo-dados.puml` |
+| *"Estados do pedido"* | `Estado/estado-pedido.puml` |
+
+Tipos: caso de uso, componentes, pacotes, classes, ER, implantação, fluxo de dados, sequência, atividade, estado, prompt C4.
+
+Mapa completo: [diagrams/README.md](../../diagrams/README.md) · [onde-ficam-os-outputs.md](../meta/onde-ficam-os-outputs.md)
+
+---
+
+## O que mantém os comandos atualizados?
+
+| Fonte | Papel |
+|-------|-------|
+| **`.github/commands.yml`** | Registro canônico de frases, skills e npm |
+| `npm run hyperion:generate-rules` | Regenera `help.mjs`, `CLAUDE.md`, `hyperion.mdc`, `copilot-instructions.md` |
+| `npm run hyperion:check-rules` | CI — falha se runtime rules estiverem desatualizadas |
+| `package.json` | Scripts npm (`hyperion:*`, `cards:*`) |
+| `scripts/hyperion/help.mjs` | Texto do `hyperion:help` (gerado) |
+| `.github/skills/setup/project-startup/` | Orquestrador setup completo |
+| `.github/skills/setup/hyperion-ops/` | Agente roda npm por você |
+| `.github/audits/manifest.yml` | Tipos de auditoria |
+
+**Fluxo mantenedor:** edite `commands.yml` → `npm run hyperion:generate-rules` → commit arquivos gerados.  
+Este doc (`comandos-rapidos.md`) é referência humana — atualize PT/EN se mudar comportamento visível ao usuário.
+
+Política completa: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
+
+Guia de confusões frequentes: [armadilhas-comuns.md](../troubleshooting/armadilhas-comuns.md)
+
+---
+
+## Ver também
+
+- [setup-quickstart.md](../onboarding/setup-quickstart.md)
+- [scripts/cards-sync/README.md](../../../scripts/cards-sync/README.md)
+- Skills: `.github/skills/setup/project-startup/SKILL.md`, `hyperion-ops/SKILL.md`

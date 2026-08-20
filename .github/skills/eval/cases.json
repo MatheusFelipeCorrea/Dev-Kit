@@ -1,0 +1,30 @@
+[
+  {
+    "skill": "memory-capture",
+    "mustContain": ["DECISIONS.md", "## Output", "auto_capture"]
+  },
+  {
+    "skill": "dependency-health",
+    "mustContain": ["## Output", "dependency-health", "project.yml"]
+  },
+  {
+    "skill": "pr-review",
+    "mustContain": ["## Output", "commands.test", "verdict"]
+  },
+  {
+    "skill": "repo-migration",
+    "mustContain": ["## Output", "project.yml", "commands"]
+  },
+  {
+    "skill": "acceptance-spec",
+    "mustContain": ["## Output", "Given/When/Then"]
+  },
+  {
+    "skill": "card-refiner",
+    "mustContain": ["## Output", ".github/cards/"]
+  },
+  {
+    "skill": "release-manager",
+    "mustContain": ["## Output", "CHANGELOG"]
+  }
+]

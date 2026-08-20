@@ -32,6 +32,17 @@ Works in any coding agent runtime (Cursor, Copilot, Claude Code, etc.). Prefer t
 5. **ALWAYS follow discovered docs and code patterns** — never invent stack, layers, or paths
 6. **ALWAYS adapt to the card format** — detect sections by content, not fixed headings
 
+## Handoff to other agents
+
+| After plan approved | Use |
+|---------------------|-----|
+| Execute phases only | `implementation-executor` agent — "run Phase 1 of {plan}" |
+| Spec was never reviewed | `spec-review` agent (`/spec-review`) first |
+| All phases complete | `audit-runner` (`/audit-run`) or `code-review` skill |
+| Legacy repo, no project.yml | `migration` agent (`/migrate`) first |
+
+After plan approved, if `memory.auto_capture: true`, log planning decisions via `memory-capture`.
+
 ## Interaction Flow
 
 ### Step 1: Analyze and Ask

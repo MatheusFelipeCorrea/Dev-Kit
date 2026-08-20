@@ -1,12 +1,20 @@
-# Audit results (generated — keep folder scaffold)
+# Gitignore — generated session artifacts (keep folder scaffolds only)
+
+# Audit results
 .github/audits/results/*
 !.github/audits/results/.gitkeep
 
-# Plans output (generated per-session — keep folder scaffold)
+# Plans — generated per session
 .github/plans/implementations/*
 !.github/plans/implementations/.gitkeep
 .github/plans/specs/*
 !.github/plans/specs/.gitkeep
+.github/plans/reviews/*
+!.github/plans/reviews/.gitkeep
+.github/plans/migrations/*
+!.github/plans/migrations/.gitkeep
+.github/plans/releases/*
+!.github/plans/releases/.gitkeep
 .github/plans/cards/last-sync.md
 
 # OS files

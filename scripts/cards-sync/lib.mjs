@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+﻿import fs from "node:fs/promises";
 import path from "node:path";
 import { execSync } from "node:child_process";
 
@@ -164,11 +164,11 @@ export function filterEdgesForCards(edges, cardIds) {
 export function pickBestGitHubProject(projects, repoName) {
   if (!Array.isArray(projects) || projects.length === 0) return null;
 
-  const kitTitle = `${repoName} Dev-Kit Project`;
+  const kitTitle = `${repoName} Hyperion Project`;
   const exact = projects.find((p) => p.title === kitTitle);
   if (exact) return exact;
 
-  const kitMatch = projects.find((p) => /devforge|dev-kit/i.test(p.title || ""));
+  const kitMatch = projects.find((p) => /hyperion/i.test(p.title || ""));
   if (kitMatch) return kitMatch;
 
   if (projects.length === 1) return projects[0];

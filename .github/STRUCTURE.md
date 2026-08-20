@@ -1,9 +1,10 @@
-# Dev-Kit — folder map
+﻿# Hyperion — folder map
 
-Canonical layout for the portable kit. **English:** see section headers; user docs are PT/EN in `docs/`.
+Canonical layout for the portable kit.
 
-> **Navigation hub:** [docs/README.md](./docs/README.md) (which doc to read)  
-> **Organization rationale:** [docs/organizacao.md](./docs/organizacao.md)
+> **Start here:** [GETTING-STARTED.md](../GETTING-STARTED.md)  
+> **Doc index:** [docs/README.md](./docs/README.md)  
+> **Organization:** [docs/meta/organizacao.md](./docs/meta/organizacao.md)
 
 ---
 
@@ -11,44 +12,33 @@ Canonical layout for the portable kit. **English:** see section headers; user do
 
 ```
 ./
-├── .cursor/rules/dev-kit.mdc   ← Cursor (ships with kit — no manual copy)
-├── .github/                     ← AI kit core (see below)
+├── GETTING-STARTED.md           ← linear onboarding path
+├── .cursor/rules/hyperion.mdc   ← Cursor (ships with kit)
+├── .github/                     ← AI kit core
 ├── scripts/
-│   ├── devkit/                ← npm run devkit:* (help, doctor, setup, sync)
+│   ├── hyperion/                ← npm run hyperion:* (help, doctor, setup, sync)
 │   └── cards-sync/              ← npm run cards:* (sync engine)
 ├── CLAUDE.md                    ← Claude Code slash commands
 ├── package.json                 ← npm shortcuts
-├── .env.example                 ← optional token config (alternative to gh)
-└── README.md                    ← main hub
+├── .env.example                 ← optional token config
+└── README.md                    ← thin hub
 ```
-
-**Not shipped / generated at runtime:** `node_modules/`, `.env`, audit reports, `last-sync.md`.
 
 ---
 
-## `.github/` — kit core
+## `.github/docs/` — organized guides
 
-| Folder | Always on clone? | Purpose |
-|--------|------------------|---------|
-| `agents/` | Yes | Autonomous agents (2) |
-| `audits/` | Yes (scaffold) | `manifest.yml`, prompts, `results/.gitkeep` |
-| `cards/` | Yes | Sync source + `_examples/` (never synced) |
-| `diagrams/` | Yes (empty) | plantuml-generator output |
-| `docs/` | Yes | Human guides + adr/retros placeholders |
-| `instructions/` | Yes | Copilot constitution |
-| `memory/` | Yes (templates) | PROJECT, DOMAIN, DECISIONS |
-| `plans/` | Yes (scaffold) | specs/, implementations/, cards/ |
-| `skills/` | Yes | 24 skills in 4 categories |
-| `workflows/` | Yes | CI, security, sync-cards |
+| Folder | Contents |
+|--------|----------|
+| `onboarding/` | guia-completo, setup-quickstart (PT/EN) |
+| `reference/` | comandos-rapidos, skills-output-map, methodology |
+| `integration/` | github-cli-setup, escolher-backend |
+| `quality/` | primeira-auditoria |
+| `troubleshooting/` | armadilhas-comuns |
+| `meta/` | organizacao, output maps, maintenance policy |
+| `adr/`, `retros/` | Generated artifacts |
 
-**Config files:**
-
-| File | Consumer action |
-|------|-----------------|
-| `project.example.yml` | Copy → `project.yml` in **your** repo |
-| `project.yml` | Copy from `project.example.yml` when adding the kit to your repo |
-| `project.schema.json` | Validation contract |
-| `INDEX.md` | Short pointer → this file + docs index |
+![Documentation map](./docs/assets/hyperion-docs-map.png)
 
 ---
 
@@ -56,13 +46,10 @@ Canonical layout for the portable kit. **English:** see section headers; user do
 
 ```
 cards/
-├── CARD.template.md      ← copy to epics|features|stories|tasks/ (never synced)
+├── CARD.template.md      ← copy template (never synced)
 ├── _examples/            ← reference samples (never synced)
-├── config/               ← projects-map.json, labels.*.json
-├── epics/                ← your syncable cards
-├── features/
-├── stories/
-└── tasks/
+├── config/               ← projects-map.json
+├── epics|features|stories|tasks/  ← syncable cards
 ```
 
 ---
@@ -72,32 +59,59 @@ cards/
 | Prefer | When |
 |--------|------|
 | **`/setup` `/sync` `/doctor`** | Day-to-day — agent runs npm |
-| `npm run devkit:*` | CI, power users, no agent |
-| `npm run cards:*` | Granular sync operations |
+| `npm run hyperion:*` | CI, power users |
+| `npm run cards:*` | Granular sync |
 
-Full command list: `npm run devkit:help`
+Command registry: `.github/commands.yml` → `npm run hyperion:generate-rules`  
+CI drift check: `npm run hyperion:check-rules`
+
+### Validation scripts (maintainers)
+
+| Script | Purpose |
+|--------|---------|
+| `npm run docs:check` | Broken markdown links |
+| `npm run skills:validate` | Skill frontmatter, `## Output`, unique names |
+| `npm run hyperion:check-rules` | Runtime rules match `commands.yml` |
+| `npm run cards:test` | cards-sync unit tests |
+| `npm run hyperion:test` | pipeline-lib unit tests |
+| `npm test` | All unit tests |
 
 ---
 
-## Runtime rules (3 surfaces — intentional overlap)
+## Runtime rules (3 surfaces)
 
 | Runtime | File |
 |---------|------|
-| Cursor | `.cursor/rules/dev-kit.mdc` |
+| Cursor | `.cursor/rules/hyperion.mdc` |
 | Claude Code | `CLAUDE.md` |
-| Copilot / generic | `.github/instructions/copilot-instructions.md` |
+| Copilot | `.github/instructions/copilot-instructions.md` |
 
-Policy: [docs/doc-maintenance-policy.md](./docs/doc-maintenance-policy.md)
+Policy: [docs/meta/doc-maintenance-policy.md](./docs/meta/doc-maintenance-policy.md)
 
 ---
 
-## Skills (24)
+## Skills (30)
 
 | Category | Count | Folder |
 |----------|-------|--------|
 | planning | 6 | `skills/planning/` |
-| setup | 5 | `skills/setup/` |
-| quality | 9 | `skills/quality/` |
-| docs | 4 | `skills/docs/` |
+| setup | 8 | `skills/setup/` |
+| quality | 11 | `skills/quality/` |
+| docs | 5 | `skills/docs/` |
 
-Output registry: [docs/skills-output-map.md](./docs/skills-output-map.md)
+## Agents (8)
+
+| Agent | Trigger | File |
+|-------|---------|------|
+| migration | `/migrate` | `agents/migration.agent.md` |
+| spec-review | `/spec-review` | `agents/spec-review.agent.md` |
+| implementation-plan | `/implement` | `agents/implementation-plan.agent.md` |
+| implementation-executor | `/execute` | `agents/implementation-executor.agent.md` |
+| pr-reviewer | `/pr-review` | `agents/pr-reviewer.agent.md` |
+| audit-runner | `/audit-run` | `agents/audit-runner.agent.md` |
+| release | `/release` | `agents/release.agent.md` |
+| mentoring | `/mentor` | `agents/mentoring.agent.md` |
+
+Catalog: [agents/README.md](./agents/README.md)
+
+Output registry: [docs/reference/skills-output-map.md](./docs/reference/skills-output-map.md)

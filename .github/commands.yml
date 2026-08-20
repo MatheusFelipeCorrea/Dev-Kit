@@ -1,0 +1,182 @@
+# Hyperion — Command registry (source of truth)
+
+# Used by scripts/hyperion/generate-runtime-rules.mjs to sync CLAUDE.md, hyperion.mdc, help.mjs
+
+commands:
+  - phrase: "/help"
+    skill: null
+    npm: "hyperion:help"
+    description: "List shortcuts"
+
+  - phrase: "/setup"
+    skill: "project-startup"
+    npm: "hyperion:setup -- --yes"
+    description: "Full guided setup"
+
+  - phrase: "/doctor"
+    skill: "hyperion-ops"
+    npm: "hyperion:doctor"
+    description: "Kit + cards health check"
+
+  - phrase: "/sync"
+    skill: "hyperion-ops"
+    npm: "hyperion:sync"
+    description: "Validate + sync cards"
+
+  - phrase: "/discover"
+    skill: "project-discovery"
+    description: "Map repo, create project.yml"
+
+  - phrase: "/migrate"
+    skill: "migration"
+    type: agent
+    description: "Adapt Hyperion to existing repo"
+
+  - phrase: "/refine"
+    skill: "card-refiner"
+    description: "Refine idea into cards"
+
+  - phrase: "/explore"
+    skill: "hypothesis-forge"
+    description: "Problem exploration session"
+
+  - phrase: "/spec"
+    skill: "acceptance-spec"
+    description: "Given/When/Then spec"
+
+  - phrase: "/architect"
+    skill: "project-architect"
+    description: "Greenfield architecture"
+
+  - phrase: "/adr"
+    skill: "adr-generator"
+    description: "Architecture Decision Record"
+
+  - phrase: "/audit"
+    skill: "full-audit"
+    description: "Full audit (6 dimensions)"
+
+  - phrase: "/security"
+    skill: "security-audit"
+    description: "Security review"
+
+  - phrase: "/deps"
+    skill: "dependency-health"
+    description: "Dependency audit + outdated"
+
+  - phrase: "/architecture"
+    skill: "architecture-audit"
+    description: "Architecture review"
+
+  - phrase: "/devops"
+    skill: "devops-audit"
+    description: "DevOps review"
+
+  - phrase: "/po"
+    skill: "po-audit"
+    description: "Product alignment"
+
+  - phrase: "/ux"
+    skill: "ux-audit"
+    description: "UX review"
+
+  - phrase: "/review"
+    skill: "code-review"
+    description: "Code review"
+
+  - phrase: "/pr-review"
+    skill: "pr-reviewer"
+    type: agent
+    description: "Review open PR (diff + tests)"
+
+  - phrase: "/implement"
+    skill: "implementation-plan"
+    type: agent
+    description: "Phased implementation plan"
+
+  - phrase: "/execute"
+    skill: "implementation-executor"
+    type: agent
+    description: "Execute approved plan phase"
+
+  - phrase: "/spec-review"
+    skill: "spec-review"
+    type: agent
+    description: "Gate card/spec before coding"
+
+  - phrase: "/audit-run"
+    skill: "audit-runner"
+    type: agent
+    description: "Orchestrated 6-dimension audit"
+
+  - phrase: "/release"
+    skill: "release"
+    type: agent
+    description: "Changelog, version, tag"
+
+  - phrase: "/mentor"
+    skill: "mentoring"
+    type: agent
+    description: "Socratic teaching"
+
+  - phrase: "/refactor"
+    skill: "refactor-guide"
+    description: "Safe refactoring guide"
+
+  - phrase: "/retro"
+    skill: "sprint-retro"
+    description: "Sprint retrospective"
+
+  - phrase: "/test-plan"
+    skill: "testing-strategy"
+    description: "Testing strategy"
+
+  - phrase: "/tech-debt"
+    skill: "tech-debt-tracker"
+    description: "Tech debt inventory"
+
+  - phrase: "/changelog"
+    skill: "changelog-generator"
+    description: "Generate CHANGELOG"
+
+  - phrase: "/connect"
+    skill: "integration-bridge"
+    description: "Jira/Azure/Linear/GitLab bridge"
+
+  - phrase: "/cards-setup"
+    skill: "cards-sync-setup"
+    description: "Cards sync wizard"
+
+  - phrase: "/readme"
+    skill: "readme-updater"
+    description: "Update README"
+
+  - phrase: "/diagram"
+    skill: "plantuml-generator"
+    description: "PlantUML/Mermaid diagrams"
+
+  - phrase: "/pipeline"
+    skill: "pipeline-architect"
+    description: "Adaptive CI/CD setup"
+
+npm_shortcuts:
+  - cmd: "npm run hyperion:help"
+    desc: "This reference"
+  - cmd: "npm run hyperion:doctor"
+    desc: "Kit + cards health check"
+  - cmd: "npm run hyperion:setup -- --yes"
+    desc: "Full bootstrap"
+  - cmd: "npm run hyperion:sync"
+    desc: "Validate + sync cards"
+  - cmd: "npm run hyperion:cursor"
+    desc: "Install .cursor/rules/ if partial kit copy"
+  - cmd: "npm run hyperion:pipeline-detect"
+    desc: "Detect CI/CD and ci policy"
+  - cmd: "npm run hyperion:pipeline-plan"
+    desc: "Dry-run Hyperion workflow install"
+  - cmd: "npm run hyperion:pipeline-apply -- --yes"
+    desc: "Apply hyperion-* workflows"
+  - cmd: "npm run hyperion:repo-detect"
+    desc: "Detect test/lint/build commands for this repo"
+  - cmd: "npm run cards:watch"
+    desc: "Auto-sync on save"

@@ -14,7 +14,7 @@ Brief purpose statement.
 
 ## Output
 
-**Write artifacts to:** `.github/path/to/folder/` (must match [onde-ficam-os-outputs.md](../docs/onde-ficam-os-outputs.md))
+**Write artifacts to:** `.github/path/to/folder/` (must match [onde-ficam-os-outputs.md](../docs/meta/onde-ficam-os-outputs.md))
 
 | Artifact | Path |
 |----------|------|

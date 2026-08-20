@@ -1,0 +1,31 @@
+flowchart TB
+  GS["GETTING-STARTED.md"]
+  README["README.md"]
+
+  subgraph onboarding ["Onboarding"]
+    GCEN["guide-complete-en.md"]
+    GCPT["guia-completo.md"]
+    SQEN["setup-quickstart-en.md"]
+    SQPT["setup-quickstart.md"]
+  end
+
+  subgraph reference ["Reference"]
+    CMD["comandos-rapidos.md"]
+    SOM["skills-output-map.md"]
+  end
+
+  subgraph integration ["Integration"]
+    GH["github-cli-setup.md"]
+    BE["escolher-backend.md"]
+  end
+
+  subgraph quality ["Quality"]
+    AU["primeira-auditoria.md"]
+  end
+
+  GS --> SQPT
+  README --> GS
+  GCPT --> CMD
+  GCPT --> GH
+  GCPT --> AU
+  SQPT --> SOM

@@ -127,6 +127,8 @@ flowchart TD
 
 Only generate if the flow is complex enough to benefit from visualization.
 
+For **project-wide** sequence, activity, state, and ER diagrams, use `/diagram` (`plantuml-generator`) — see `.github/diagrams/README.md`.
+
 ## Output
 
 | Artifact | Path |

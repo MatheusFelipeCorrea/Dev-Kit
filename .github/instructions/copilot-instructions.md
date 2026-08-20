@@ -1,4 +1,4 @@
-# Project Instructions
+﻿# Project Instructions
 
 These instructions apply to all AI coding agents working in this repository
 (GitHub Copilot, Cursor, Claude Code, or any other). They are the project's
@@ -68,7 +68,7 @@ Use Conventional Commits:
 - Follow existing conventions discovered from the codebase.
 - When creating new files, reference `project.yml` for paths and existing patterns.
 - Never invent a new organizational pattern without checking what exists.
-- **Dev-Kit outputs** — every skill writes to a defined folder (see `.github/docs/onde-ficam-os-outputs.md`):
+- **Hyperion outputs** — every skill writes to a defined folder (see `.github/docs/meta/onde-ficam-os-outputs.md`):
   - Cards (sync) → `.github/cards/`
   - Specs → `.github/plans/specs/`
   - Plans → `.github/plans/implementations/`
@@ -98,36 +98,72 @@ Use Conventional Commits:
 
 ## Available Skills
 
-When a task maps to an existing skill, suggest using it — **or run npm yourself** via `devkit-ops` when the user wants sync/doctor without using the terminal.
+<!-- HYPERION:SKILLS:START -->
+Skills live in `.github/skills/` organized by category:
+
+- **planning/** — acceptance-spec, card-refiner, hypothesis-forge, project-architect, refactor-guide, sprint-retro
+- **setup/** — cards-sync-setup, hyperion-ops, integration-bridge, memory-capture, pipeline-architect, project-discovery, project-startup, repo-migration
+- **quality/** — architecture-audit, code-review, dependency-health, devops-audit, full-audit, po-audit, pr-review, security-audit, tech-debt-tracker, testing-strategy, ux-audit
+- **docs/** — adr-generator, changelog-generator, plantuml-generator, readme-updater, release-manager
+
+When the user asks for any of these capabilities, read the corresponding `SKILL.md` and follow its instructions exactly.
+<!-- HYPERION:SKILLS:END -->
+
+## Agents
+
+<!-- HYPERION:AGENTS:START -->
+- `.github/agents/audit-runner.agent.md` — orchestrated 6-dimension audit (`/audit-run`)
+- `.github/agents/implementation-executor.agent.md` — execute approved plan phases (`/execute`)
+- `.github/agents/implementation-plan.agent.md` — phased implementation plan (`/implement`)
+- `.github/agents/mentoring.agent.md` — for teaching/explaining (`/mentor`)
+- `.github/agents/migration.agent.md` — adapt Hyperion to existing repo (`/migrate`)
+- `.github/agents/pr-reviewer.agent.md` — review open PR diff + tests (`/pr-review`)
+- `.github/agents/release.agent.md` — changelog, version, tag (`/release`)
+- `.github/agents/spec-review.agent.md` — gate card/spec before coding (`/spec-review`)
+
+See `.github/agents/README.md` for catalog and recommended flow.
+<!-- HYPERION:AGENTS:END -->
+
+When a task maps to an existing skill, suggest using it — **or run npm yourself** via `hyperion-ops` when the user wants sync/doctor without using the terminal.
 
 | Need | Skill / command |
 |------|-----------------|
-| **Full Dev-Kit setup** | `project-startup` — or user says `/setup` |
-| **Sync / doctor / validate cards** | `devkit-ops` — runs `npm run devkit:sync`, `devkit:doctor` |
-| Understand project structure | `project-discovery` |
-| Plan greenfield architecture | `project-architect` |
-| Refine ideas into cards | `card-refiner` |
-| Explore a problem space | `hypothesis-forge` |
-| Write acceptance spec | `acceptance-spec` |
-| Record architectural decision | `adr-generator` |
-| Implement from a card | `implementation-plan` agent |
-| Learn/mentor | `mentoring` agent |
-| Full repo audit | `full-audit` |
-| Security review | `security-audit` |
-| Architecture review | `architecture-audit` |
-| Code quality review | `code-review` |
-| DevOps/CI review | `devops-audit` |
-| Product alignment review | `po-audit` |
-| UX/Design review | `ux-audit` |
-| Generate diagrams | `plantuml-generator` |
-| Update README | `readme-updater` |
-| Sync cards to GitHub | `cards-sync-setup` |
-| Test strategy/plan | `testing-strategy` |
-| Identify tech debt | `tech-debt-tracker` |
-| Guide a refactoring | `refactor-guide` |
-| Sprint retrospective | `sprint-retro` |
-| Generate changelog | `changelog-generator` |
-| Connect to Jira/Azure/Linear/GitLab | `integration-bridge` |
+<!-- HYPERION:COMMANDS:START -->
+| **Full Hyperion setup** | `project-startup` — or user says `/setup` |
+| **Sync / doctor / validate cards** | `hyperion-ops` — runs `npm run hyperion:sync`, `hyperion:doctor` |
+| Map repo, create project.yml | `project-discovery` — or user says `/discover` |
+| Adapt Hyperion to existing repo | `migration` agent |
+| Refine idea into cards | `card-refiner` — or user says `/refine` |
+| Problem exploration session | `hypothesis-forge` — or user says `/explore` |
+| Given/When/Then spec | `acceptance-spec` — or user says `/spec` |
+| Greenfield architecture | `project-architect` — or user says `/architect` |
+| Architecture Decision Record | `adr-generator` — or user says `/adr` |
+| **Full audit (6 dimensions)** | `full-audit` — or user says `/audit` |
+| Security review | `security-audit` — or user says `/security` |
+| Dependency audit + outdated | `dependency-health` — or user says `/deps` |
+| Architecture review | `architecture-audit` — or user says `/architecture` |
+| DevOps review | `devops-audit` — or user says `/devops` |
+| Product alignment | `po-audit` — or user says `/po` |
+| UX review | `ux-audit` — or user says `/ux` |
+| Code review | `code-review` — or user says `/review` |
+| Review open PR (diff + tests) | `pr-reviewer` agent |
+| Phased implementation plan | `implementation-plan` agent |
+| Execute approved plan phase | `implementation-executor` agent |
+| Gate card/spec before coding | `spec-review` agent |
+| Orchestrated 6-dimension audit | `audit-runner` agent |
+| Changelog, version, tag | `release` agent |
+| Socratic teaching | `mentoring` agent |
+| Safe refactoring guide | `refactor-guide` — or user says `/refactor` |
+| Sprint retrospective | `sprint-retro` — or user says `/retro` |
+| Testing strategy | `testing-strategy` — or user says `/test-plan` |
+| Tech debt inventory | `tech-debt-tracker` — or user says `/tech-debt` |
+| Generate CHANGELOG | `changelog-generator` — or user says `/changelog` |
+| Jira/Azure/Linear/GitLab bridge | `integration-bridge` — or user says `/connect` |
+| Cards sync wizard | `cards-sync-setup` — or user says `/cards-setup` |
+| Update README | `readme-updater` — or user says `/readme` |
+| PlantUML/Mermaid diagrams | `plantuml-generator` — or user says `/diagram` |
+| Adaptive CI/CD setup | `pipeline-architect` — or user says `/pipeline` |
+<!-- HYPERION:COMMANDS:END -->
 
 ## Evolving cards in conversation
 
@@ -135,7 +171,7 @@ If the user asks to move or update a card (e.g. "mova o card X para Done"):
 
 1. Edit the existing file in `.github/cards/{epics|features|stories|tasks}/` — update `status` or other frontmatter fields
 2. Keep `card_id` unchanged
-3. Run `npm run devkit:sync` (or `devkit-ops` skill)
+3. Run `npm run hyperion:sync` (or `hyperion-ops` skill)
 4. **GitHub:** Project Status column updates. **Jira/other:** status in issue metadata (native board not mapped yet)
 5. Allowed status values: Backlog, Functional Refinement, Technical Refinement, In Progress, In Tests, In Revision, Done
 

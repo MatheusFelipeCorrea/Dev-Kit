@@ -1,14 +1,14 @@
----
+﻿---
 name: project-startup
 description: >-
-  Guided end-to-end Dev-Kit setup without requiring the user to run npm
+  Guided end-to-end Hyperion setup without requiring the user to run npm
   manually. Orchestrates project-discovery, memory, cards-sync bootstrap,
   and optional first audit. Use when the user says /setup, "configura o
-  Dev-Kit", "setup completo", "primeira vez no kit", or wants everything
+  Hyperion", "setup completo", "primeira vez no kit", or wants everything
   initialized in one flow.
 ---
 
-# Project Startup — guided Dev-Kit setup
+# Project Startup — guided Hyperion setup
 
 One conversation to bootstrap the kit. **Prefer running terminal commands yourself**
 (via Shell) so the user does not need patience for npm — explain briefly what you ran.
@@ -18,17 +18,17 @@ One conversation to bootstrap the kit. **Prefer running terminal commands yourse
 | User says | Action |
 |-----------|--------|
 | `/setup` | Run this skill |
-| "Configura o Dev-Kit" / "setup completo" | Run this skill |
+| "Configura o Hyperion" / "setup completo" | Run this skill |
 | "Primeira vez no kit" / "inicializa tudo" | Run this skill |
 
 ## Prerequisites (check first)
 
-1. Dev-Kit present (`.github/skills/`, `.github/cards/`)
+1. Hyperion present (`.github/skills/`, `.github/cards/`)
 2. Node.js 20+ (`node -v`)
 3. For GitHub sync: `gh auth login` — if missing, guide user through
-   `.github/docs/github-cli-setup.md` and continue other steps
+   `.github/docs/integration/github-cli-setup.md` and continue other steps
 
-Run `npm run devkit:doctor` (or read checks manually) and report blockers vs warnings.
+Run `npm run hyperion:doctor` (or read checks manually) and report blockers vs warnings.
 
 ## Flow (in order — pause only on blockers)
 
@@ -52,20 +52,34 @@ Suggest filling (or draft from repo evidence):
 
 Ask user for gaps you cannot infer — do not invent domain.
 
+### Step 2b — CI/CD (non-destructive)
+
+Read `.github/skills/setup/pipeline-architect/SKILL.md` or run:
+
+```bash
+npm run hyperion:pipeline-detect
+npm run hyperion:pipeline-plan
+npm run hyperion:pipeline-apply -- --yes
+```
+
+- Default `ci.policy: detect` — never overwrite existing product CI
+- Persist `ci:` block in `project.yml` from detection
+- If legacy `ci.yml` / `sync-cards.yml` found, migrate after user OK
+
 ### Step 3 — Cursor rules + cards bootstrap (you run npm)
 
 **Do not ask the user to copy-paste commands** unless Shell is unavailable.
 
 ```bash
-npm run devkit:setup -- --yes
+npm run hyperion:setup -- --yes
 ```
 
-This installs `.cursor/rules/dev-kit.mdc` (if needed) and runs cards bootstrap.
+This installs `.cursor/rules/hyperion.mdc` (if needed) and runs cards bootstrap.
 
-If GitHub token missing: `npm run devkit:setup -- --skip-sync` and tell user to run
+If GitHub token missing: `npm run hyperion:setup -- --skip-sync` and tell user to run
 `/sync` after `gh auth login`.
 
-Optional hook: `npm run devkit:setup -- --yes --install-hook`
+Optional hook: `npm run hyperion:setup -- --yes --install-hook`
 
 If `projects-map.json` needs manual fields, run **cards-sync-setup** skill first.
 
@@ -86,6 +100,7 @@ Report a checklist:
 | Step | Status | Notes |
 |------|--------|-------|
 | project.yml | ✅/⚠️ | |
+| ci / pipeline | ✅/⚠️ | hyperion-* workflows |
 | memory/PROJECT.md | ✅/⚠️ | |
 | cards bootstrap | ✅/⚠️/skipped | |
 | GitHub token | ✅/⚠️ | |
@@ -100,6 +115,6 @@ Report a checklist:
 
 ## Related
 
-- Terminal ops detail: `.github/skills/setup/devkit-ops/SKILL.md`
-- Quick reference: `.github/docs/comandos-rapidos.md`
-- npm: `npm run devkit:help`
+- Terminal ops detail: `.github/skills/setup/hyperion-ops/SKILL.md`
+- Quick reference: `.github/docs/reference/comandos-rapidos.md`
+- npm: `npm run hyperion:help`

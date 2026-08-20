@@ -1,5 +1,5 @@
-# yaml-language-server: $schema=./project.schema.json
-# Project contract for Dev-Kit agents and skills.
+﻿# yaml-language-server: $schema=./project.schema.json
+# Project contract for Hyperion agents and skills.
 # Copy from project.example.yml and adapt to your product.
 
 version: 1
@@ -46,3 +46,21 @@ management:
 
 audits:
   overlay: null
+
+ci:
+  provider: github-actions
+  policy: detect
+  stack: auto
+  hyperion:
+    cards_sync: true
+    kit_validation: true
+    security_scan: true
+    product_ci: auto
+
+commands:
+  test: npm test
+  audit: npm audit --audit-level=moderate
+
+memory:
+  auto_capture: true
+  decisions_file: .github/memory/DECISIONS.md

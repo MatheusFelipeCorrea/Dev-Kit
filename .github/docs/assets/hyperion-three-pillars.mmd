@@ -1,0 +1,18 @@
+flowchart TB
+  subgraph config ["Config"]
+    PY["project.yml"]
+    MEM["memory/"]
+    MAP["projects-map.json"]
+  end
+  subgraph work ["Trabalho"]
+    CARDS["cards/"]
+    SKILLS["skills/"]
+    AGENTS["agents/"]
+  end
+  subgraph auto ["Automacao"]
+    DF["hyperion:*"]
+    CS["cards-sync"]
+    WF["workflows/"]
+  end
+  config --> work
+  work --> auto

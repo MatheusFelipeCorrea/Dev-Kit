@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+﻿import fs from "node:fs/promises";
 import { execSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
@@ -98,7 +98,22 @@ function readManagementHintsFromProjectYml(content) {
     url: pick("url"),
     project_key: pick("project_key"),
     email: pick("email"),
+    org: pick("org"),
+    project: pick("project"),
+    team: pick("team"),
+    status_map: parseStatusMapBlock(block),
   };
+}
+
+function parseStatusMapBlock(managementBlock) {
+  const mapMatch = managementBlock.match(/^\s*status_map\s*:\s*\n((?:\s+.+\n?)*)/m);
+  if (!mapMatch) return {};
+  const map = {};
+  for (const line of mapMatch[1].split("\n")) {
+    const m = line.match(/^\s{2,}["']?([^"':]+)["']?\s*:\s*["']?([^"'\n#]+)["']?\s*$/);
+    if (m) map[m[1].trim()] = m[2].trim();
+  }
+  return map;
 }
 
 async function resolveManagementConfig(repoConfig) {
@@ -151,6 +166,7 @@ async function resolveManagementConfig(repoConfig) {
     // ----------------------------
     linearTeamId: process.env.LINEAR_TEAM_ID || cfgManagement.team || projectYmlManagement.team || null,
     linearApiToken: process.env.LINEAR_API_TOKEN || null,
+    statusMap: cfgManagement.status_map || projectYmlManagement.status_map || {},
 
     // ----------------------------
     // GitLab
@@ -491,7 +507,7 @@ function buildIssueBody(card, linkContext = null) {
   const lines = [body, "", "---"];
 
   if (linkContext) {
-    lines.push("", "> **🔄 Dev-Kit sync**", ">");
+    lines.push("", "> **🔄 Hyperion sync**", ">");
     lines.push(`> - **Card:** \`${card.cardId}\``);
     if (card.parent) {
       lines.push(
@@ -991,7 +1007,7 @@ async function ensureKitFieldColors(project, repoConfig) {
   await applySelectFieldColors(priorityField, PRIORITY_OPTION_COLORS, "Priority");
 }
 
-const DEVFORGE_PROJECT_VIEWS = [
+const HYPERION_PROJECT_VIEWS = [
   { name: "Board", layout: "BOARD_LAYOUT" },
   { name: "Tabela", layout: "TABLE_LAYOUT" },
   { name: "Roadmap", layout: "ROADMAP_LAYOUT" },
@@ -1069,7 +1085,7 @@ async function ensureKitProjectViews(project) {
 
   try {
     if (!views.length) {
-      for (const spec of DEVFORGE_PROJECT_VIEWS) {
+      for (const spec of HYPERION_PROJECT_VIEWS) {
         await createProjectView(project.id, spec.name, spec.layout);
       }
       log("  + Project views created");
@@ -1077,16 +1093,16 @@ async function ensureKitProjectViews(project) {
     }
 
     await updateProjectView(views[0].id, {
-      name: DEVFORGE_PROJECT_VIEWS[0].name,
-      layout: DEVFORGE_PROJECT_VIEWS[0].layout,
+      name: HYPERION_PROJECT_VIEWS[0].name,
+      layout: HYPERION_PROJECT_VIEWS[0].layout,
     });
 
     for (let i = views.length - 1; i >= 1; i--) {
       await deleteProjectView(views[i].id);
     }
 
-    await createProjectView(project.id, DEVFORGE_PROJECT_VIEWS[1].name, DEVFORGE_PROJECT_VIEWS[1].layout);
-    await createProjectView(project.id, DEVFORGE_PROJECT_VIEWS[2].name, DEVFORGE_PROJECT_VIEWS[2].layout);
+    await createProjectView(project.id, HYPERION_PROJECT_VIEWS[1].name, HYPERION_PROJECT_VIEWS[1].layout);
+    await createProjectView(project.id, HYPERION_PROJECT_VIEWS[2].name, HYPERION_PROJECT_VIEWS[2].layout);
     log("  + Project views configured");
   } catch (error) {
     log(`  WARN: Could not configure project views automatically: ${error.message}`);
@@ -1111,13 +1127,13 @@ async function ensureStatusFieldOptions(project, repoConfig) {
   const allPresent = DEFAULT_STATUS_OPTIONS.every((opt) => existing.has(normalizeText(opt)));
 
   if (allPresent && (statusField.options || []).length >= DEFAULT_STATUS_OPTIONS.length) {
-    log(`  = Status field already has Dev-Kit workflow options`);
+    log(`  = Status field already has Hyperion workflow options`);
     return;
   }
 
   try {
     await updateSingleSelectFieldOptions(statusField.id, DEFAULT_STATUS_OPTIONS, "status");
-    log(`  ~ Status field updated with Dev-Kit workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
+    log(`  ~ Status field updated with Hyperion workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
   } catch (error) {
     log(`  WARN: Could not update Status options automatically: ${error.message}`);
     log(`  Customize Status options manually in Project Settings.`);
@@ -1170,8 +1186,8 @@ async function autoCreateProject(owner, repoConfig) {
     throw new Error(`Cannot resolve owner node ID for "${owner}". Check permissions.`);
   }
 
-  // Name requirement: "[RepoName] Dev-Kit Project"
-  const projectTitle = `${repoName} Dev-Kit Project`;
+  // Name requirement: "[RepoName] Hyperion Project"
+  const projectTitle = `${repoName} Hyperion Project`;
   const repositoryId = await getRepositoryNodeId(repoOwner, repoName);
   const created = await createProjectV2(ownerId, projectTitle, repositoryId);
   log(`Project created: "${projectTitle}" (number ${created.number})`);
@@ -1229,7 +1245,7 @@ async function autoCreateProject(owner, repoConfig) {
   }
 
   log("");
-  log("NOTE: Status field configured with Dev-Kit workflow columns.");
+  log("NOTE: Status field configured with Hyperion workflow columns.");
   log("Sprint iteration field configured (cards may keep sprint: null until sprints are defined).");
 
   return created;
@@ -2338,6 +2354,7 @@ async function runForwardSyncLinear(repoConfig, management) {
   const endpoint = "https://api.linear.app/graphql";
   const teamId = management.linearTeamId;
   const apiToken = management.linearApiToken;
+  const statusMap = management.statusMap || {};
 
   async function linearGraphql(query, variables = {}) {
     const response = await fetch(endpoint, {
@@ -2407,6 +2424,47 @@ async function runForwardSyncLinear(repoConfig, management) {
     await linearGraphql(query, { id: issueId, input });
   }
 
+  let linearStatesCache = null;
+  async function linearGetTeamStates() {
+    if (linearStatesCache) return linearStatesCache;
+    const query = `query($teamId: String!) {
+      team(id: $teamId) {
+        states { nodes { id name type } }
+      }
+    }`;
+    const data = await linearGraphql(query, { teamId });
+    linearStatesCache = data?.team?.states?.nodes || [];
+    return linearStatesCache;
+  }
+
+  function pickLinearState(states, hyperionStatus) {
+    if (!hyperionStatus || !states?.length) return null;
+    const mapped = statusMap[hyperionStatus] || hyperionStatus;
+    const target = normalizeText(mapped);
+    let best = null;
+    for (const state of states) {
+      const name = normalizeText(state.name);
+      if (name === target) return state;
+      if (name.includes(target) || target.includes(name)) best = best || state;
+    }
+    for (const state of states) {
+      if (normalizeText(state.name) === normalizeText(hyperionStatus)) return state;
+    }
+    return best;
+  }
+
+  async function linearApplyStatus(issueId, hyperionStatus) {
+    if (!hyperionStatus) return { applied: false, reason: "no_status" };
+    const states = await linearGetTeamStates();
+    const picked = pickLinearState(states, hyperionStatus);
+    if (!picked) return { applied: false, reason: "no_matching_state", hyperionStatus };
+    const query = `mutation($id: String!, $input: IssueUpdateInput!) {
+      issueUpdate(id: $id, input: $input) { success issue { id state { name } } }
+    }`;
+    await linearGraphql(query, { id: issueId, input: { stateId: picked.id } });
+    return { applied: true, linearState: picked.name };
+  }
+
   const allMd = await listMarkdownFiles(cardsRoot);
   const cards = [];
   for (const file of allMd) {
@@ -2440,9 +2498,29 @@ async function runForwardSyncLinear(repoConfig, management) {
     if (existingId) {
       await linearUpdateIssue(existingId, card);
       actions.push({ action: "UPDATED", cardId: card.cardId, linearIssueId: existingId });
+      if (card.status) {
+        const st = await linearApplyStatus(existingId, card.status);
+        actions.push({
+          action: st.applied ? "STATUS_SET" : "STATUS_SKIPPED",
+          cardId: card.cardId,
+          linearIssueId: existingId,
+          status: card.status,
+          ...st,
+        });
+      }
     } else {
       const createdId = await linearCreateIssue(card);
       actions.push({ action: "CREATED", cardId: card.cardId, linearIssueId: createdId });
+      if (createdId && card.status) {
+        const st = await linearApplyStatus(createdId, card.status);
+        actions.push({
+          action: st.applied ? "STATUS_SET" : "STATUS_SKIPPED",
+          cardId: card.cardId,
+          linearIssueId: createdId,
+          status: card.status,
+          ...st,
+        });
+      }
     }
   }
 
