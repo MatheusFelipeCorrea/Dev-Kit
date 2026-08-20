@@ -1,4 +1,4 @@
-import path from "node:path";
+﻿import path from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -34,7 +34,7 @@ function runScript(scriptName, args = []) {
 }
 
 async function main() {
-  log("Dev-Kit cards init (GitHub automation bootstrap)");
+  log("Hyperion cards init (GitHub automation bootstrap)");
   log("");
 
   const repositorySlug = process.env.GITHUB_REPOSITORY || detectRepoFromGit() || "unknown/unknown";
@@ -43,12 +43,12 @@ async function main() {
     process.env.PROJECT_SYNC_TOKEN || process.env.GITHUB_TOKEN || detectTokenFromGhCli();
 
   log(`Repository: ${repositorySlug} (${detectRepoFromGit() ? "git auto-detect" : "env/fallback"})`);
-  log(`Token: ${token ? "available" : "missing — see .github/docs/github-cli-setup.md (gh auth login)"}`);
+  log(`Token: ${token ? "available" : "missing — see .github/docs/integration/github-cli-setup.md (gh auth login)"}`);
 
   const config = await readJsonIfExists(configPath);
   if (!config) {
     log("ERROR: missing .github/cards/config/projects-map.json");
-    log("Run cards-sync-setup skill or copy from Dev-Kit.");
+    log("Run cards-sync-setup skill or copy from Hyperion.");
     process.exit(1);
   }
 
@@ -97,7 +97,7 @@ async function main() {
   }
 
   log("");
-  log("Step 2/6 — Reset repository labels (Dev-Kit catalog)...");
+  log("Step 2/6 — Reset repository labels (Hyperion catalog)...");
   const labelsCode = runScript("labels-reset.mjs", argYes ? ["--yes"] : ["--dry-run"]);
   if (labelsCode !== 0) process.exit(labelsCode);
 

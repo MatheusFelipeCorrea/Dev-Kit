@@ -3,7 +3,7 @@
 Protocolos **genéricos**. Skills seguem estes arquivos; o manifesto liga prompt → skill → pasta de saída.
 
 Produto (paths, stack): [`../../project.yml`](../../project.yml) + overlay opcional.  
-Hub: [`../README.md`](../README.md) · Comandos: [`../../docs/comandos-rapidos.md`](../../docs/comandos-rapidos.md).
+Hub: [`../README.md`](../README.md) · Comandos: [`../../docs/reference/comandos-rapidos.md`](../../docs/reference/comandos-rapidos.md).
 
 ## Ordem de leitura
 

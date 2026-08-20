@@ -1,14 +1,24 @@
 {
-  "name": "dev-kit",
+  "name": "hyperion",
   "private": true,
-  "description": "Dev-Kit — portable AI agents and skills for software projects",
+  "description": "Hyperion — portable AI agents and skills for software projects",
   "type": "module",
   "scripts": {
-    "devkit:help": "node scripts/devkit/help.mjs",
-    "devkit:doctor": "node scripts/devkit/doctor.mjs",
-    "devkit:setup": "node scripts/devkit/setup.mjs",
-    "devkit:sync": "node scripts/devkit/sync.mjs",
-    "devkit:cursor": "node scripts/devkit/install-cursor-rules.mjs",
+    "hyperion:help": "node scripts/hyperion/help.mjs",
+    "hyperion:doctor": "node scripts/hyperion/doctor.mjs",
+    "hyperion:setup": "node scripts/hyperion/setup.mjs",
+    "hyperion:sync": "node scripts/hyperion/sync.mjs",
+    "hyperion:cursor": "node scripts/hyperion/install-cursor-rules.mjs",
+    "hyperion:pipeline-detect": "node scripts/hyperion/pipeline-detect.mjs",
+    "hyperion:pipeline-plan": "node scripts/hyperion/pipeline-plan.mjs",
+    "hyperion:pipeline-apply": "node scripts/hyperion/pipeline-apply.mjs",
+    "hyperion:generate-rules": "node scripts/hyperion/generate-runtime-rules.mjs",
+    "hyperion:check-rules": "node scripts/hyperion/generate-runtime-rules.mjs --check",
+    "docs:check": "node scripts/hyperion/docs-check.mjs",
+    "skills:validate": "node scripts/hyperion/skills-validate.mjs",
+    "hyperion:repo-detect": "node scripts/hyperion/repo-detect.mjs",
+    "hyperion:skills-eval": "node scripts/hyperion/skills-eval.mjs",
+    "hyperion:skills-catalog": "node scripts/hyperion/skills-catalog.mjs",
     "cards:init": "node scripts/cards-sync/init.mjs",
     "cards:validate": "node scripts/cards-sync/validate.mjs",
     "cards:sync": "node scripts/cards-sync/sync.mjs",
@@ -18,7 +28,9 @@
     "cards:watch": "node scripts/cards-sync/watch.mjs",
     "cards:hook": "node scripts/cards-sync/install-hook.mjs",
     "cards:labels-reset": "node scripts/cards-sync/labels-reset.mjs",
-    "cards:test": "node --test scripts/cards-sync/*.test.mjs"
+    "cards:test": "node --test scripts/cards-sync/*.test.mjs",
+    "hyperion:test": "node --test scripts/hyperion/*.test.mjs",
+    "test": "npm run hyperion:test && npm run cards:test"
   },
   "engines": {
     "node": ">=20"

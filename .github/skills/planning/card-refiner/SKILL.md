@@ -1,4 +1,4 @@
----
+﻿---
 name: card-refiner
 description: >-
   Card refinement skill: create cards from rough ideas AND evolve existing cards
@@ -59,8 +59,8 @@ Cards are read in the IDE **and** rendered as GitHub Issues after sync. Use a co
 
 ### What sync adds on GitHub
 
-- Parent + Sub-issue links, optional section emoji polish, **🔄 Dev-Kit sync** footer
-- After creating/editing cards: run `npm run devkit:sync` via **devkit-ops** (agent) — or `npm run cards:watch` for auto-sync
+- Parent + Sub-issue links, optional section emoji polish, **🔄 Hyperion sync** footer
+- After creating/editing cards: run `npm run hyperion:sync` via **hyperion-ops** (agent) — or `npm run cards:watch` for auto-sync
 
 **Kit reference (`_examples/`, `CARD.template.md`):** validated locally for kit integrity; **never forward-synced**. Agents use them as guides when creating real cards under `epics/`, `features/`, etc.
 
@@ -407,15 +407,15 @@ The user may evolve cards **after creation** with natural language. Treat these 
    - Update frontmatter and/or body
    - Never change `card_id`
    - Use only allowed `status` values (see below)
-3. **Validate + sync** (run via **devkit-ops** — agent executes npm; user should not need terminal)
+3. **Validate + sync** (run via **hyperion-ops** — agent executes npm; user should not need terminal)
    ```bash
-   npm run devkit:sync
+   npm run hyperion:sync
    ```
    Or keep watch mode running while editing:
    ```bash
    npm run cards:watch
    ```
-   - For Jira backend: `CARDS_SYNC_BACKEND=jira npm run devkit:sync`
+   - For Jira backend: `CARDS_SYNC_BACKEND=jira npm run hyperion:sync`
    - Incremental: `npm run cards:sync -- --only CARD_ID`
    - If sync cannot run (no token), edit the file anyway and tell the user to run `/sync` after `gh auth login`
 5. **Confirm** what changed: card file path, field old → new, and backend effect:
@@ -428,7 +428,7 @@ When the user asks to **move a card on the board**, set explicit `status:` in fr
 
 Safe mode applies only when `status` is **omitted** on an **existing** card: the sync preserves whatever status was set manually on the GitHub board. Do not omit `status` when the user explicitly asked to move the card.
 
-See `scripts/cards-sync/README.md` and `setup-quickstart.md` § Regras de Status.
+See `scripts/cards-sync/README.md` and `.github/docs/onboarding/setup-github.md` § Cards sync (Status).
 
 ### Status values (canonical — use exactly in frontmatter)
 

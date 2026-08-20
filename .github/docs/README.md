@@ -1,119 +1,61 @@
-# Dev-Kit Documentation
+# 📚 Hyperion Documentation
 
-Central index. Use the table below to find **which document to read**.
+**New here?** 🚀 [GETTING-STARTED.md](../../GETTING-STARTED.md) → [learning path](./onboarding/trilha-de-aprendizado.md)
 
----
-
-## Which doc to read?
-
-| Your goal | Read in this order |
-|--------------|------------------|
-| **Never used Dev-Kit** | [guide-complete-en.md](./guide-complete-en.md) · [PT](./guia-completo.md) |
-| **Comandos rápidos (agente + npm)** | [comandos-rapidos.md](./comandos-rapidos.md) · [EN](./quick-commands-en.md) |
-| **Quick setup (basics understood)** | [setup-quickstart-en.md](./setup-quickstart-en.md) · [PT](./setup-quickstart.md) |
-| **Armadilhas / gaps de aprendizado** | [armadilhas-comuns.md](./armadilhas-comuns.md) · [EN](./common-pitfalls-en.md) |
-| **Organização do kit** | [organizacao.md](./organizacao.md) · [STRUCTURE.md](../STRUCTURE.md) |
-| **GitHub cards sync only** | [github-cli-setup-en.md](./github-cli-setup-en.md) → `/setup` ou `npm run devkit:setup -- --yes` |
-| **Jira / Azure / Linear / GitLab** | [choose-backend-en.md](./choose-backend-en.md) · [PT](./escolher-backend.md) |
-| **Where generated files go** | [where-outputs-go-en.md](./where-outputs-go-en.md) · [PT](./onde-ficam-os-outputs.md) · [skill map](./skills-output-map.md) |
-| **Docs consistency / anti-duplication** | [doc-maintenance-policy.md](./doc-maintenance-policy.md) |
-| **Methodology cheat sheet** | [methodology-cheatsheet.md](./methodology-cheatsheet.md) |
-| **First repo audit** | [first-audit-en.md](./first-audit-en.md) · [PT](./primeira-auditoria.md) |
-| **Sync technical reference** | [scripts/cards-sync/README.md](../../scripts/cards-sync/README.md) |
-| **Environment variables** | [`.env.example`](../../.env.example) |
-| **Navigate kit folders** | [INDEX.md](../INDEX.md) |
-| **Contribute skills** | [CONTRIBUTING.md](../../CONTRIBUTING.md) |
+| Legenda | Para quem |
+|---------|-----------|
+| 🟢 | Iniciante — 6 comandos no chat |
+| 🟡 | Intermediário — GitHub, repo, cards |
+| 🔵 | Avançado — SDLC, referência, CI |
 
 ---
 
-## Documentation map
+## 🎓 Trilha (3 camadas)
 
-```mermaid
-flowchart TB
-  README[Root README.md]
+| Camada | Documentos |
+|--------|------------|
+| 📖 **Aprender** | GETTING-STARTED · trilha · armadilhas-comuns |
+| 🔧 **Fazer** | setup-github · adaptar-ao-repo · escolher-backend · fluxo-completo |
+| 📋 **Referência** | comandos-rapidos · catalogo-skills · skills-output-map |
 
-  subgraph docs_en [English guides]
-    GCEN[guide-complete-en.md]
-    SQEN[setup-quickstart-en.md]
-    GHEN[github-cli-setup-en.md]
-    BEEN[choose-backend-en.md]
-    AUEN[first-audit-en.md]
-    OUTEN[where-outputs-go-en.md]
-  end
+| Nível | Doc | Tempo |
+|-------|-----|-------|
+| 🟢 1 | [GETTING-STARTED.md](../../GETTING-STARTED.md) | ⏱️ ~15 min |
+| 🟡 2 | [setup-github.md](./onboarding/setup-github.md) | ⏱️ ~15 min |
+| 🟡 3 | [adaptar-ao-repo.md](./onboarding/adaptar-ao-repo.md) | ⏱️ ~15 min |
+| 🔵 4 | [fluxo-completo.md](./meta/fluxo-completo.md) | ⏱️ ~20 min |
+| 🔵 5 | [catalogo-skills.md](./reference/catalogo-skills.md) · [comandos-rapidos.md](./reference/comandos-rapidos.md) | consulta |
 
-  subgraph docs_pt [Português]
-    GCPT[guia-completo.md]
-    SQPT[setup-quickstart.md]
-    GHPT[github-cli-setup.md]
-    BEPT[escolher-backend.md]
-    AUPT[primeira-auditoria.md]
-    OUTPT[onde-ficam-os-outputs.md]
-  end
-
-  subgraph tech [Reference]
-    SYNC[scripts/cards-sync/README.md]
-    ENV[.env.example]
-  end
-
-  README --> GCEN
-  README --> GCPT
-  GCEN --> SQEN
-  GCEN --> GHEN
-  GCEN --> BEEN
-  GCEN --> OUTEN
-  GCPT --> SQPT
-  SQEN --> SYNC
-  GHEN --> ENV
-```
+[trilha-de-aprendizado.md](./onboarding/trilha-de-aprendizado.md) · [EN](./onboarding/learning-path-en.md)
 
 ---
 
-## User guides
+## 🔎 Busca por objetivo
 
-| Document | Audience | Language |
-|-----------|---------|--------|
-| [guide-complete-en.md](./guide-complete-en.md) | First-time users | EN |
-| [guia-completo.md](./guia-completo.md) | Absolute beginner | PT-BR |
-| [setup-quickstart-en.md](./setup-quickstart-en.md) | Setup checklist | EN |
-| [setup-quickstart.md](./setup-quickstart.md) | Setup checklist | PT-BR |
-| [github-cli-setup-en.md](./github-cli-setup-en.md) | GitHub CLI | EN |
-| [github-cli-setup.md](./github-cli-setup.md) | GitHub CLI | PT-BR |
-| [choose-backend-en.md](./choose-backend-en.md) | Backend choice | EN |
-| [escolher-backend.md](./escolher-backend.md) | Backend choice | PT-BR |
-| [where-outputs-go-en.md](./where-outputs-go-en.md) | Output organization | EN |
-| [onde-ficam-os-outputs.md](./onde-ficam-os-outputs.md) | Output organization | PT-BR |
-| [doc-maintenance-policy.md](./doc-maintenance-policy.md) | Docs consistency policy | EN/PT |
-| [first-audit-en.md](./first-audit-en.md) | First audit | EN |
-| [primeira-auditoria.md](./primeira-auditoria.md) | First audit | PT-BR |
+| Objetivo | Documento |
+|----------|-----------|
+| 🧩 **Qual skill usar** | [catalogo-skills.md](./reference/catalogo-skills.md) · [EN](./reference/skills-catalog.md) |
+| 💬 **Comandos** | [comandos-rapidos.md](./reference/comandos-rapidos.md) |
+| 🔧 **Setup GitHub** | [setup-github.md](./onboarding/setup-github.md) |
+| 📦 **Repo legado** | [adaptar-ao-repo.md](./onboarding/adaptar-ao-repo.md) → `/migrate` |
+| 🔄 **Jira/Linear/…** | [escolher-backend.md](./integration/escolher-backend.md) |
+| 📁 **Outputs** | [skills-output-map.md](./reference/skills-output-map.md) |
+| ⚠️ **Problemas** | [armadilhas-comuns.md](./troubleshooting/armadilhas-comuns.md) |
+| 🏆 **Contribuir** | [CONTRIBUTING.md](../../CONTRIBUTING.md) |
 
 ---
 
-## Fresh clone vs generated artifacts
-
-A **fresh Dev-Kit clone** ships the kit (agents, skills, templates, example cards, guides). Many paths below are **empty until a skill runs** — do not treat them as missing prerequisites.
-
-| Category | Examples | Present on clone? |
-|----------|----------|-------------------|
-| **Kit (always)** | `agents/`, `skills/`, `memory/` templates, `CARD.template.md`, `_examples/` samples, `project.example.yml` | Yes |
-| **Project config** | `project.yml`, filled `memory/PROJECT.md` | After setup / `project-discovery` |
-| **Skill outputs** | ADRs, retros, diagrams, specs, plans, audit results | Created on demand |
-| **Greenfield blueprints** | `Project_Architecture_Blueprint.md`, `Project_Folders_Structure_Blueprint.md` | Only after `project-architect` (optional for existing repos) |
-| **Team-maintained** | `exemplars.md` | Optional — fill with your team's reference files |
-
-**Fallback rule:** if a blueprint or output folder is missing, skills and agents should use codebase discovery, `project.yml`, and `memory/` — not block waiting for files that were never generated.
-
-Folder READMEs: [adr/README.md](./adr/README.md) · [retros/README.md](./retros/README.md) · [../diagrams/README.md](../diagrams/README.md)
+![Mapa da documentação](./assets/hyperion-docs-map.png)
 
 ---
 
-## Generated artifacts (by skills)
+## 📂 Pastas
 
-Artifacts that skills and agents create at runtime — see [where-outputs-go-en.md](./where-outputs-go-en.md):
-
-- ADRs → `.github/docs/adr/` ([README](./adr/README.md))
-- Retros → `.github/docs/retros/` ([README](./retros/README.md))
-- Diagrams → `.github/diagrams/` ([README](../diagrams/README.md))
-- Audit reports → `.github/audits/results/`
-- Implementation plans → `.github/plans/implementations/`
-- Syncable cards → `.github/cards/{epics,features,stories,tasks}/` (reference: `_examples/`, `CARD.template.md` — never synced)
-- Last sync → `.github/plans/cards/last-sync.md`
+| Pasta | Conteúdo |
+|-------|----------|
+| [onboarding/](./onboarding/) | 🚀 Primeiros passos, setup-github |
+| [reference/](./reference/) | 📋 Comandos, catálogo skills, outputs |
+| [integration/](./integration/) | 🔄 Backends, GitHub CLI |
+| [quality/](./quality/) | 🔍 Auditorias |
+| [troubleshooting/](./troubleshooting/) | ⚠️ Armadilhas |
+| [meta/](./meta/) | 🗺️ Fluxo SDLC |

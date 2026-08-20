@@ -148,6 +148,55 @@
         }
       }
     },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "CI/CD policy — Hyperion never overwrites non-hyperion workflows when policy is detect (default).",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["github-actions", "gitlab-ci", "azure-pipelines", "circleci", "jenkins", "bitbucket", "none"],
+          "description": "Detected or configured CI provider."
+        },
+        "policy": {
+          "type": "string",
+          "enum": ["detect", "hyperion-only", "merge", "skip"],
+          "description": "detect=add hyperion-* only; skip=no workflow writes; hyperion-only=generate product CI if absent; merge=manual integration."
+        },
+        "stack": {
+          "type": "string",
+          "description": "Stack hint for generated CI: auto, node-npm, python, docker, go, rust, unknown."
+        },
+        "existing": {
+          "type": "array",
+          "description": "Paths to existing product CI files (informational; populated by discovery).",
+          "items": { "type": "string" }
+        },
+        "hyperion": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cards_sync": {
+              "type": "boolean",
+              "description": "Install hyperion-sync-cards.yml."
+            },
+            "kit_validation": {
+              "type": "boolean",
+              "description": "Install hyperion-validate.yml (kit maintainer checks)."
+            },
+            "security_scan": {
+              "type": "boolean",
+              "description": "Install hyperion-security.yml."
+            },
+            "product_ci": {
+              "type": "string",
+              "enum": ["auto", "true", "false"],
+              "description": "auto=generate hyperion-product-ci.yml only when no product CI exists."
+            }
+          }
+        }
+      }
+    },
     "management": {
       "type": "object",
       "additionalProperties": false,
@@ -157,6 +206,11 @@
           "type": "string",
           "enum": ["github", "jira", "azure-devops", "linear", "gitlab", "none"],
           "description": "Target project management backend."
+        },
+        "status_map": {
+          "type": "object",
+          "description": "Map Hyperion card status → backend-native status name (optional; fuzzy match used when absent).",
+          "additionalProperties": { "type": "string" }
         },
         "url": {
           "type": "string",
@@ -196,6 +250,36 @@
         }
       },
       "required": ["backend"]
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Repo-adaptive shell commands for agents (test, lint, build, audit). Discovery fills defaults when omitted.",
+      "properties": {
+        "test": { "type": "string", "description": "Run tests (e.g. npm test, pytest)" },
+        "lint": { "type": "string", "description": "Lint command if available" },
+        "build": { "type": "string", "description": "Build command if available" },
+        "audit": { "type": "string", "description": "Dependency audit command" }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Persistent memory capture settings for agents.",
+      "properties": {
+        "auto_capture": {
+          "type": "boolean",
+          "description": "Append session decisions to DECISIONS.md after agent runs."
+        },
+        "decisions_file": {
+          "type": "string",
+          "description": "Path to decisions log (default .github/memory/DECISIONS.md)."
+        },
+        "project_file": {
+          "type": "string",
+          "description": "Path to project context file."
+        }
+      }
     }
   },
   "$defs": {

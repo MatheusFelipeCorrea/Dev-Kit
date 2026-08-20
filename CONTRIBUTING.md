@@ -1,4 +1,4 @@
-# Contribuindo com o Dev-Kit
+﻿# Contribuindo com o Hyperion
 
 Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 
@@ -7,7 +7,14 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 1. Fork o repositório
 2. Crie uma branch para sua feature (`git checkout -b feature/minha-skill`)
 3. Faça suas alterações
-4. Teste localmente (se aplicável, rode `node scripts/cards-sync/sync.mjs --dry-run`)
+4. Valide localmente antes do PR:
+   ```bash
+   npm run docs:check              # links em markdown
+   npm run skills:validate         # frontmatter + ## Output das skills
+   npm run hyperion:check-rules    # runtime rules sincronizadas
+   npm run cards:test              # testes do cards-sync
+   node scripts/cards-sync/sync.mjs --dry-run   # se alterou cards/sync
+   ```
 5. Commit com mensagem descritiva
 6. Abra um Pull Request
 
@@ -39,7 +46,7 @@ O `SKILL.md` deve ter:
 - Passos claros e numerados
 - Regras/constraints
 - Pelo menos um exemplo de uso
-- **Caminho de output explícito** — onde gravar artefatos (ver [onde-ficam-os-outputs.md](.github/docs/onde-ficam-os-outputs.md))
+- **Caminho de output explícito** — onde gravar artefatos (ver [onde-ficam-os-outputs.md](.github/docs/meta/onde-ficam-os-outputs.md))
 
 ### Onde gravar outputs (novas skills)
 
@@ -52,6 +59,13 @@ O `SKILL.md` deve ter:
 | Descoberta de produto | `.github/memory/discoveries/` |
 
 Leia `project.yml` → `outputs` antes de inventar paths. Registre auditorias em `audits/manifest.yml`.
+
+### Novo comando ou slash phrase
+
+1. Adicione entrada em `.github/commands.yml`
+2. Rode `npm run hyperion:generate-rules` e commite os arquivos gerados
+3. Atualize `comandos-rapidos.md` + `quick-commands-en.md` se o comportamento visível mudar
+4. `npm run hyperion:check-rules` deve passar no CI
 
 ## Licença
 

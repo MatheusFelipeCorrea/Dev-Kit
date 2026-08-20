@@ -1,4 +1,4 @@
-import test from "node:test";
+﻿import test from "node:test";
 import assert from "node:assert/strict";
 import {
   pickBestGitHubProject,
@@ -13,10 +13,10 @@ import {
   shouldIncludeKitSamples,
 } from "./lib.mjs";
 
-test("pickBestGitHubProject prefers Dev-Kit title", () => {
+test("pickBestGitHubProject prefers Hyperion title", () => {
   const projects = [
     { number: 1, title: "Random Board" },
-    { number: 7, title: "myrepo Dev-Kit Project" },
+    { number: 7, title: "myrepo Hyperion Project" },
   ];
   const picked = pickBestGitHubProject(projects, "myrepo");
   assert.equal(picked.number, 7);

@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+﻿import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { execSync } from "node:child_process";
@@ -180,7 +180,7 @@ async function main() {
   }
 
   log(`Repository: ${repositorySlug}`);
-  log(`Locale: ${locale} (${canonical.size} Dev-Kit labels)`);
+  log(`Locale: ${locale} (${canonical.size} Hyperion labels)`);
   log(`Keep Dependabot labels: ${keepDependabot ? "yes" : "no"}`);
   log("");
 
@@ -208,12 +208,12 @@ async function main() {
   log("");
 
   if (toDelete.length) {
-    log("Removing non-Dev-Kit labels...");
+    log("Removing non-Hyperion labels...");
     for (const name of toDelete.sort()) deleteLabel(owner, repo, name, dryRun);
   }
 
   log("");
-  log("Ensuring Dev-Kit catalog labels...");
+  log("Ensuring Hyperion catalog labels...");
   for (const name of [...canonical].sort()) createLabel(owner, repo, name, dryRun);
 
   log("");

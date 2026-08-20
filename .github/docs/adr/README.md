@@ -1,6 +1,6 @@
-# Architecture Decision Records (ADRs)
+﻿# Architecture Decision Records (ADRs)
 
-This folder is **generated on demand** — it is empty in a fresh Dev-Kit clone.
+This folder is **generated on demand** — it is empty in a fresh Hyperion clone.
 
 ## When files appear here
 
@@ -16,5 +16,5 @@ Quick decisions that do not warrant a full ADR can go in [`.github/memory/DECISI
 
 ## Related docs
 
-- [where-outputs-go-en.md](../where-outputs-go-en.md)
-- [skills-output-map.md](../skills-output-map.md)
+- [where-outputs-go-en.md](../meta/where-outputs-go-en.md)
+- [skills-output-map.md](../reference/skills-output-map.md)

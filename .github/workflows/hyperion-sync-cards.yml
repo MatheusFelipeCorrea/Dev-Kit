@@ -1,0 +1,45 @@
+name: Hyperion — Sync Cards
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run without persisting changes"
+        required: false
+        default: "false"
+      sync_direction:
+        description: "Sync direction: forward or reverse"
+        required: false
+        default: "forward"
+  push:
+    paths:
+      - ".github/cards/**/*.md"
+      - ".github/cards/config/projects-map.json"
+      - "scripts/cards-sync/**"
+
+permissions:
+  contents: read
+  issues: write
+  repository-projects: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Sync cards
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PROJECT_SYNC_TOKEN: ${{ secrets.PROJECT_SYNC_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CREATE_MISSING_LABELS: "true"
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          SYNC_DIRECTION: ${{ github.event.inputs.sync_direction || 'forward' }}
+        run: node scripts/cards-sync/sync.mjs

@@ -18,7 +18,7 @@ Ask the agent: **`/audit`** or *"Auditoria completa do repositório"* → skill 
 
 Single dimension: `/security`, `/architecture`, `/devops`, `/review`, `/po`, `/ux`.
 
-Commands reference: [comandos-rapidos.md](../docs/comandos-rapidos.md) · First audit guide: [primeira-auditoria.md](../docs/primeira-auditoria.md)
+Commands reference: [comandos-rapidos.md](../docs/reference/comandos-rapidos.md) · First audit guide: [primeira-auditoria.md](../docs/quality/primeira-auditoria.md)
 
 ## Rules
 

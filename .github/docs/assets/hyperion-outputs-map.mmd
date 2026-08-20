@@ -1,0 +1,44 @@
+flowchart TB
+  subgraph input ["Voce + IA"]
+    U["Conversa / pedido"]
+  end
+
+  subgraph sync ["Sync com board"]
+    C[".github/cards/**/*.md"]
+    S["cards-sync"]
+    L["last-sync.md"]
+  end
+
+  subgraph plans ["Planos e specs"]
+    PC["plans/cards/"]
+    PS["plans/specs/"]
+    PI["plans/implementations/"]
+  end
+
+  subgraph memory ["Memoria persistente"]
+    M1["PROJECT.md"]
+    M2["DOMAIN.md"]
+    M3["DECISIONS.md"]
+    MD["discoveries/"]
+  end
+
+  subgraph docs ["Documentacao gerada"]
+    ADR["docs/adr/"]
+    RET["docs/retros/"]
+    TD["tech-debt-inventory.md"]
+  end
+
+  subgraph audits ["Auditorias"]
+    AR["audits/results/tipo/"]
+    AS["audits/results/_summary/"]
+  end
+
+  U --> C
+  U --> PC
+  U --> PS
+  U --> PI
+  U --> MD
+  U --> ADR
+  U --> AR
+  C --> S
+  S --> L

@@ -44,6 +44,8 @@ Mark N/A when there is no CI, no schedulers, no cloud config, etc.
 ## Execution rules
 
 - **Read-only by default.** Do not change pipelines or infra unless the user asks for implementation separately.
+- If **no CI** exists or only Hyperion workflows: recommend **`pipeline-architect`** (`/pipeline`) — never overwrite existing product CI without explicit approval.
+- If `ci.policy: merge`: point to `.github/docs/integration/pipeline-merge.md`.
 - Output language: config / user preference.
 
 ## Output

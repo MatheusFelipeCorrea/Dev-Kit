@@ -1,0 +1,46 @@
+name: Hyperion — Kit Validation
+
+# Runs Hyperion maintainer checks. Enable via project.yml → ci.hyperion.kit_validation: true
+# Safe to add alongside existing product CI — does not replace lint/test/build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+jobs:
+  hyperion-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Docs link check
+        run: npm run docs:check
+
+      - name: Validate skills
+        run: npm run skills:validate
+
+      - name: Runtime rules in sync
+        run: npm run hyperion:check-rules
+
+      - name: Validate cards (frontmatter + hierarchy)
+        run: node scripts/cards-sync/validate.mjs
+
+      - name: Skills structural eval
+        run: npm run hyperion:skills-eval
+
+      - name: Skills catalog in sync
+        run: npm run hyperion:skills-catalog -- --check
+
+      - name: Unit tests (hyperion + cards)
+        run: npm test
+
+      - name: Sync cards (dry-run)
+        run: node scripts/cards-sync/sync.mjs --dry-run

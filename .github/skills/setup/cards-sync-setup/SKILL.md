@@ -1,4 +1,4 @@
----
+﻿---
 name: cards-sync-setup
 description: >-
   Setup wizard for cards-sync in GitHub mode. Guides configuring GitHub Project,
@@ -26,7 +26,7 @@ If backend is **not GitHub** (Jira, Azure DevOps, Linear, GitLab), route to `int
 | Label presets (optional) | `.github/cards/config/labels.{locale}.json` |
 | Reference samples | `.github/cards/_examples/` (read-only for agents; never synced) |
 | Last sync log (after init) | `.github/plans/cards/last-sync.md` |
-| Workflow confirmation | `.github/workflows/sync-cards.yml` (must exist) |
+| Workflow confirmation | `.github/workflows/hyperion-sync-cards.yml` (must exist) |
 
 Read `project.yml` → `outputs` if paths are customized. For non-GitHub backends, route to `integration-bridge` instead of writing GitHub-specific config.
 
@@ -34,9 +34,9 @@ Read `project.yml` → `outputs` if paths are customized. For non-GitHub backend
 
 Before wizard questions, confirm GitHub CLI is ready for auto-detect:
 
-1. Point the user to `.github/docs/github-cli-setup.md` (install + `gh auth login`)
+1. Point the user to `.github/docs/integration/github-cli-setup.md` (install + `gh auth login`)
 2. Verify: `gh auth status` should show logged in
-3. Suggest: **`/setup`** or `npm run devkit:setup -- --yes` for one-shot bootstrap
+3. Suggest: **`/setup`** or `npm run hyperion:setup -- --yes` for one-shot bootstrap
 
 If the user cannot install `gh`, guide them to `GITHUB_TOKEN` in `.env` (see `.env.example`).
 
@@ -124,7 +124,7 @@ Write `.github/cards/config/projects-map.json`:
 ```
 
 Worst-case behavior: if the Project does not exist and `projectNumber` is `0/null` (and `autoCreateProject` is enabled),
-the sync will auto-create a Project named: `[RepoName] Dev-Kit Project` and **link it to the repository** (Default repository in Project Settings).
+the sync will auto-create a Project named: `[RepoName] Hyperion Project` and **link it to the repository** (Default repository in Project Settings).
 
 (`RepoName` is the repository name detected from git.)
 
@@ -156,14 +156,14 @@ Instruct the user:
 2. Run: `npm run cards:doctor`
 3. Run: `npm run cards:validate`
 4. Run: `npm run cards:dry-run`
-5. If dry-run looks good: `npm run devkit:sync` (or `/setup` / `devkit:setup -- --yes` on first setup)
+5. If dry-run looks good: `npm run hyperion:sync` (or `/setup` / `hyperion:setup -- --yes` on first setup)
 6. Check: Issue created? In Project? Fields populated? Labels applied? Issue body has parent/sub-issue **links**?
 
-Optional: `npm run cards:labels-reset -- --yes` to align repo labels with Dev-Kit catalog.
+Optional: `npm run cards:labels-reset -- --yes` to align repo labels with Hyperion catalog.
 
 ## Step 9: Workflow
 
-Confirm `.github/workflows/sync-cards.yml` exists and triggers on:
+Confirm `.github/workflows/hyperion-sync-cards.yml` exists and triggers on:
 - `push` to `.github/cards/**/*.md`
 - `workflow_dispatch` for manual runs (supports `sync_direction: reverse` for GitHub reverse sync)
 
@@ -176,7 +176,7 @@ Confirm `.github/workflows/sync-cards.yml` exists and triggers on:
 | Existing card without `status` | Preserves manual board status |
 | Existing card with explicit `status` | Applies status from frontmatter |
 
-Full details: `.github/docs/setup-quickstart.md` § Regras de Status.
+Full details: `.github/docs/onboarding/setup-github.md` § Cards sync (Status).
 
 ## After setup: conversational card moves
 

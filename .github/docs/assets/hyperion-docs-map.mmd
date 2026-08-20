@@ -1,0 +1,30 @@
+flowchart TB
+  GS["GETTING-STARTED.md"]
+  README["README.md"]
+  TRILHA["trilha-de-aprendizado.md"]
+
+  subgraph onboarding ["Onboarding"]
+    SETUP["setup-github.md"]
+    ADAPT["adaptar-ao-repo.md"]
+  end
+
+  subgraph reference ["Reference"]
+    CMD["comandos-rapidos.md"]
+    CAT["catalogo-skills.md"]
+    SOM["skills-output-map.md"]
+  end
+
+  subgraph rest ["Depois"]
+    FLOW["fluxo-completo.md"]
+    GH["github-cli-setup.md"]
+  end
+
+  README --> GS
+  GS --> TRILHA
+  TRILHA --> SETUP
+  TRILHA --> ADAPT
+  TRILHA --> FLOW
+  SETUP --> GH
+  ADAPT --> SOM
+  TRILHA --> CAT
+  CAT --> CMD

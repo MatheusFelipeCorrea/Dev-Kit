@@ -36,7 +36,7 @@ audits:
     phases: [1, 2, 3, consolidate]
     scanners:
       - id: npm-audit
-        workflow: .github/workflows/security.yml
+        workflow: .github/workflows/hyperion-security.yml
         jobs: [audit]
         schedule: "weekly (Mon 09:00 UTC)"
 
@@ -50,7 +50,7 @@ audits:
     phases: [1, 2, 3, consolidate]
     scanners:
       - id: ci
-        workflow: .github/workflows/ci.yml
+        workflow: .github/workflows/hyperion-validate.yml
         jobs: [lint-test-build]
       - id: dependabot
         config: .github/dependabot.yml
@@ -66,7 +66,7 @@ audits:
     phases: [1, 2, 3, consolidate]
     scanners:
       - id: ci-tests
-        workflow: .github/workflows/ci.yml
+        workflow: .github/workflows/hyperion-validate.yml
         note: Cobertura e testes — achados qualitativos ficam no relatório do agente
 
   ux-design:

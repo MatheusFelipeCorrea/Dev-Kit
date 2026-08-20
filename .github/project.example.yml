@@ -73,3 +73,26 @@ management:
 # Audit overlay (optional — domain-specific context for audit prompts)
 audits:
   overlay: null
+
+# CI/CD — Hyperion adds hyperion-*.yml; policy detect never overwrites existing product CI
+ci:
+  provider: github-actions
+  policy: detect
+  stack: auto
+  hyperion:
+    cards_sync: true
+    kit_validation: false
+    security_scan: true
+    product_ci: auto
+
+# Repo-adaptive commands (agents run these — discovery fills when omitted)
+commands:
+  test: npm test
+  lint: null
+  build: null
+  audit: npm audit --audit-level=moderate
+
+# Session memory (optional)
+memory:
+  auto_capture: true
+  decisions_file: .github/memory/DECISIONS.md
