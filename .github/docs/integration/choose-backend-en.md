@@ -2,7 +2,7 @@
 
 Use this guide to decide **where your cards land** and which setup path to follow.
 
-**Português:** [escolher-backend.md](../integration/escolher-backend.md)
+**Português:** [escolher-backend.md](./escolher-backend.md)
 
 ---
 
@@ -11,20 +11,11 @@ Use this guide to decide **where your cards land** and which setup path to follo
 ```
 Which management tool do you use?
 │
-├── GitHub Projects (Issues + board in repo)
-│   └── → github-cli-setup-en.md + /setup (or hyperion:setup -- --yes)
+├── GitHub Projects
+│   └── → [setup-github-en.md](../onboarding/setup-github-en.md) + /setup
 │
-├── Jira
-│   └── → integration-bridge (via agent) + setup-quickstart-en §3.1 Jira
-│
-├── Azure DevOps
-│   └── → integration-bridge + setup-quickstart-en §3.1 Azure
-│
-├── Linear
-│   └── → integration-bridge + setup-quickstart-en §3.1 Linear
-│
-└── GitLab Issues
-    └── → integration-bridge + setup-quickstart-en §3.1 GitLab
+├── Jira / Azure / Linear / GitLab
+│   └── → integration-bridge + env vars below
 ```
 
 ---
@@ -39,34 +30,17 @@ Which management tool do you use?
 | **Linear** | API token | Forward + **status** | optional `status_map` | ❌ |
 | **GitLab** | Token + project ID | Forward | Metadata ⚠️ | ❌ |
 
-> **Recommendation:** if you are already on GitHub, use GitHub Projects — most automation.
-
 ---
 
 ## GitHub Projects (default)
 
-**When to choose:** repo on GitHub, project board in the same ecosystem.
-
-**Setup:**
-
-1. [github-cli-setup-en.md](../integration/github-cli-setup-en.md) — `gh auth login`
-2. **`/setup`** or `npm run hyperion:setup -- --yes`
-3. `npm run cards:watch` (optional, sync on save)
-
-**Ask the agent:** *"Configure cards sync"* → skill `cards-sync-setup`
+[setup-github-en.md](../onboarding/setup-github-en.md) · **`/setup`** · `cards-sync-setup` skill
 
 ---
 
 ## Jira
 
-**When to choose:** team already uses Jira Cloud/Server as source of truth.
-
-**Setup:**
-
-1. Copy [`.env.example`](../../../.env.example) → `.env`
-2. Fill in: `JIRA_URL`, `JIRA_PROJECT_KEY`, `JIRA_EMAIL`, `JIRA_API_TOKEN`
-3. Set `CARDS_SYNC_BACKEND=jira`
-4. In `project.yml`:
+**Env:** `CARDS_SYNC_BACKEND=jira`, `JIRA_URL`, `JIRA_PROJECT_KEY`, `JIRA_EMAIL`, `JIRA_API_TOKEN`
 
 ```yaml
 management:
@@ -75,28 +49,34 @@ management:
   project_key: PROJ
 ```
 
-5. Sync: `CARDS_SYNC_BACKEND=jira npm run cards:sync`
+---
 
-**Ask the agent:** *"Connect to Jira"* → skill `integration-bridge`
+## Azure DevOps
 
-**Tip:** map PT status names in `projects-map.json` → `optionMapByLocale`.
+**Env:** `CARDS_SYNC_BACKEND=azure-devops`, `AZDO_ORG_URL`, `AZDO_PROJECT`, `AZDO_PAT` · optional `AZDO_WORK_ITEM_TYPE=Task`
+
+Forward via `CARD_ID`. No reverse or native board columns yet.
 
 ---
 
-## Azure DevOps / Linear / GitLab
+## Linear
 
-**When to choose:** board already exists in that tool.
+**Env:** `CARDS_SYNC_BACKEND=linear`, `LINEAR_TEAM_ID`, `LINEAR_API_TOKEN`
 
-**Setup:** see [setup-quickstart-en §3.1](../onboarding/setup-quickstart-en.md#step-31--choose-backend-github--jira--others) for each backend's env vars.
+Optional `management.status_map` in `project.yml`.
 
-**Ask the agent:** *"Connect to Azure"* / *"Connect to Linear"* / *"Connect to GitLab"* → `integration-bridge`
+---
+
+## GitLab
+
+**Env:** `CARDS_SYNC_BACKEND=gitlab`, `GITLAB_PROJECT_ID`, `GITLAB_TOKEN` · optional `GITLAB_URL`
 
 ---
 
 ## After choosing
 
-| Next step | Document |
-|---------------|-----------|
-| Create cards | Ask *"Refine X into cards"* or see [guide-complete-en §4](../onboarding/guide-complete-en.md#4-how-do-cards-work) |
-| Evolve cards | *"move CARD-ID to Done"* — [card-refiner](../../skills/planning/card-refiner/SKILL.md) |
-| Audit repo | [first-audit-en.md](../quality/first-audit-en.md) |
+| Next | Document |
+|------|----------|
+| Create cards | **`/refine`** — [skills-catalog.md](../reference/skills-catalog.md) |
+| Evolve cards | [card-refiner](../../skills/planning/card-refiner/SKILL.md) |
+| Audit | [first-audit-en.md](../quality/first-audit-en.md) |

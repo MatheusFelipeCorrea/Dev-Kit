@@ -176,7 +176,7 @@ Confirm `.github/workflows/hyperion-sync-cards.yml` exists and triggers on:
 | Existing card without `status` | Preserves manual board status |
 | Existing card with explicit `status` | Applies status from frontmatter |
 
-Full details: `.github/docs/onboarding/setup-quickstart.md` § Regras de Status.
+Full details: `.github/docs/onboarding/setup-github.md` § Cards sync (Status).
 
 ## After setup: conversational card moves
 

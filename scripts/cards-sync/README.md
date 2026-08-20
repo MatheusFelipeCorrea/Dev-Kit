@@ -20,7 +20,7 @@ Syncs card files from `.github/cards/` to project management backends:
 
 See [Backend support (current reality)](#backend-support-current-reality) for the full matrix.
 
-**Related docs:** [Quick commands](../../.github/docs/reference/comandos-rapidos.md) · [Documentation index](../../.github/docs/README.md) · [GitHub CLI setup](../../.github/docs/integration/github-cli-setup.md) · [Choose backend](../../.github/docs/integration/escolher-backend.md) · [setup-quickstart](../../.github/docs/onboarding/setup-quickstart.md) · [card-refiner](../../.github/skills/planning/card-refiner/SKILL.md)
+**Related docs:** [Quick commands](../../.github/docs/reference/comandos-rapidos.md) · [Documentation index](../../.github/docs/README.md) · [GitHub CLI setup](../../.github/docs/integration/github-cli-setup.md) · [Choose backend](../../.github/docs/integration/escolher-backend.md) · [setup-github](../../.github/docs/onboarding/setup-github.md) · [card-refiner](../../.github/skills/planning/card-refiner/SKILL.md)
 
 ## Hyperion shortcuts (preferred)
 

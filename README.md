@@ -13,9 +13,9 @@
 **Hyperion** is a portable, runtime-agnostic AI agents and skills kit. Works with Copilot, Cursor, Claude Code, or any assistant that reads Markdown.
 
 **Full guides (EN):**
-- **[Complete guide](./.github/docs/onboarding/guide-complete-en.md)**
-- **[5-minute setup](./.github/docs/onboarding/setup-quickstart-en.md)**
-- **[Getting started](./GETTING-STARTED.md)**
+- **[Getting started](./GETTING-STARTED.md)** (glossary + 6 commands)
+- **[Learning path](./.github/docs/onboarding/learning-path-en.md)**
+- **[Skills catalog](./.github/docs/reference/skills-catalog.md)**
 
 Skill names and paths use English identifiers. User guides available in **PT-BR and EN**.
 
@@ -23,7 +23,9 @@ Skill names and paths use English identifiers. User guides available in **PT-BR 
 
 ---
 
-## ☀️ Quickstart em 3 passos
+## 🚀 Quickstart em 3 passos
+
+Não precisa saber o que é um agent. Abra o chat da IA **no seu repo** (depois de copiar o kit) e digite os comandos.
 
 | # | Passo | Ação |
 |---|-------|------|
@@ -31,9 +33,11 @@ Skill names and paths use English identifiers. User guides available in **PT-BR 
 | 2️⃣ | **Configurar** | Repo novo: **`/setup`** · Repo existente: **`/migrate`** |
 | 3️⃣ | **Usar** | **`/refine`** → **`/implement`** → **`/execute`** |
 
-📖 Jornada completa passo a passo: **[GETTING-STARTED.md](./GETTING-STARTED.md)**
+🟢 **Iniciante:** só esses 6 no começo — `/setup` ou `/migrate`, `/doctor`, `/refine`, `/implement`, `/execute`, `/help`.
 
-![Jornada Hyperion](./.github/docs/assets/hyperion-journey-full.png)
+![Jornada mínima Hyperion](./.github/docs/assets/hyperion-journey-minimal.png)
+
+Jornada completa: **[GETTING-STARTED.md](./GETTING-STARTED.md)** · duas velocidades: [trilha](./.github/docs/onboarding/trilha-de-aprendizado.md)
 
 ---
 
@@ -46,7 +50,7 @@ Skill names and paths use English identifiers. User guides available in **PT-BR 
 | 🔄 **Cards Sync** | 5 backends | GitHub (completo) · Jira · Azure · Linear · GitLab |
 | 🔍 **Auditorias** | 6 dimensões | Segurança, arquitetura, DevOps, code review, PO, UX |
 
-Detalhes completos: **[guia completo](./.github/docs/onboarding/guia-completo.md)**
+Detalhes: **[catalogo-skills.md](./.github/docs/reference/catalogo-skills.md)**
 
 ---
 
@@ -55,8 +59,9 @@ Detalhes completos: **[guia completo](./.github/docs/onboarding/guia-completo.md
 | Objetivo | Documento |
 |----------|-----------|
 | 🚀 **Primeira vez** | [GETTING-STARTED.md](./GETTING-STARTED.md) → [trilha](./.github/docs/onboarding/trilha-de-aprendizado.md) |
+| 🧩 **Qual skill usar** | [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) |
 | 🔧 **Repo existente** | [adaptar-ao-repo.md](./.github/docs/onboarding/adaptar-ao-repo.md) → `/migrate` |
-| 📘 **Guia completo** | [guia-completo.md](./.github/docs/onboarding/guia-completo.md) |
+| 📘 **Setup GitHub** | [setup-github.md](./.github/docs/onboarding/setup-github.md) |
 | 🗺️ **Fluxo SDLC** | [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md) |
 | 💬 **Comandos** | [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) |
 | 📁 **Onde ficam outputs** | [onde-ficam-os-outputs.md](./.github/docs/meta/onde-ficam-os-outputs.md) |
@@ -67,28 +72,22 @@ Detalhes completos: **[guia completo](./.github/docs/onboarding/guia-completo.md
 
 ---
 
-## 💬 Comandos essenciais
+## 💬 Comandos — kit mínimo vs o resto
 
-Fale com seu agente — **sem terminal**:
+Fale no **chat** (Cursor / Copilot / Claude). Sem terminal.
 
-| Comando | O que faz |
-|---------|-----------|
-| **`/setup`** | Setup completo guiado |
-| **`/sync`** | Valida e sincroniza cards |
-| **`/doctor`** | Verifica saúde do kit |
-| **`/audit`** | Auditoria completa (6 dimensões) |
-| **`/refine`** | Refina ideia em cards |
-| **`/implement`** | Plano de implementação |
-| **`/execute`** | Executa fase aprovada (+ testes) |
-| **`/migrate`** | Adaptar Hyperion a repo existente |
-| **`/pr-review`** | Revisar PR aberto |
-| **`/deps`** | Auditoria de dependências |
-| **`/spec-review`** | Gate de spec antes de codar |
-| **`/audit-run`** | Auditoria orquestrada (6 dimensões) |
-| **`/release`** | Changelog, versão e tag |
-| **`/diagram`** | Pacote completo de diagramas UML (11 tipos) |
+**🟢 Primeira semana (6):** `/setup` ou `/migrate` · `/doctor` · `/refine` · `/implement` · `/execute` · `/help`
 
-Referência completa: **[comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md)**
+| Quando precisar | Comando |
+|-----------------|---------|
+| 🔄 Subir cards pro board | **`/sync`** |
+| 📋 Spec antes de codar | **`/spec`** · **`/spec-review`** |
+| 👀 Revisar PR | **`/pr-review`** |
+| 🔍 Auditoria | **`/audit`** (rápida) ou **`/audit-run`** (com gates) |
+| 📦 Dependências / release | **`/deps`** · **`/release`** |
+| 📐 Diagramas UML | **`/diagram`** |
+
+Lista completa: **[comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md)**
 
 <details>
 <summary>⌨️ npm (CI / power users)</summary>

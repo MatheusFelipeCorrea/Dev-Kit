@@ -1,7 +1,32 @@
-﻿# Hyperion quick commands
+﻿# 💬 Hyperion quick commands
 
-Single reference for **npm** (terminal) and **agent** (no terminal).  
-**Português:** [comandos-rapidos.md](../reference/comandos-rapidos.md)
+Single reference for **npm** (terminal) and **the AI chat** (no terminal).
+
+| Level | Read |
+|-------|------|
+| 🟢 | [Minimum kit](#minimum-kit-first-week) — 6 commands |
+| 🟡 | [Prefer the agent](#prefer-the-agent) — chat phrases |
+| 🔵 | [npm one-liners](#npm--one-liners) — CI and power users |
+
+**Português:** [comandos-rapidos.md](./comandos-rapidos.md)
+
+---
+
+## 🟢 Minimum kit (first week)
+
+Type in **chat**, not the terminal. Slash works in Claude Code; in Cursor the equivalent phrase also works.
+
+| Order | Command | Level |
+|-------|---------|-------|
+| 1 | **`/setup`** (new repo) or **`/migrate`** (existing code) | 🟢 |
+| 2 | **`/doctor`** | 🟢 |
+| 3 | **`/refine`** | 🟢 |
+| 4 | **`/implement`** → **`/execute`** | 🟡 |
+| 5 | **`/help`** | 🟢 |
+
+`/discover` ≠ `/explore` ≠ `/migrate`: discover only maps `project.yml`; explore is product hypothesis; migrate adapts the kit to a legacy repo.
+
+`/audit` (skill, 6 dimensions) vs **`/audit-run`** (same content, agent with gates). Prefer `/audit` day-to-day.
 
 ---
 
@@ -119,5 +144,5 @@ Full policy: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
 
 ## See also
 
-- [setup-quickstart-en.md](../onboarding/setup-quickstart-en.md)
+- [setup-github-en.md](../onboarding/setup-github-en.md)
 - [scripts/cards-sync/README.md](../../../scripts/cards-sync/README.md)

@@ -1,31 +1,30 @@
 flowchart TB
   GS["GETTING-STARTED.md"]
   README["README.md"]
+  TRILHA["trilha-de-aprendizado.md"]
 
   subgraph onboarding ["Onboarding"]
-    GCEN["guide-complete-en.md"]
-    GCPT["guia-completo.md"]
-    SQEN["setup-quickstart-en.md"]
-    SQPT["setup-quickstart.md"]
+    SETUP["setup-github.md"]
+    ADAPT["adaptar-ao-repo.md"]
   end
 
   subgraph reference ["Reference"]
     CMD["comandos-rapidos.md"]
+    CAT["catalogo-skills.md"]
     SOM["skills-output-map.md"]
   end
 
-  subgraph integration ["Integration"]
+  subgraph rest ["Depois"]
+    FLOW["fluxo-completo.md"]
     GH["github-cli-setup.md"]
-    BE["escolher-backend.md"]
   end
 
-  subgraph quality ["Quality"]
-    AU["primeira-auditoria.md"]
-  end
-
-  GS --> SQPT
   README --> GS
-  GCPT --> CMD
-  GCPT --> GH
-  GCPT --> AU
-  SQPT --> SOM
+  GS --> TRILHA
+  TRILHA --> SETUP
+  TRILHA --> ADAPT
+  TRILHA --> FLOW
+  SETUP --> GH
+  ADAPT --> SOM
+  TRILHA --> CAT
+  CAT --> CMD

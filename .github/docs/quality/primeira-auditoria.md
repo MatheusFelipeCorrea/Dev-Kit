@@ -141,6 +141,7 @@ Não para a auditoria em si — é fluxo de IA + Markdown. Node só se quiser va
 
 ## Próximos passos
 
-- [guia-completo.md](../onboarding/guia-completo.md) — visão geral do kit
+- [primeira-auditoria.md](../quality/primeira-auditoria.md)
+- [trilha-de-aprendizado.md](../onboarding/trilha-de-aprendizado.md)
 - [README principal](../README.md) — tabela de todas as skills
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) — criar overlays ou prompts custom

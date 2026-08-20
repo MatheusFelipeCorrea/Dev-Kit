@@ -18,6 +18,7 @@
     "skills:validate": "node scripts/hyperion/skills-validate.mjs",
     "hyperion:repo-detect": "node scripts/hyperion/repo-detect.mjs",
     "hyperion:skills-eval": "node scripts/hyperion/skills-eval.mjs",
+    "hyperion:skills-catalog": "node scripts/hyperion/skills-catalog.mjs",
     "cards:init": "node scripts/cards-sync/init.mjs",
     "cards:validate": "node scripts/cards-sync/validate.mjs",
     "cards:sync": "node scripts/cards-sync/sync.mjs",

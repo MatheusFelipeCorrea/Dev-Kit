@@ -1,58 +1,34 @@
-# Fluxo completo Hyperion
+# 🗺️ Fluxo completo Hyperion
 
-Mapa end-to-end: do zero ao release. Use como referência de **onde cada peça entra** e **o que validar** em cada etapa.
+Mapa end-to-end: do zero ao release.
+
+| Nível | O que focar |
+|-------|-------------|
+| 🟢 | Bootstrap + `/refine` + `/implement` + `/execute` |
+| 🔵 | Diagrama completo abaixo (lead / time maduro) |
 
 **English:** [full-flow-en.md](./full-flow-en.md)
 
 ---
 
-## Visão geral
+## 👁️ Visão geral
 
-```mermaid
-flowchart TB
-  subgraph bootstrap [Bootstrap]
-    A[Copiar kit] --> B{"Repo existente?"}
-    B -->|Sim| M["/migrate"]
-    B -->|Não| S["/setup"]
-    M --> C["/doctor"]
-    S --> C
-    C --> D["/pipeline"]
-  end
+![Fluxo SDLC completo Hyperion](../assets/hyperion-journey-full.png)
 
-  subgraph planning [Planejamento]
-    E["/explore"] --> F["/refine"]
-    F --> G["/spec"]
-    G --> H["/spec-review"]
-  end
-
-  subgraph delivery [Entrega]
-    H --> I["/implement"]
-    I --> J["/execute"]
-    J --> K{Testes OK?}
-    K -->|Não| J
-    K -->|Sim| L["/audit-run"]
-  end
-
-  subgraph ship [Release]
-    L --> M["/release"]
-    M --> N[Tag + CHANGELOG]
-  end
-
-  bootstrap --> planning
-```
+Fonte: [`hyperion-journey-full.mmd`](../assets/hyperion-journey-full.mmd)
 
 ---
 
-## Fase 0 — Bootstrap (uma vez)
+## 🚀 Fase 0 — Bootstrap (uma vez)
 
 | Passo | Comando | Script npm | Output |
 |-------|---------|------------|--------|
 | Copiar kit | Manual | — | `.github/`, `scripts/`, `package.json` |
-| Repo legado | `/migrate` | — | `project.yml` + relatório local (gitignored) |
+| Repo legado | `/migrate` | — | `.github/plans/migrations/` |
 | Setup greenfield | `/setup` | `hyperion:setup -- --yes` | `project.yml`, cards config |
 | Adaptar comandos | — | `hyperion:repo-detect` | Sugestão `commands.*` |
 | Descobrir repo | `/discover` | — | `project.yml` atualizado |
-| Saúde | `/doctor` | `hyperion:doctor` | Relatório in-session |
+| Saúde | `/doctor` | `hyperion:doctor` | *(chat)* |
 | CI adaptável | `/pipeline` | `hyperion:pipeline-apply` | `hyperion-*.yml` workflows |
 | GitHub CLI | Manual | `gh auth login` | Token para sync |
 
@@ -60,7 +36,7 @@ flowchart TB
 
 ---
 
-## Fase 1 — Ideia → Cards
+## 📋 Fase 1 — Ideia → Cards
 
 | Passo | Comando | Skill/Agent | Output |
 |-------|---------|-------------|--------|
@@ -74,7 +50,7 @@ flowchart TB
 
 ---
 
-## Fase 2 — Plano → Código → Testes
+## ⚡ Fase 2 — Plano → Código → Testes
 
 | Passo | Comando | Skill/Agent | Output |
 |-------|---------|-------------|--------|
@@ -97,28 +73,22 @@ Isso fecha o gap **"plano sem verificação"** — o fluxo de testes não é ski
 
 ---
 
-## Fase 3 — Qualidade → Release
+## 🔍 Fase 3 — Qualidade → Release
 
 | Passo | Comando | Skill/Agent | Output |
 |-------|---------|-------------|--------|
 | Auditoria orquestrada | `/audit-run` | audit-runner | `.github/audits/results/` |
 | Auditoria avulsa | `/audit`, `/security`, … | *-audit skills | Por dimensão |
 | Changelog | `/changelog` ou `/release` | changelog-generator / release | `CHANGELOG.md` |
-| **`/deps`** | dependency-health | `.github/audits/results/dependency/` |
-| **`/pr-review`** | pr-reviewer | `.github/plans/reviews/pr-*` |
+| Dependências | `/deps` | dependency-health | `.github/audits/results/dependency/` |
+| Revisão de PR | `/pr-review` | pr-reviewer | `.github/plans/reviews/pr-*` |
 | Release | `/release` | release agent | Tag + checklist |
 
 **Gates:** audit-runner sem blockers críticos · semver aprovado pelo humano · nunca tag/push sem confirmação.
 
 ---
 
-## Artefatos gerados (não commitar)
-
-Relatórios de sessão ficam **gitignored** — pastas com `.gitkeep` apenas. Ver [adaptar-ao-repo.md](../onboarding/adaptar-ao-repo.md) e [.gitignore](../../../.gitignore).
-
----
-
-## Onde cada tipo de artefato fica
+## Onde cada output fica
 
 Ver [skills-output-map.md](../reference/skills-output-map.md) e [onde-ficam-os-outputs.md](./onde-ficam-os-outputs.md).
 

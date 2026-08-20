@@ -1,12 +1,12 @@
-﻿# Armadilhas comuns e gaps de aprendizado
+﻿# ⚠️ Armadilhas comuns e gaps de aprendizado
 
 O que mais confunde quem usa o Hyperion pela primeira vez — e como evitar.
 
-**English:** [common-pitfalls-en.md](../troubleshooting/common-pitfalls-en.md) · **Comandos:** [comandos-rapidos.md](../reference/comandos-rapidos.md)
+**English:** [common-pitfalls-en.md](./common-pitfalls-en.md) · **Comandos:** [comandos-rapidos.md](../reference/comandos-rapidos.md)
 
 ---
 
-## 1. “Preciso rodar npm o tempo todo?”
+## 💬 1. “Preciso rodar npm o tempo todo?”
 
 **Não.** Desde a v2026 do kit, o caminho preferido é falar com o agente:
 
@@ -20,7 +20,7 @@ npm continua existindo para CI, power users e quando o agente não tem terminal.
 
 ---
 
-## 2. Cursor: regras não carregam
+## 🖥️ 2. Cursor: regras não carregam
 
 O kit **já inclui** `.cursor/rules/hyperion.mdc` no clone completo.
 
@@ -34,7 +34,7 @@ Ou peça `/setup` — o bootstrap instala as rules automaticamente.
 
 ---
 
-## 3. EXAMPLE cards aparecem no board / sync falha
+## 🔄 3. EXAMPLE cards aparecem no board / sync falha
 
 Cards em `.github/cards/_examples/` e `CARD.template.md` são **referência** — nunca vão pro GitHub Project.
 
@@ -46,7 +46,7 @@ Cards em `.github/cards/_examples/` e `CARD.template.md` são **referência** �
 
 ---
 
-## 4. Status do card vs coluna do board
+## 📋 4. Status do card vs coluna do board
 
 **Modo seguro (GitHub Projects):**
 
@@ -60,7 +60,7 @@ Confusão comum: mover só no board e esperar que o Markdown atualize sozinho �
 
 ---
 
-## 5. `gh auth login` vs token no `.env`
+## 🔑 5. `gh auth login` vs token no `.env`
 
 | Cenário | Recomendação |
 |---------|--------------|
@@ -72,24 +72,25 @@ Sem token: `hyperion:setup` roda até validate/dry-run; sync real fica para depo
 
 ---
 
-## 6. Muitas skills — por onde começar?
+## 🧩 6. Muitas skills — por onde começar?
 
-Jornada mínima (ordem sugerida):
+Jornada mínima (ordem sugerida) — **não** é o catálogo de 30 skills:
 
-![Jornada mínima Hyperion — setup, refine, implement, audit](../assets/hyperion-journey-minimal.png)
+![Jornada mínima Hyperion — setup, refine, implement, execute](../assets/hyperion-journey-minimal.png)
 
 | Fase | Comando | Objetivo |
 |------|---------|----------|
-| Bootstrap | `/setup` | project.yml + memory + cards |
+| Bootstrap | `/setup` ou `/migrate` | `project.yml` + memory |
+| Saúde | `/doctor` | O que falta (token, cards, rules) |
 | Planejar | `/refine` | Ideia → cards |
-| Executar | `/implement` | Plano por fases |
-| Qualidade | `/audit` | Relatórios read-only |
+| Executar | `/implement` → `/execute` | Plano + código + testes do **seu** repo |
+| Qualidade (depois) | `/audit` | Relatórios read-only |
 
-Não precisa decorar 30 skills — [comandos-rapidos.md](../reference/comandos-rapidos.md) cobre 90% do uso.
+`/help` lista o resto. [comandos-rapidos.md](../reference/comandos-rapidos.md) cobre 90% do uso.
 
 ---
 
-## 7. Auditoria demora / pausa entre dimensões
+## 🔍 7. Auditoria demora / pausa entre dimensões
 
 `full-audit` roda **6 dimensões** e pausa entre elas (por design — evita contexto gigante).
 
@@ -101,7 +102,7 @@ Não precisa decorar 30 skills — [comandos-rapidos.md](../reference/comandos-r
 
 ---
 
-## 8. Docs desatualizados vs `hyperion:*`
+## 📚 8. Docs desatualizados vs `hyperion:*`
 
 **Fonte de verdade para atalhos:**
 
@@ -115,7 +116,7 @@ Se algo parecer inconsistente, rode `npm run hyperion:check-rules` — o CI bloq
 
 ---
 
-## 9. Backend não-GitHub (Jira, Azure, Linear, GitLab)
+## 🔄 9. Backend não-GitHub (Jira, Azure, Linear, GitLab)
 
 GitHub Projects = caminho maduro. Outros backends = forward sync best-effort; reverse e colunas nativas limitadas.
 
@@ -123,13 +124,29 @@ GitHub Projects = caminho maduro. Outros backends = forward sync best-effort; re
 
 ---
 
-## 10. O que ainda não existe (expectativa vs kit)
+## 💡 10. O que ainda não existe (expectativa vs kit)
 
 | Usuário espera | Status atual |
 |----------------|--------------|
-| Slash commands nativos no Cursor | Via rules — não é plugin |
-| Sync bidirecional de status em Jira | Metadados na issue; board nativo WIP |
+| Slash commands nativos no Cursor (plugin) | Via rules — escreva `/setup` ou a frase equivalente |
+| Sync bidirecional de status em Jira | Transições de **workflow** quando o nome bate; Kanban nativo depende do projeto |
+| Reverse Azure / GitLab / Linear | Ainda não — só GitHub e Jira |
 | Vídeo / tutorial interativo | Só markdown |
+
+---
+
+## 🟢 11. “Nunca usei agents — por onde começo?”
+
+Você não precisa entender a arquitetura. Copie o kit → abra o chat no repo → **`/setup`** ou **`/migrate`**. Se o modelo não reconhecer a barra, digite *“Configura o Hyperion neste repo”*.
+
+Confusões de comando:
+
+| Você quis | Use |
+|-----------|-----|
+| Ligar o kit num repo que já existe | `/migrate` |
+| Só gerar/atualizar `project.yml` | `/discover` |
+| Explorar uma ideia de produto | `/explore` |
+| Setup greenfield completo | `/setup` |
 
 ---
 

@@ -36,6 +36,9 @@ jobs:
       - name: Skills structural eval
         run: npm run hyperion:skills-eval
 
+      - name: Skills catalog in sync
+        run: npm run hyperion:skills-catalog -- --check
+
       - name: Unit tests (hyperion + cards)
         run: npm test
 

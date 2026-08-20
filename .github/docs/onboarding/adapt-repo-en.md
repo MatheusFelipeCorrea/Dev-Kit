@@ -42,9 +42,9 @@ memory:
 
 ---
 
-## Generated artifacts (do not commit)
+## Session outputs
 
-Session outputs under `.github/plans/migrations/`, `reviews/`, `implementations/`, `audits/results/` are gitignored. See [.gitignore](../../../.gitignore).
+See [skills-output-map.md](../reference/skills-output-map.md) for where `/migrate`, `/implement`, `/audit`, and other commands write files.
 
 ---
 

@@ -1,12 +1,11 @@
-# Adaptar o Hyperion ao seu repositório
+# ⚙️ Adaptar o Hyperion ao seu repositório
 
-O kit é **genérico**; o arquivo `.github/project.yml` é o **contrato** que liga o Hyperion ao **seu** produto (stack, comandos, backend, memória).
-
+🟡 **Intermediário** — o kit é **genérico**; o arquivo `.github/project.yml` é o **contrato** que liga o Hyperion ao **seu** produto (stack, comandos, backend, memória).
 **English:** [adapt-repo-en.md](./adapt-repo-en.md)
 
 ---
 
-## Quando usar
+## 🎯 Quando usar
 
 | Situação | Comando |
 |----------|---------|
@@ -82,18 +81,9 @@ Mapa completo: [skills-output-map.md](../reference/skills-output-map.md)
 
 ---
 
-## O que **não** commitar
+## Outputs de sessão
 
-Artefatos **gerados por sessão** (relatórios, planos, migrações) ficam gitignored:
-
-| Pasta | Gerado por |
-|-------|------------|
-| `.github/plans/migrations/` | `/migrate` |
-| `.github/plans/reviews/` | `/spec-review`, `/pr-review` |
-| `.github/plans/implementations/` | `/implement` |
-| `.github/audits/results/` | `/audit`, `/audit-run` |
-
-O kit versiona só `.gitkeep` nessas pastas — veja [.gitignore](../../../.gitignore).
+Outputs de `/migrate`, `/implement`, `/audit`, etc. ficam em `.github/plans/` e `.github/audits/results/`. Mapa completo: [skills-output-map.md](../reference/skills-output-map.md).
 
 ---
 

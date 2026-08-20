@@ -1,6 +1,11 @@
-# Hyperion full flow
+# 🗺️ Hyperion full flow
 
 End-to-end map from zero to release.
+
+| Level | Focus |
+|-------|-------|
+| 🟢 | Bootstrap + `/refine` + `/implement` + `/execute` |
+| 🔵 | Full diagram below (lead / mature team) |
 
 **Português:** [fluxo-completo.md](./fluxo-completo.md) · **Learning path:** [learning-path-en.md](../onboarding/learning-path-en.md)
 
@@ -8,39 +13,9 @@ End-to-end map from zero to release.
 
 ## Overview
 
-```mermaid
-flowchart TB
-  subgraph bootstrap [Bootstrap]
-    A[Copy kit] --> B{"Existing repo?"}
-    B -->|Yes| M["/migrate"]
-    B -->|No| S["/setup"]
-    M --> C["/doctor"]
-    S --> C
-    C --> D["/pipeline"]
-  end
+![Hyperion full SDLC flow](../assets/hyperion-sdlc-full-en.png)
 
-  subgraph planning [Planning]
-    E["/explore"] --> F["/refine"]
-    F --> G["/spec"]
-    G --> H["/spec-review"]
-  end
-
-  subgraph delivery [Delivery]
-    H --> I["/implement"]
-    I --> J["/execute"]
-    J --> K{Tests pass?}
-    K -->|No| J
-    K -->|Yes| P["/pr-review"]
-    P --> L["/audit-run"]
-  end
-
-  subgraph ship [Release]
-    L --> D2["/deps"]
-    D2 --> M2["/release"]
-  end
-
-  bootstrap --> planning
-```
+Source: [`hyperion-sdlc-full-en.mmd`](../assets/hyperion-sdlc-full-en.mmd)
 
 ---
 
@@ -49,12 +24,12 @@ flowchart TB
 | Step | Command | Output |
 |------|---------|--------|
 | Copy kit | Manual | `.github/`, `scripts/` |
-| Legacy repo | `/migrate` | `project.yml` (report gitignored) |
+| Legacy repo | `/migrate` | `.github/plans/migrations/` |
 | Greenfield | `/setup` | `project.yml`, cards |
 | Adapt commands | `hyperion:repo-detect` | Suggested `commands.*` |
-| Health | `/doctor` | In-session report |
+| Health | `/doctor` | *(chat)* |
 
-See [adapt-repo-en.md](../onboarding/adapt-repo-en.md).
+See [adapt-repo-en.md](../onboarding/adapt-repo-en.md) and [skills-output-map.md](../reference/skills-output-map.md).
 
 ---
 
@@ -78,9 +53,9 @@ See [adapt-repo-en.md](../onboarding/adapt-repo-en.md).
 
 ---
 
-## Generated artifacts (do not commit)
+## Where outputs go
 
-Session outputs are **gitignored** — folders ship with `.gitkeep` only. See [.gitignore](../../../.gitignore) and [adapt-repo-en.md](../onboarding/adapt-repo-en.md).
+[skills-output-map.md](../reference/skills-output-map.md) · [where-outputs-go-en.md](./where-outputs-go-en.md)
 
 ---
 

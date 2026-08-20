@@ -1,20 +1,10 @@
-﻿# Skills → Output map
+﻿# 📁 Skills → Output map
 
 Canonical registry: **every skill** and where it writes artifacts.
 
 Override: read `project.yml` → `outputs` and `docs.*` first; fall back to paths below.
 
 ![Hyperion output map](../assets/hyperion-outputs-map.png)
-
----
-
-## Summary
-
-| Status | Count | Meaning |
-|--------|-------|---------|
-| ✅ | 30/30 | All skills have explicit `## Output` section |
-| ⚠️ | 0 | — |
-| 📁 | scaffold | Output folders ship with `.gitkeep`; contents gitignored |
 
 ---
 
@@ -107,7 +97,7 @@ Override: read `project.yml` → `outputs` and `docs.*` first; fall back to path
 │   ├── adr/            ← adr-generator
 │   └── retros/         ← sprint-retro
 ├── diagrams/           ← plantuml-generator
-└── audits/results/     ← *-audit (gitignored — generated at runtime)
+└── audits/results/     ← *-audit skills
 ```
 
 ---
@@ -128,4 +118,4 @@ docs:
   diagrams: .github/diagrams
 ```
 
-Full user guide: [onde-ficam-os-outputs.md](../meta/onde-ficam-os-outputs.md) · [EN](../meta/where-outputs-go-en.md)
+Full user guide: [onde-ficam-os-outputs.md](../meta/onde-ficam-os-outputs.md) · **Catalog:** [catalogo-skills.md](./catalogo-skills.md) · [skills-catalog.md](./skills-catalog.md)

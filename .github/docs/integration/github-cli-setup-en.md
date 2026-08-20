@@ -164,7 +164,7 @@ Local = `gh`. CI = Actions token.
 ## Next steps
 
 - [Documentation index](../README.md) — which doc to read
-- [5-minute setup](../onboarding/setup-quickstart-en.md)
+- [GitHub setup](../onboarding/setup-github-en.md)
+- [Learning path](../onboarding/learning-path-en.md)
 - [Choose backend](../integration/choose-backend-en.md)
-- [Complete guide](../onboarding/guide-complete-en.md)
 - [Cards sync README](../../../scripts/cards-sync/README.md)

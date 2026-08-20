@@ -1,25 +1,25 @@
 flowchart TB
   subgraph bootstrap [Bootstrap]
-    A[Copiar kit] --> B{"Repo existente?"}
-    B -->|Sim| Mig["/migrate"]
-    B -->|Nao| S["/setup"]
+    A[Copy kit] --> B{"Existing repo?"}
+    B -->|Yes| Mig["/migrate"]
+    B -->|No| S["/setup"]
     Mig --> C["/doctor"]
     S --> C
     C --> D["/pipeline"]
   end
 
-  subgraph planning [Planejamento]
+  subgraph planning [Planning]
     E["/explore"] --> F["/refine"]
     F --> G["/spec"]
     G --> H["/spec-review"]
   end
 
-  subgraph delivery [Entrega]
+  subgraph delivery [Delivery]
     H --> I["/implement"]
     I --> J["/execute"]
-    J --> K{Testes OK?}
-    K -->|Nao| J
-    K -->|Sim| PR["/pr-review"]
+    J --> K{Tests pass?}
+    K -->|No| J
+    K -->|Yes| PR["/pr-review"]
     PR --> L["/audit-run"]
   end
 

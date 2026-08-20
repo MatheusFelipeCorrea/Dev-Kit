@@ -1,7 +1,32 @@
-﻿# Comandos rápidos Hyperion
+﻿# 💬 Comandos rápidos Hyperion
 
-Referência única: **npm** (terminal) e **agente** (sem terminal).  
-**English:** [quick-commands-en.md](../reference/quick-commands-en.md)
+Referência única: **npm** (terminal) e **chat da IA** (sem terminal).
+
+| Nível | O que ler |
+|-------|-----------|
+| 🟢 | [Kit mínimo](#kit-mínimo-primeira-semana) — 6 comandos |
+| 🟡 | [Fale com o agente](#preferência-fale-com-o-agente) — frases no chat |
+| 🔵 | [npm one-liners](#npm--one-liners) — CI e power users |
+
+**English:** [quick-commands-en.md](./quick-commands-en.md)
+
+---
+
+## 🟢 Kit mínimo (primeira semana)
+
+Digite **no chat**, não no terminal. Slash no Claude Code; no Cursor o texto equivalente também vale.
+
+| Ordem | Comando | Nível |
+|-------|---------|-------|
+| 1 | **`/setup`** (repo novo) ou **`/migrate`** (já tem código) | 🟢 |
+| 2 | **`/doctor`** | 🟢 |
+| 3 | **`/refine`** | 🟢 |
+| 4 | **`/implement`** → **`/execute`** | 🟡 |
+| 5 | **`/help`** | 🟢 |
+
+`/discover` ≠ `/explore` ≠ `/migrate`: discover só mapeia `project.yml`; explore é hipótese de produto; migrate adapta kit a repo legado.
+
+`/audit` (skill, 6 dimensões) vs **`/audit-run`** (mesmo conteúdo, agent com gates). Use `/audit` no dia a dia.
 
 ---
 
@@ -122,6 +147,6 @@ Guia de confusões frequentes: [armadilhas-comuns.md](../troubleshooting/armadil
 
 ## Ver também
 
-- [setup-quickstart.md](../onboarding/setup-quickstart.md)
+- [setup-github.md](../onboarding/setup-github.md)
 - [scripts/cards-sync/README.md](../../../scripts/cards-sync/README.md)
 - Skills: `.github/skills/setup/project-startup/SKILL.md`, `hyperion-ops/SKILL.md`

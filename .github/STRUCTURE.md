@@ -30,7 +30,7 @@ Canonical layout for the portable kit.
 
 | Folder | Contents |
 |--------|----------|
-| `onboarding/` | guia-completo, setup-quickstart (PT/EN) |
+| `onboarding/` | setup-github, trilha, adaptar-ao-repo (PT/EN) |
 | `reference/` | comandos-rapidos, skills-output-map, methodology |
 | `integration/` | github-cli-setup, escolher-backend |
 | `quality/` | primeira-auditoria |

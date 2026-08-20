@@ -1,0 +1,182 @@
+{
+  "hypothesis-forge": {
+    "phase": "plan",
+    "when_pt": "Explorar ideia antes de virar card",
+    "when_en": "Explore an idea before cards",
+    "output": ".github/memory/discoveries/"
+  },
+  "acceptance-spec": {
+    "phase": "plan",
+    "when_pt": "Spec Given/When/Then de uma story",
+    "when_en": "BDD spec for a story",
+    "output": ".github/plans/specs/"
+  },
+  "card-refiner": {
+    "phase": "plan",
+    "when_pt": "Ideia → cards; mover status no board",
+    "when_en": "Idea → cards; move board status",
+    "output": ".github/cards/"
+  },
+  "project-architect": {
+    "phase": "plan",
+    "when_pt": "Arquitetura greenfield",
+    "when_en": "Greenfield architecture",
+    "output": ".github/docs/Project_*_Blueprint.md"
+  },
+  "refactor-guide": {
+    "phase": "plan",
+    "when_pt": "Plano de refactor seguro",
+    "when_en": "Safe refactor plan",
+    "output": ".github/plans/implementations/"
+  },
+  "sprint-retro": {
+    "phase": "plan",
+    "when_pt": "Retrospectiva de sprint",
+    "when_en": "Sprint retrospective",
+    "output": ".github/docs/retros/"
+  },
+  "project-discovery": {
+    "phase": "bootstrap",
+    "when_pt": "Mapear repo e gerar project.yml",
+    "when_en": "Map repo and create project.yml",
+    "output": ".github/project.yml"
+  },
+  "project-startup": {
+    "phase": "bootstrap",
+    "when_pt": "Setup completo (/setup)",
+    "when_en": "Full setup (/setup)",
+    "output": "*(sessão — orquestrador)*"
+  },
+  "hyperion-ops": {
+    "phase": "bootstrap",
+    "when_pt": "Doctor, sync, help via npm",
+    "when_en": "Doctor, sync, help via npm",
+    "output": "*(sessão — roda npm)*"
+  },
+  "cards-sync-setup": {
+    "phase": "bootstrap",
+    "when_pt": "Configurar projects-map.json",
+    "when_en": "Configure projects-map.json",
+    "output": ".github/cards/config/"
+  },
+  "integration-bridge": {
+    "phase": "bootstrap",
+    "when_pt": "Conectar Jira/Azure/Linear/GitLab",
+    "when_en": "Connect Jira/Azure/Linear/GitLab",
+    "output": "project.yml → management"
+  },
+  "pipeline-architect": {
+    "phase": "bootstrap",
+    "when_pt": "CI adaptável (hyperion-* workflows)",
+    "when_en": "Adaptive CI (hyperion-* workflows)",
+    "output": ".github/workflows/hyperion-*.yml"
+  },
+  "repo-migration": {
+    "phase": "bootstrap",
+    "when_pt": "Repo legado → Hyperion",
+    "when_en": "Legacy repo → Hyperion",
+    "output": ".github/plans/migrations/"
+  },
+  "memory-capture": {
+    "phase": "bootstrap",
+    "when_pt": "Registrar decisões entre sessões",
+    "when_en": "Log decisions across sessions",
+    "output": ".github/memory/DECISIONS.md"
+  },
+  "full-audit": {
+    "phase": "quality",
+    "when_pt": "Auditoria 6 dimensões (/audit)",
+    "when_en": "Six-dimension audit (/audit)",
+    "output": ".github/audits/results/"
+  },
+  "architecture-audit": {
+    "phase": "quality",
+    "when_pt": "Revisão de arquitetura",
+    "when_en": "Architecture review",
+    "output": ".github/audits/results/architecture/"
+  },
+  "security-audit": {
+    "phase": "quality",
+    "when_pt": "Revisão de segurança",
+    "when_en": "Security review",
+    "output": ".github/audits/results/application-security/"
+  },
+  "devops-audit": {
+    "phase": "quality",
+    "when_pt": "Revisão DevOps/CI",
+    "when_en": "DevOps/CI review",
+    "output": ".github/audits/results/devops/"
+  },
+  "code-review": {
+    "phase": "quality",
+    "when_pt": "Code review pontual",
+    "when_en": "Ad-hoc code review",
+    "output": ".github/audits/results/code-review/"
+  },
+  "po-audit": {
+    "phase": "quality",
+    "when_pt": "Alinhamento de produto",
+    "when_en": "Product alignment",
+    "output": ".github/audits/results/product-owner/"
+  },
+  "ux-audit": {
+    "phase": "quality",
+    "when_pt": "Revisão de UX",
+    "when_en": "UX review",
+    "output": ".github/audits/results/ux-design/"
+  },
+  "testing-strategy": {
+    "phase": "deliver",
+    "when_pt": "Plano de testes",
+    "when_en": "Testing strategy",
+    "output": ".github/plans/specs/testing-strategy-*.md"
+  },
+  "tech-debt-tracker": {
+    "phase": "quality",
+    "when_pt": "Inventário de dívida técnica",
+    "when_en": "Tech debt inventory",
+    "output": ".github/docs/tech-debt-inventory.md"
+  },
+  "pr-review": {
+    "phase": "deliver",
+    "when_pt": "Revisão de PR (skill)",
+    "when_en": "PR review (skill)",
+    "output": ".github/plans/reviews/pr-*"
+  },
+  "dependency-health": {
+    "phase": "quality",
+    "when_pt": "Audit de dependências (/deps)",
+    "when_en": "Dependency audit (/deps)",
+    "output": ".github/audits/results/dependency/"
+  },
+  "adr-generator": {
+    "phase": "docs",
+    "when_pt": "Architecture Decision Record",
+    "when_en": "Architecture Decision Record",
+    "output": ".github/docs/adr/"
+  },
+  "plantuml-generator": {
+    "phase": "docs",
+    "when_pt": "Diagramas UML (/diagram)",
+    "when_en": "UML diagrams (/diagram)",
+    "output": ".github/diagrams/"
+  },
+  "readme-updater": {
+    "phase": "docs",
+    "when_pt": "Atualizar README(s)",
+    "when_en": "Update README(s)",
+    "output": "README in repo"
+  },
+  "changelog-generator": {
+    "phase": "docs",
+    "when_pt": "Gerar CHANGELOG",
+    "when_en": "Generate CHANGELOG",
+    "output": "CHANGELOG.md"
+  },
+  "release-manager": {
+    "phase": "docs",
+    "when_pt": "Checklist de release",
+    "when_en": "Release checklist",
+    "output": ".github/plans/releases/"
+  }
+}

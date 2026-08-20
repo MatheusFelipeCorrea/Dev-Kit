@@ -1,66 +1,79 @@
-# Hyperion learning path
+# 📚 Hyperion learning path
 
-Recommended order for a **gentle learning curve** — from zero to daily use in ~1–2 hours.
+Two speeds. Do not read the whole kit — pick your level and follow in order.
+
+| Legend | Meaning |
+|--------|---------|
+| 🟢 | Beginner — chat + 6 commands |
+| 🟡 | Intermediate — GitHub, cards, repo |
+| 🔵 | Advanced — full SDLC, reference, contributing |
 
 **Português:** [trilha-de-aprendizado.md](./trilha-de-aprendizado.md)
 
 ---
 
-## Quick map
+## 🎯 Pick a track
 
-```text
-Level 1 (15 min)   GETTING-STARTED.md
-Level 2 (20 min)   setup-quickstart + /setup or /migrate
-Level 3 (15 min)   adapt-repo-en.md  ← YOUR repo's project.yml
-Level 4 (20 min)   full-flow-en.md   ← SDLC from card to release
-Level 5 (reference) quick-commands-en.md + guide-complete-en.md
-Level 6 (as needed) integration/, quality/, troubleshooting/
-```
+| You | Do | Skip on day 1 |
+|-----|-----|---------------|
+| 🟢 **New to agents** | Levels 1–2 + filtered catalog | cards-sync technical README |
+| 🟡 **Already uses agents/CI** | Levels 1 + 3–4 | Long glossary |
+| 🔵 **Lead / maintainer** | Levels 1 + 5–6 | — |
 
----
+**Minimum kit:** `/setup` or `/migrate` → `/doctor` → `/refine` → `/implement` → `/execute` → `/help`
 
-## Level 1 — First contact (15 min)
-
-Read [GETTING-STARTED.md](../../../GETTING-STARTED.md). Copy the kit → run **`/setup`** (new repo) or **`/migrate`** (existing repo).
+![Minimal journey](../assets/hyperion-journey-minimal.png)
 
 ---
 
-## Level 2 — Setup (20 min)
+## 🟢 Level 1 — First contact · ⏱️ ~15 min
 
-[setup-quickstart-en.md](./setup-quickstart-en.md) · [github-cli-setup-en.md](../integration/github-cli-setup-en.md) if using GitHub Projects.
+[GETTING-STARTED.md](../../../GETTING-STARTED.md) — glossary + 6 commands.
 
----
-
-## Level 3 — Adapt to your repository (15 min)
-
-[adapt-repo-en.md](./adapt-repo-en.md) — `project.yml` commands, memory, backends.
-
-Run: `npm run hyperion:repo-detect`
+**Do now:** copy kit → **`/setup`** or **`/migrate`** → **`/doctor`**.
 
 ---
 
-## Level 4 — Workflow (20 min)
+## 🟡 Level 2 — GitHub · ⏱️ ~15 min
+
+| Doc | When |
+|-----|------|
+| [setup-github-en.md](./setup-github-en.md) | GitHub Projects sync |
+| [github-cli-setup-en.md](../integration/github-cli-setup-en.md) | If `gh` missing |
+
+**Do now:** **`/refine`** → **`/sync`**.
+
+💡 Other backends: [choose-backend-en.md](../integration/choose-backend-en.md).
+
+---
+
+## 🟡 Level 3 — Your repo · ⏱️ ~15 min
+
+[adapt-repo-en.md](./adapt-repo-en.md) · `npm run hyperion:repo-detect`
+
+---
+
+## 🔵 Level 4 — SDLC · ⏱️ ~20 min
 
 [full-flow-en.md](../meta/full-flow-en.md)
 
-```text
-/refine → /spec → /spec-review → /implement → /execute → /pr-review → /release
-```
+---
+
+## 🔵 Level 5 — Reference · lookup
+
+| Doc | For |
+|-----|-----|
+| [skills-catalog.md](../reference/skills-catalog.md) | 🧩 **Which skill to use** |
+| [quick-commands-en.md](../reference/quick-commands-en.md) | 💬 Slash commands |
+| [skills-output-map.md](../reference/skills-output-map.md) | 📁 Output paths |
+| [methodology-cheatsheet.md](../reference/methodology-cheatsheet.md) | Agent vs skill vs script |
 
 ---
 
-## Level 5 — Daily reference
+## 🔵 Level 6 — On demand
 
-[quick-commands-en.md](../reference/quick-commands-en.md) · [guide-complete-en.md](./guide-complete-en.md) · [skills-output-map.md](../reference/skills-output-map.md)
-
----
-
-## Generated artifacts (do not commit)
-
-Session outputs are gitignored — folders ship with `.gitkeep` only. See [.gitignore](../../../.gitignore).
+`integration/` · `quality/` · [cards-sync README](../../../scripts/cards-sync/README.md) · [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 
 ---
 
-## Index
-
-[docs/README.md](../README.md)
+➡️ [Documentation index](../README.md)

@@ -6,9 +6,10 @@ Guidelines to keep Hyperion docs consistent while avoiding duplication.
 
 | Topic | Source of truth | Secondary references |
 |------|------------------|----------------------|
-| Onboarding flow | `onboarding/guia-completo.md` + `onboarding/guide-complete-en.md` | `GETTING-STARTED.md`, `README.md` |
-| Commands and scripts | `reference/comandos-rapidos.md` + `.github/commands.yml` + `scripts/hyperion/help.mjs` | `README.md`, `cards-sync/README.md` |
-| Output locations | `reference/skills-output-map.md` | `meta/onde-ficam-os-outputs.md`, `README.md` |
+| Onboarding flow | `GETTING-STARTED.md` + `onboarding/trilha-de-aprendizado.md` | `setup-github.md` |
+| Skills catalog | `reference/catalogo-skills.md` + `reference/skills-catalog.md` | Generated from `catalog-meta.json` |
+| Commands and scripts | `reference/comandos-rapidos.md` + `.github/commands.yml` | `README.md`, `cards-sync/README.md` |
+| Output locations | `reference/skills-output-map.md` | `meta/onde-ficam-os-outputs.md` (short intro) |
 | Audit directories | `.github/audits/manifest.yml` | `quality/primeira-auditoria*.md` |
 | Learning gaps | `troubleshooting/armadilhas-comuns.md` | `reference/comandos-rapidos.md` |
 | Runtime rules | `.github/commands.yml` → generate | `CLAUDE.md`, `hyperion.mdc`, `copilot-instructions.md` |
@@ -41,6 +42,7 @@ Guidelines to keep Hyperion docs consistent while avoiding duplication.
    - `npm run skills:validate` — skill frontmatter and outputs
    - `npm run hyperion:check-rules` — runtime rules in sync with `commands.yml`
    - `npm test` — hyperion + cards unit tests
+6. User-facing flow diagrams are **PNG** in `docs/assets/` (edit `.mmd`, export). Do not leave live Mermaid in guides. Exception: templates inside `SKILL.md` that the model copies.
 
 Markers synced by `hyperion:generate-rules`: `HYPERION:COMMANDS`, `HYPERION:SKILLS`, `HYPERION:AGENTS`.
 
@@ -63,7 +65,7 @@ When changing behavior, verify:
 ## Translation policy
 
 - PT-BR and EN guides should be equivalent in meaning.
-- Reference docs: provide PT pair or link at top (`cheatsheet-metodologia.md`, `mapa-outputs-skills.md`).
+- Reference docs: provide PT pair or link at top (`cheatsheet-metodologia.md`, `skills-output-map.md`).
 
 ## Review cadence
 

@@ -62,18 +62,19 @@ Local dev: `gh auth login`. CI: `GITHUB_TOKEN` or `PROJECT_SYNC_TOKEN`. Org Proj
 
 ## 6. Too many skills — where to start?
 
-Suggested minimal journey:
+Suggested minimal journey — **not** the 30-skill catalog:
 
-![Minimal Hyperion journey — setup, refine, implement, audit](../assets/hyperion-journey-minimal.png)
+![Minimal Hyperion journey — setup, refine, implement, execute](../assets/hyperion-journey-minimal.png)
 
 | Phase | Command | Goal |
 |------|---------|------|
-| Bootstrap | `/setup` | project.yml + memory + cards |
+| Bootstrap | `/setup` or `/migrate` | `project.yml` + memory |
+| Health | `/doctor` | What’s missing (token, cards, rules) |
 | Plan | `/refine` | Idea → cards |
-| Execute | `/implement` | Phased plan |
-| Quality | `/audit` | Read-only reports |
+| Execute | `/implement` → `/execute` | Plan + code + **your** repo tests |
+| Quality (later) | `/audit` | Read-only reports |
 
-You do not need to memorize 30 skills — [quick-commands-en.md](../reference/quick-commands-en.md) covers most usage.
+`/help` lists the rest. [quick-commands-en.md](../reference/quick-commands-en.md) covers most usage.
 
 ---
 
@@ -109,9 +110,23 @@ GitHub Projects is fully mature. Others are best-effort forward sync — see [ch
 
 | User expects | Current status |
 |--------------|----------------|
-| Native Cursor slash plugin | Rules file only |
-| Full Jira board column sync | Metadata in issue; WIP |
+| Native Cursor slash plugin | Rules file — type `/setup` or the equivalent phrase |
+| Full Jira Kanban column sync | Workflow **transitions** when names match; native board depends on the project |
+| Azure / GitLab / Linear reverse | Not yet — GitHub and Jira only |
 | Video walkthrough | Markdown only |
+
+---
+
+## 11. “I’ve never used agents — where do I start?”
+
+You do not need the architecture. Copy the kit → open chat in the repo → **`/setup`** or **`/migrate`**. If the model ignores the slash, say *“Set up Hyperion in this repo”*.
+
+| You meant | Use |
+|-----------|-----|
+| Wire the kit into an existing repo | `/migrate` |
+| Only generate/update `project.yml` | `/discover` |
+| Explore a product idea | `/explore` |
+| Full greenfield setup | `/setup` |
 
 ---
 

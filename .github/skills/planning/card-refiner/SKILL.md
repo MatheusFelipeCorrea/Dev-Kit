@@ -428,7 +428,7 @@ When the user asks to **move a card on the board**, set explicit `status:` in fr
 
 Safe mode applies only when `status` is **omitted** on an **existing** card: the sync preserves whatever status was set manually on the GitHub board. Do not omit `status` when the user explicitly asked to move the card.
 
-See `scripts/cards-sync/README.md` and `setup-quickstart.md` § Regras de Status.
+See `scripts/cards-sync/README.md` and `.github/docs/onboarding/setup-github.md` § Cards sync (Status).
 
 ### Status values (canonical — use exactly in frontmatter)
 

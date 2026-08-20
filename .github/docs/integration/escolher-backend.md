@@ -12,19 +12,19 @@ Use este guia para decidir **onde seus cards vão parar** e qual caminho de setu
 Você usa qual ferramenta de gestão?
 │
 ├── GitHub Projects (Issues + board no repo)
-│   └── → github-cli-setup.md + /setup (ou hyperion:setup -- --yes)
+│   └── → [setup-github.md](../onboarding/setup-github.md) + /setup
 │
 ├── Jira
-│   └── → integration-bridge (via agente) + setup-quickstart §3.1 Jira
+│   └── → integration-bridge + env vars abaixo
 │
 ├── Azure DevOps
-│   └── → integration-bridge + setup-quickstart §3.1 Azure
+│   └── → integration-bridge + env vars abaixo
 │
 ├── Linear
-│   └── → integration-bridge + setup-quickstart §3.1 Linear
+│   └── → integration-bridge + env vars abaixo
 │
 └── GitLab Issues
-    └── → integration-bridge + setup-quickstart §3.1 GitLab
+    └── → integration-bridge + env vars abaixo
 ```
 
 ---
@@ -83,13 +83,29 @@ management:
 
 ---
 
-## Azure DevOps / Linear / GitLab
+## Azure DevOps
 
-**Quando escolher:** board já existe nessa ferramenta.
+**Env:** `CARDS_SYNC_BACKEND=azure-devops`, `AZDO_ORG_URL`, `AZDO_PROJECT`, `AZDO_PAT` · opcional `AZDO_WORK_ITEM_TYPE=Task`
 
-**Setup:** veja [setup-quickstart §3.1](../onboarding/setup-quickstart.md#passo-31--escolher-backend-github--jira--outros) para env vars de cada um.
+Forward sync idempotente via `CARD_ID`. Reverse e colunas nativas: ainda não.
 
-**Peça ao agente:** *"Conecta ao Azure"* / *"Conecta ao Linear"* / *"Conecta ao GitLab"* → `integration-bridge`
+---
+
+## Linear
+
+**Env:** `CARDS_SYNC_BACKEND=linear`, `LINEAR_TEAM_ID`, `LINEAR_API_TOKEN`
+
+Opcional em `project.yml`: `management.status_map` para nomes de estado do time.
+
+Forward + status via workflow states. Reverse: ainda não.
+
+---
+
+## GitLab
+
+**Env:** `CARDS_SYNC_BACKEND=gitlab`, `GITLAB_PROJECT_ID`, `GITLAB_TOKEN` · opcional `GITLAB_URL` (default gitlab.com)
+
+Forward sync idempotente. Reverse e board nativo: ainda não.
 
 ---
 
@@ -97,6 +113,6 @@ management:
 
 | Próximo passo | Documento |
 |---------------|-----------|
-| Criar cards | Peça *"Refina X em cards"* ou veja [guia-completo §4](../onboarding/guia-completo.md#4-como-funcionam-os-cards) |
+| Criar cards | **`/refine`** — [catalogo-skills.md](../reference/catalogo-skills.md) |
 | Evoluir cards | *"mova CARD-ID para Done"* — [card-refiner](../../skills/planning/card-refiner/SKILL.md) |
 | Auditar repo | [primeira-auditoria.md](../quality/primeira-auditoria.md) |

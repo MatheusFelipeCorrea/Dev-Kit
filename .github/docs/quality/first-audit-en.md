@@ -141,6 +141,6 @@ Not for the audit itself — AI flow + Markdown. Node only if you want to valida
 
 ## Next steps
 
-- [guide-complete-en.md](../onboarding/guide-complete-en.md) — kit overview
+- [learning-path-en.md](../onboarding/learning-path-en.md)
 - [Main README](../README.md) — all skills table
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) — create custom overlays or prompts
