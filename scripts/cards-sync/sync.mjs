@@ -8,9 +8,12 @@ import {
   expandCardIdsWithParents,
   filterEdgesForCards,
   filterKitSampleCards,
+  isKitSampleCardId,
+  isKitSampleRemoteArtifact,
   listCardsMarkdownFiles,
   discoverGitHubProjectNumber,
   resolveRepoConfig,
+  shouldIncludeKitSamples,
   writeSyncSummary,
 } from "./lib.mjs";
 
@@ -581,6 +584,9 @@ async function getRepositoryNodeId(owner, name) {
 }
 
 async function searchIssueByCardId(owner, name, cardId) {
+  // Never attach/update kit sample issues unless maintainer opts in
+  if (isKitSampleCardId(cardId) && !shouldIncludeKitSamples()) return null;
+  // is:issue excludes pull requests that might contain CARD_ID in a template body
   const q = `repo:${owner}/${name} in:body "CARD_ID: ${cardId}" is:issue`;
   const data = await graphql(
     `query($query: String!) { search(type: ISSUE, query: $query, first: 1) { nodes { ... on Issue { id number title url } } } }`,
@@ -594,6 +600,7 @@ async function loadIssueMapByCardId(owner, name) {
   const q = `repo:${owner}/${name} in:body "CARD_ID:" is:issue`;
   let endCursor = null;
   let hasNextPage = true;
+  let skippedSamples = 0;
 
   while (hasNextPage) {
     const data = await graphql(
@@ -607,12 +614,25 @@ async function loadIssueMapByCardId(owner, name) {
     );
 
     for (const issue of data.search?.nodes || []) {
+      if (!issue?.id) continue; // skip PullRequest nodes if search ever returns them
       const cardId = issue.body?.match(/CARD_ID:\s*(\S+)/)?.[1];
-      if (cardId) map.set(cardId, issue);
+      const sourceFile = issue.body?.match(/SOURCE_FILE:\s*(.+)/)?.[1]?.trim();
+      if (!cardId) continue;
+      if (isKitSampleRemoteArtifact({ cardId, sourceFile })) {
+        skippedSamples += 1;
+        continue;
+      }
+      map.set(cardId, issue);
     }
 
     hasNextPage = Boolean(data.search?.pageInfo?.hasNextPage);
     endCursor = data.search?.pageInfo?.endCursor || null;
+  }
+
+  if (skippedSamples > 0) {
+    log(
+      `Ignored ${skippedSamples} remote kit sample issue(s) (EXAMPLE/TEMPLATE/SAMPLE — not mapped for sync).`
+    );
   }
 
   return map;
@@ -2162,6 +2182,8 @@ function remoteIssueToCardMarkdown({ title, description, labels, statusOverride 
   const cardId = meta.CARD_ID || null;
   const sourceFile = meta.SOURCE_FILE || null;
   if (!cardId || !sourceFile) return null;
+  // Same policy as local cards: never reverse-sync kit samples / templates
+  if (isKitSampleRemoteArtifact({ cardId, sourceFile })) return null;
 
   const categoriesFromMeta = meta.CATEGORIES
     ? meta.CATEGORIES.split(",").map((x) => x.trim()).filter(Boolean)
@@ -3025,14 +3047,24 @@ async function runReverseSync() {
 
   log(`Issues found: ${issues.length}`);
 
+  let skippedSamples = 0;
   for (const issue of issues) {
+    if (!issue?.number) continue; // defensive: ignore non-Issue nodes
+
     const metaMatch = issue.body?.match(/<!-- SYNC_METADATA.*?-->\r?\n([\s\S]*?)\r?\n<!-- \/SYNC_METADATA -->/);
     if (!metaMatch) continue;
 
     const metaLines = metaMatch[1];
     const sourceFile = metaLines.match(/SOURCE_FILE:\s*(.+)/)?.[1]?.trim();
+    const cardId = metaLines.match(/CARD_ID:\s*(\S+)/)?.[1]?.trim();
 
     if (!sourceFile) continue;
+
+    if (isKitSampleRemoteArtifact({ cardId, sourceFile })) {
+      skippedSamples += 1;
+      log(`Skipping kit sample issue #${issue.number} (${cardId || sourceFile})`);
+      continue;
+    }
 
     const bodyContent = issue.body.replace(/\n---\n<!-- SYNC_METADATA[\s\S]*<!-- \/SYNC_METADATA -->/, "").trim();
     const targetPath = path.join(workspaceRoot, sourceFile);
@@ -3045,6 +3077,10 @@ async function runReverseSync() {
     await fs.mkdir(path.dirname(targetPath), { recursive: true });
     await fs.writeFile(targetPath, `${bodyContent}\n`, "utf8");
     log(`Written: ${sourceFile} (issue #${issue.number})`);
+  }
+
+  if (skippedSamples > 0) {
+    log(`Skipped ${skippedSamples} kit sample issue(s) on reverse sync.`);
   }
 }
 
