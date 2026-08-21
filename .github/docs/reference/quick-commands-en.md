@@ -147,10 +147,7 @@ Full map: [diagrams/README.md](../../diagrams/README.md) · [where-outputs-go-en
 | `project-startup` / `hyperion-ops` skills | Guided setup and terminal ops |
 | `.github/audits/manifest.yml` | Audit types |
 
-**Maintainer flow:** edit `commands.yml` → `npm run hyperion:generate-rules` → commit generated files.  
-Update this doc (PT/EN pair) when user-visible behavior changes.
-
-Full policy: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
+**Only if you contribute to the Hyperion repository:** edit `commands.yml` → `npm run hyperion:generate-rules` → commit. See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
 
 ---
 

@@ -1,10 +1,10 @@
 ﻿# yaml-language-server: $schema=./project.schema.json
-# Project contract for Hyperion agents and skills.
-# Copy from project.example.yml and adapt to your product.
+# Project contract for the Hyperion kit repository (dogfood / CI).
+# Adopters: do NOT copy this file — use project.example.yml or /setup|/migrate.
 
 version: 1
 
-name: My Project
+name: Hyperion
 locale: en
 
 layout: single

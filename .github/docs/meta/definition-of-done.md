@@ -46,5 +46,4 @@ Humanos podem re-rodar os mesmos comandos a qualquer momento (CI ou chat).
 
 - [fluxo-completo.md](./fluxo-completo.md) — SDLC  
 - [node-and-docker.md](./node-and-docker.md) — Node nativo ou Docker  
-- `npm run hyperion:help`  
-- Scorecard (canvas): precisao LLM ~8.7 · cenario sem Node ~8.5 · unico gap &lt;8 = video (aceito)
+- `npm run hyperion:help`

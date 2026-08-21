@@ -20,15 +20,14 @@ Por que a pasta está assim, o que é essencial, o que pode ignorar, e como adot
 
 | Copiar | Obrigatório? |
 |--------|--------------|
-| `.github/` | Sim (merge se já existir) |
-| `scripts/` | Sim (cards-sync + hyperion) |
-| `package.json` | Recomendado (`hyperion:*`, `cards:*`) |
-| `bin/` + `Dockerfile` | Recomendado se host sem Node — [node-and-docker.md](./node-and-docker.md) |
-| `.cursor/rules/` | Se usar Cursor (já vem no kit completo) |
-| `CLAUDE.md` | Se usar Claude Code |
+| `.github/skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/`, `cards/` limpo, `project.example.yml`, … | Sim (merge se já existir) |
+| `scripts/` | Sim |
+| Scripts `hyperion:*` / `cards:*` (**merge** no seu `package.json`) | Recomendado |
+| `bin/` + `Dockerfile` | Se host sem Node — [node-and-docker.md](./node-and-docker.md) |
+| `.cursor/rules/` / `CLAUDE.md` | Conforme a IDE |
 | `.env.example` | Recomendado |
 
-**Não copie:** `.git/` deste repo, artefatos de teste remoto, `project.yml` do kit Hyperion — use `project.example.yml` como base.
+**Não copie:** `.git/` deste repo · **`project.yml`** do Hyperion (use `project.example.yml`) · **`workflows/`** do kit (use **`/pipeline`**) · artefatos gerados.
 
 ---
 
@@ -39,9 +38,9 @@ Por que a pasta está assim, o que é essencial, o que pode ignorar, e como adot
 | `audits/prompts/*.md` | Sim (agente lê) | Mantenedores de skills |
 | `SKILL.template.md` | Sim | Só ao criar skill nova |
 | `project.schema.json` | Quase | project-discovery valida |
-| Guia completo + EN pairs | Escolha um idioma | Evite ler tudo |
 | `exemplars.md` | Sim até ter padrões | Opcional por time |
-| `INDEX.md` + `STRUCTURE.md` | Um basta | STRUCTURE = mapa; INDEX = atalho |
+| `STRUCTURE.md` | Mapa de pastas do kit | Consulta rara |
+| Guia completo + pares EN | Escolha um idioma | Evite ler tudo |
 
 ---
 
@@ -54,7 +53,7 @@ Por que a pasta está assim, o que é essencial, o que pode ignorar, e como adot
 | PT + EN docs | Mesmo conteúdo, locales diferentes |
 | `hyperion:*` + `cards:*` | Master vs granular (CI usa cards direto) |
 
-Fonte anti-duplicação: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
+Fonte anti-duplicação (mantenedores do repo Hyperion): [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 
 ---
 

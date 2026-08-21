@@ -1,30 +1,41 @@
+%% Hyperion documentation map — keep in sync with README.md + docs/README.md
 flowchart TB
+  README["README.md — hub"]
   GS["GETTING-STARTED.md"]
-  README["README.md"]
+  INDEX["docs/README.md — índice"]
   TRILHA["trilha-de-aprendizado.md"]
 
-  subgraph onboarding ["Onboarding"]
+  subgraph dia1 ["Dia 1"]
     SETUP["setup-github.md"]
     ADAPT["adaptar-ao-repo.md"]
+    PIT["armadilhas-comuns.md"]
   end
 
-  subgraph reference ["Reference"]
+  subgraph ref ["Referência"]
     CMD["comandos-rapidos.md"]
     CAT["catalogo-skills.md"]
-    SOM["skills-output-map.md"]
+    OUT["onde-ficam-os-outputs.md"]
   end
 
-  subgraph rest ["Depois"]
+  subgraph depois ["Depois"]
     FLOW["fluxo-completo.md"]
+    DOD["definition-of-done.md"]
+    NODE["node-and-docker.md"]
     GH["github-cli-setup.md"]
+    BE["escolher-backend.md"]
   end
 
   README --> GS
+  README --> INDEX
   GS --> TRILHA
   TRILHA --> SETUP
   TRILHA --> ADAPT
-  TRILHA --> FLOW
-  SETUP --> GH
-  ADAPT --> SOM
+  TRILHA --> PIT
   TRILHA --> CAT
   CAT --> CMD
+  TRILHA --> FLOW
+  SETUP --> GH
+  ADAPT --> OUT
+  FLOW --> DOD
+  FLOW --> NODE
+  SETUP --> BE

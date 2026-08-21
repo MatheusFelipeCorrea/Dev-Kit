@@ -1,65 +1,51 @@
-# 📚 Hyperion Documentation
+# 📚 Hyperion — índice de documentação
 
-**New here?** 🚀 [GETTING-STARTED.md](../../GETTING-STARTED.md) → [learning path](./onboarding/trilha-de-aprendizado.md)
+**Comece no hub:** [README.md](../../README.md) · **Primeira vez:** [GETTING-STARTED.md](../../GETTING-STARTED.md)
 
-**Repo:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) · upgrade: `npm run hyperion:upgrade`
+Este índice é a **consulta completa**. Não leia tudo no dia 1.
 
 | Legenda | Para quem |
 |---------|-----------|
-| 🟢 | Iniciante — 6 comandos no chat |
-| 🟡 | Intermediário — GitHub, repo, cards |
-| 🔵 | Avançado — SDLC, referência, CI |
+| 🟢 | Iniciante — chat + 6 comandos |
+| 🟡 | Intermediário — GitHub, cards, repo |
+| 🔵 | Avançado no **seu** produto — SDLC, CI, backends |
 
 ---
 
-## 🎓 Trilha (3 camadas)
+## Por objetivo
 
-| Camada | Documentos |
-|--------|------------|
-| 📖 **Aprender** | GETTING-STARTED · trilha · armadilhas-comuns |
-| 🔧 **Fazer** | setup-github · adaptar-ao-repo · escolher-backend · fluxo-completo |
-| 📋 **Referência** | comandos-rapidos · catalogo-skills · skills-output-map · [definition-of-done](./meta/definition-of-done.md) · [node-and-docker](./meta/node-and-docker.md) |
-
-| Nível | Doc | Tempo |
-|-------|-----|-------|
-| 🟢 1 | [GETTING-STARTED.md](../../GETTING-STARTED.md) | ⏱️ ~15 min |
-| 🟡 2 | [setup-github.md](./onboarding/setup-github.md) | ⏱️ ~15 min |
-| 🟡 3 | [adaptar-ao-repo.md](./onboarding/adaptar-ao-repo.md) | ⏱️ ~15 min |
-| 🔵 4 | [fluxo-completo.md](./meta/fluxo-completo.md) | ⏱️ ~20 min |
-| 🔵 5 | [catalogo-skills.md](./reference/catalogo-skills.md) · [comandos-rapidos.md](./reference/comandos-rapidos.md) | consulta |
-
-[trilha-de-aprendizado.md](./onboarding/trilha-de-aprendizado.md) · [EN](./onboarding/learning-path-en.md)
-
----
-
-## 🔎 Busca por objetivo
-
-| Objetivo | Documento |
-|----------|-----------|
-| 🧩 **Qual skill usar** | [catalogo-skills.md](./reference/catalogo-skills.md) · [EN](./reference/skills-catalog.md) |
-| 💬 **Comandos** | [comandos-rapidos.md](./reference/comandos-rapidos.md) |
-| ✅ **Gates / DoD** | [definition-of-done.md](./meta/definition-of-done.md) |
-| 🐳 **Sem Node / Docker** | [node-and-docker.md](./meta/node-and-docker.md) |
-| 🔧 **Setup GitHub** | [setup-github.md](./onboarding/setup-github.md) |
-| 📦 **Repo legado** | [adaptar-ao-repo.md](./onboarding/adaptar-ao-repo.md) → `/migrate` |
-| 🔄 **Jira/Linear/…** | [escolher-backend.md](./integration/escolher-backend.md) |
-| 📁 **Outputs** | [skills-output-map.md](./reference/skills-output-map.md) |
-| ⚠️ **Problemas** | [armadilhas-comuns.md](./troubleshooting/armadilhas-comuns.md) |
-| 🏆 **Contribuir** | [CONTRIBUTING.md](../../CONTRIBUTING.md) |
+| Quero… | Documento |
+|--------|-----------|
+| Começar | [GETTING-STARTED.md](../../GETTING-STARTED.md) |
+| Trilha por nível | [trilha-de-aprendizado.md](./onboarding/trilha-de-aprendizado.md) · [EN](./onboarding/learning-path-en.md) |
+| Comandos | [comandos-rapidos.md](./reference/comandos-rapidos.md) |
+| Qual skill | [catalogo-skills.md](./reference/catalogo-skills.md) |
+| Problemas comuns | [armadilhas-comuns.md](./troubleshooting/armadilhas-comuns.md) |
+| Setup GitHub | [setup-github.md](./onboarding/setup-github.md) |
+| Repo legado | [adaptar-ao-repo.md](./onboarding/adaptar-ao-repo.md) |
+| Fluxo SDLC | [fluxo-completo.md](./meta/fluxo-completo.md) |
+| Gates `*-verify` | [definition-of-done.md](./meta/definition-of-done.md) |
+| Sem Node / Docker | [node-and-docker.md](./meta/node-and-docker.md) |
+| Onde grava output | [onde-ficam-os-outputs.md](./meta/onde-ficam-os-outputs.md) · [mapa](./reference/skills-output-map.md) |
+| Backend (Jira/…) | [escolher-backend.md](./integration/escolher-backend.md) |
 
 ---
 
-![Mapa da documentação](./assets/hyperion-docs-map.png)
-
----
-
-## 📂 Pastas
+## Por pasta
 
 | Pasta | Conteúdo |
 |-------|----------|
-| [onboarding/](./onboarding/) | 🚀 Primeiros passos, setup-github |
-| [reference/](./reference/) | 📋 Comandos, catálogo skills, outputs |
-| [integration/](./integration/) | 🔄 Backends, GitHub CLI |
-| [quality/](./quality/) | 🔍 Auditorias |
-| [troubleshooting/](./troubleshooting/) | ⚠️ Armadilhas |
-| [meta/](./meta/) | 🗺️ Fluxo SDLC |
+| `onboarding/` | setup, trilha, adaptar-ao-repo |
+| `reference/` | comandos, catálogo, cheatsheets |
+| `integration/` | GitHub CLI, backends, pipeline |
+| `quality/` | primeira auditoria |
+| `troubleshooting/` | armadilhas |
+| `meta/` | organização, fluxo, DoD, Node/Docker |
+
+![Mapa da documentação](./assets/hyperion-docs-map.png)
+
+*Fonte:* [`hyperion-docs-map.mmd`](./assets/hyperion-docs-map.mmd) — regenerar se a árvore de docs mudar.
+
+Mapa de pastas do kit: [STRUCTURE.md](../STRUCTURE.md)
+
+**Contribuir no repositório Hyperion:** [CONTRIBUTING.md](../../CONTRIBUTING.md)

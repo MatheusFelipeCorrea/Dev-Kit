@@ -25,7 +25,7 @@ ci:
   policy: merge
   hyperion:
     cards_sync: true
-    kit_validation: true
+    kit_validation: false
     security_scan: false
 ```
 

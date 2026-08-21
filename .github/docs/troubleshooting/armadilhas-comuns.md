@@ -20,6 +20,18 @@ npm continua existindo para CI, power users e quando o agente não tem terminal.
 
 ---
 
+## 📦 1a. “Copiei o `.github/` inteiro e o CI do produto quebrou”
+
+O repo Hyperion carrega **`project.yml` com `kit_validation: true`** e workflows de **mantenedor do kit**. No seu produto:
+
+1. Use `project.example.yml` → `project.yml` (ou `/setup` / `/migrate`)
+2. **Não** copie `.github/workflows/` do kit — rode **`/pipeline`**
+3. **Merge** scripts `hyperion:*` no seu `package.json` — não substitua o arquivo
+
+Tabela canônica: [README.md](../../../README.md).
+
+---
+
 ## 🐳 1b. “Não tenho Node no laptop”
 
 Os scripts (`sync`, `doctor`, `upgrade`, `*-verify`) **continuam obrigatórios** — são o diferencial. Sem Node ≥ 20:

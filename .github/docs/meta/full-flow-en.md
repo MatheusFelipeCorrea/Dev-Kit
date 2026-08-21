@@ -23,7 +23,7 @@ Source: [`hyperion-sdlc-full-en.mmd`](../assets/hyperion-sdlc-full-en.mmd)
 
 | Step | Command | Output |
 |------|---------|--------|
-| Copy kit | Manual | `.github/`, `scripts/` |
+| Copy kit | Manual | Selective — see [README](../../../README.md) (not kit `project.yml` / `workflows`) |
 | Legacy repo | `/migrate` | `.github/plans/migrations/` |
 | Greenfield | `/setup` | `project.yml`, cards |
 | Adapt commands | `hyperion:repo-detect` | Suggested `commands.*` |
@@ -73,4 +73,4 @@ Full gates: [definition-of-done.md](./definition-of-done.md) (PT).
 
 [learning-path-en.md](../onboarding/learning-path-en.md) · [quick-commands-en.md](../reference/quick-commands-en.md)
 
-Maintainers: [doc-maintenance-policy.md](./doc-maintenance-policy.md)
+Contributing to the Hyperion repo: [CONTRIBUTING.md](../../../CONTRIBUTING.md)

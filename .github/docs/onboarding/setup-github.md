@@ -10,7 +10,7 @@ Guia **curto** para GitHub Projects. 🟢 Primeira vez? Comece em [GETTING-START
 
 | # | Passo |
 |---|-------|
-| 1️⃣ | Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) e copie `.github/`, `scripts/`, `package.json` (+ `bin/`, `Dockerfile` se quiser Docker) |
+| 1️⃣ | Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) e copie o kit **seletivo** (ver tabela abaixo) — nunca o `project.yml` nem os `workflows/` do kit |
 | 2️⃣ | No chat: **`/setup`** (novo) ou **`/migrate`** (já tem código) |
 | 3️⃣ | **`/doctor`** — veja o que falta |
 | 4️⃣ | `gh auth login` → **`/sync`** (se usar Projects) |
@@ -47,14 +47,15 @@ Guia **curto** para GitHub Projects. 🟢 Primeira vez? Comece em [GETTING-START
 git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
 ```
 
-| Pasta / arquivo | |
-|-----------------|---|
-| `.github/` | ✅ |
-| `scripts/` | ✅ |
-| `package.json` | Recomendado |
-| `bin/` + `Dockerfile` | Se usar Docker sem Node — [node-and-docker.md](../meta/node-and-docker.md) |
-| `.cursor/rules/` | Se usar Cursor |
-| `CLAUDE.md` | Se usar Claude Code |
+| Copiar | Não / cuidado |
+|--------|----------------|
+| `skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/`, `cards/` (limpo), `project.example.yml`, … sob `.github/` | **`project.yml`** do kit → `cp project.example.yml project.yml` |
+| `scripts/` | **`workflows/`** do kit → **`/pipeline`** no seu repo |
+| Scripts `hyperion:*` / `cards:*` (**merge** no seu `package.json`) | Substituir o `package.json` do produto |
+| `bin/` + `Dockerfile` | Se precisar Docker sem Node |
+| `.cursor/rules/` / `CLAUDE.md` | Conforme a IDE |
+
+Detalhe: [GETTING-STARTED.md](../../../GETTING-STARTED.md) · hub: [README.md](../../../README.md)
 
 ---
 

@@ -14,6 +14,8 @@ categories:
   - Frontend
 ---
 
+> **Kit sample** — never synced to your board. Copy the pattern into `epics/` / `features/` / `stories/` with your own IDs.
+
 # [FEATURE] Credential authentication flow
 
 > **Context:** End-to-end login/logout with email and password, API contract, and UI feedback states.

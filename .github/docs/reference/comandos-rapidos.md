@@ -148,10 +148,7 @@ Mapa completo: [diagrams/README.md](../../diagrams/README.md) · [onde-ficam-os-
 | `.github/skills/setup/hyperion-ops/` | Agente roda npm por você |
 | `.github/audits/manifest.yml` | Tipos de auditoria |
 
-**Fluxo mantenedor:** edite `commands.yml` → `npm run hyperion:generate-rules` → commit arquivos gerados.  
-Este doc (`comandos-rapidos.md`) é referência humana — atualize PT/EN se mudar comportamento visível ao usuário.
-
-Política completa: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
+**Só se você contribui no repositório Hyperion:** edite `commands.yml` → `npm run hyperion:generate-rules` → commit. Ver [CONTRIBUTING.md](../../../CONTRIBUTING.md).
 
 Guia de confusões frequentes: [armadilhas-comuns.md](../troubleshooting/armadilhas-comuns.md)
 

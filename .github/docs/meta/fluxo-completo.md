@@ -23,7 +23,7 @@ Fonte: [`hyperion-journey-full.mmd`](../assets/hyperion-journey-full.mmd)
 
 | Passo | Comando | Script npm | Output |
 |-------|---------|------------|--------|
-| Copiar kit | Manual | — | `.github/`, `scripts/`, `package.json` |
+| Copiar kit | Manual | — | Seletivo — ver [README](../../../README.md) (não `project.yml` / `workflows` do kit) |
 | Repo legado | `/migrate` | — | `.github/plans/migrations/` |
 | Setup greenfield | `/setup` | `hyperion:setup -- --yes` | `project.yml`, cards config |
 | Adaptar comandos | — | `hyperion:repo-detect` | Sugestão `commands.*` |
@@ -121,4 +121,4 @@ Ver [skills-output-map.md](../reference/skills-output-map.md) e [onde-ficam-os-o
 
 [trilha-de-aprendizado.md](../onboarding/trilha-de-aprendizado.md) · [comandos-rapidos.md](../reference/comandos-rapidos.md)
 
-Mantenedores: [doc-maintenance-policy.md](./doc-maintenance-policy.md) · [CONTRIBUTING.md](../../../CONTRIBUTING.md)
+Mantenedores do **repositório Hyperion** (não do seu produto): [CONTRIBUTING.md](../../../CONTRIBUTING.md)

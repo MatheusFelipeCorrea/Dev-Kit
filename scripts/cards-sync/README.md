@@ -278,9 +278,10 @@ node scripts/cards-sync/sync.mjs --dry-run
 # Forward sync (Markdown -> GitHub)
 node scripts/cards-sync/sync.mjs
 
-# Incremental sync (specific cards + their parents)
-node scripts/cards-sync/sync.mjs --only EXAMPLE-STORY-001,EXAMPLE-EPIC-001
-# or: CARDS_SYNC_ONLY=EXAMPLE-STORY-001 node scripts/cards-sync/sync.mjs
+# Incremental sync (your cards — not kit samples in `_examples/`)
+node scripts/cards-sync/sync.mjs --only PROJ-STORY-001,PROJ-EPIC-001
+# or: CARDS_SYNC_ONLY=PROJ-STORY-001 node scripts/cards-sync/sync.mjs
+# Kit samples (EXAMPLE-* / `_examples/`): never sync unless --include-samples (maintainers only)
 
 # Forward sync using Jira backend
 CARDS_SYNC_BACKEND=jira node scripts/cards-sync/sync.mjs

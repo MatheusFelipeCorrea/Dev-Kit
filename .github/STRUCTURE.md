@@ -43,7 +43,9 @@ Canonical layout for the portable kit.
 | `meta/` | organizacao, definition-of-done, node-and-docker, output maps, maintenance policy |
 | `adr/`, `retros/` | Generated artifacts |
 
-![Documentation map](./docs/assets/hyperion-docs-map.png)
+![Mapa da documentação Hyperion](./docs/assets/hyperion-docs-map.png)
+
+*Fonte:* [`hyperion-docs-map.mmd`](./docs/assets/hyperion-docs-map.mmd)
 
 ---
 
@@ -91,7 +93,7 @@ CI drift check: `npm run hyperion:check-rules`
 | Claude Code | `CLAUDE.md` |
 | Copilot | `.github/instructions/copilot-instructions.md` |
 
-Policy: [docs/meta/doc-maintenance-policy.md](./docs/meta/doc-maintenance-policy.md)
+Policy (Hyperion maintainers only): [docs/meta/doc-maintenance-policy.md](./docs/meta/doc-maintenance-policy.md) · [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ---
 

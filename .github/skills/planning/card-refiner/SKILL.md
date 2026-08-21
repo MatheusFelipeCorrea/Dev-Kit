@@ -149,7 +149,7 @@ The sync auto-creates any label from `categories` that does not exist in the rep
 - PROJECT: short project name uppercase (e.g. EXAMPLE, FARM, APP)
 - TYPE: EPIC, FEAT, STORY, TASK, SUB, BUG
 - SEQ: three-digit zero-padded sequential number (001, 002, ...)
-- Examples: `EXAMPLE-EPIC-001`, `EXAMPLE-STORY-003`, `FARM-TASK-012`
+- Examples: `EXAMPLE-EPIC-001`, `EXAMPLE-STORY-003`, `PROJ-TASK-012`
 - The CARD_ID MUST be stable — once assigned, never change it
 - Determine PROJECT from `project.yml` name field, or ask the user
 

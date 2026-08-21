@@ -75,3 +75,16 @@ Leia `project.yml` → `outputs` antes de inventar paths. Registre auditorias em
 ## Licença
 
 Ao contribuir, você concorda que suas contribuições serão licenciadas sob MIT.
+
+## Manutenção de docs (só mantenedores do kit)
+
+Política interna de cadência e anti-duplicação: [doc-maintenance-policy.md](.github/docs/meta/doc-maintenance-policy.md).
+
+Comandos extras após editar o kit:
+
+```bash
+npm run hyperion:generate-rules
+npm run hyperion:skills-eval
+npm run docs:check
+npm test
+```

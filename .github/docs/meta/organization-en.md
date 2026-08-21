@@ -20,15 +20,14 @@ Why the folder looks like this, what is essential, what you can ignore, and how 
 
 | Copy | Required? |
 |------|-----------|
-| `.github/` | Yes (merge if it already exists) |
-| `scripts/` | Yes (cards-sync + hyperion) |
-| `package.json` | Recommended (`hyperion:*`, `cards:*`) |
-| `bin/` + `Dockerfile` | Recommended without Node — [node-and-docker-en.md](./node-and-docker-en.md) |
-| `.cursor/rules/` | If using Cursor (ships with full kit) |
-| `CLAUDE.md` | If using Claude Code |
+| `.github/skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/`, clean `cards/`, `project.example.yml`, … | Yes (merge if it already exists) |
+| `scripts/` | Yes |
+| `hyperion:*` / `cards:*` scripts (**merge** into your `package.json`) | Recommended |
+| `bin/` + `Dockerfile` | Without Node — [node-and-docker-en.md](./node-and-docker-en.md) |
+| `.cursor/rules/` / `CLAUDE.md` | Per IDE |
 | `.env.example` | Recommended |
 
-**Do not copy:** this kit’s `.git/`, remote test artifacts, or the kit’s own `project.yml` — start from `project.example.yml`.
+**Do not copy:** this kit’s `.git/` · kit **`project.yml`** (use `project.example.yml`) · kit **`workflows/`** (use **`/pipeline`**) · generated artifacts.
 
 ---
 
@@ -39,8 +38,9 @@ Why the folder looks like this, what is essential, what you can ignore, and how 
 | `audits/prompts/*.md` | Yes (agent reads them) | Skill maintainers only |
 | `SKILL.template.md` | Yes | Only when authoring a skill |
 | `project.schema.json` | Almost | Used by project-discovery |
+| `exemplars.md` | Yes until you have patterns | Optional per team |
+| `STRUCTURE.md` | Kit folder map | Rare lookup |
 | Full guide + EN pairs | Pick one locale | Don’t read everything |
-| `INDEX.md` + `STRUCTURE.md` | One is enough | STRUCTURE = map; INDEX = shortcut |
 
 ---
 
@@ -53,7 +53,7 @@ Why the folder looks like this, what is essential, what you can ignore, and how 
 | PT + EN docs | Same meaning, different locales |
 | `hyperion:*` + `cards:*` | Master vs granular (CI may call cards directly) |
 
-Anti-duplication policy: [doc-maintenance-policy.md](./doc-maintenance-policy.md)
+Anti-duplication (Hyperion repo maintainers): [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 
 ---
 

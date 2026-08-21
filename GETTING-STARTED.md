@@ -6,7 +6,7 @@ Do zero (ou repo legado) ao primeiro release. **Não precisa saber o que é um �
 |-------|------|-------------|
 | 🟢 **Iniciante** | Primeira vez com IA no repo | Seção [Dois caminhos](#dois-caminhos-não-leia-os-30-skills) → 6 comandos |
 | 🟡 **Intermediário** | Já usa Cursor/Copilot no dia a dia | Passos 1–4 abaixo + [setup-github](./.github/docs/onboarding/setup-github.md) |
-| 🔵 **Avançado** | Mantenedor / CI / multi-backend | [catálogo](./.github/docs/reference/catalogo-skills.md) · [comandos](./.github/docs/reference/comandos-rapidos.md) · [CONTRIBUTING](./CONTRIBUTING.md) |
+| 🔵 **Avançado (no seu produto)** | Multi-app, CI, vários boards | [catálogo](./.github/docs/reference/catalogo-skills.md) · [comandos](./.github/docs/reference/comandos-rapidos.md) · [fluxo](./.github/docs/meta/fluxo-completo.md) |
 
 **English:** [learning-path-en.md](./.github/docs/onboarding/learning-path-en.md) · **Trilha:** [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md) · **Fluxo:** [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md)
 
@@ -47,8 +47,7 @@ Repo **já tem código** → `/migrate`. Repo **novo** → `/setup`.
 
 ### 🔵 Já uso agents no dia a dia
 
-- [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) · [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md)
-- Mantenedor: [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) · [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) · [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md)
 
 ---
 
@@ -60,23 +59,19 @@ Repo **já tem código** → `/migrate`. Repo **novo** → `/setup`.
 git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
 ```
 
-Depois copie para a **raiz do seu repositório**:
+Copie para a **raiz do seu repositório** (não o `.git` do Hyperion):
 
-| Pasta / arquivo | Obrigatório? |
-|-----------------|--------------|
-| `.github/` | Sim |
-| `scripts/` | Sim |
-| `package.json` | Recomendado |
-| `bin/` + `Dockerfile` | Se host sem Node — [node-and-docker](./.github/docs/meta/node-and-docker.md) |
-| `.env.example` | Recomendado |
-| `CLAUDE.md` | Se usar Claude Code |
-| `.cursor/rules/` | Se usar Cursor |
+| Copiar | Não copiar / cuidado |
+|--------|----------------------|
+| `.github/skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/` (templates), `cards/` (template + config limpo), `diagrams/`, `project.example.yml`, `project.schema.json`, `hyperion-origin.json` | **`.github/project.yml`** do Hyperion → use `project.example.yml` ou `/setup` |
+| `scripts/` | **`.github/workflows/`** → **`/pipeline`** no seu repo |
+| Scripts `hyperion:*` / `cards:*` no **seu** `package.json` (**merge**) | Substituir o `package.json` do produto |
+| `bin/` + `Dockerfile` (sem Node) | `projects-map` de outro time |
+| `.env.example`, `CLAUDE.md`, `.cursor/rules/` conforme a IDE | Artefatos gerados (`plans/`, audit results) |
 
-Atualizar um repo que já tem o kit: `npm run hyperion:upgrade` (consulta esse mesmo origin).
+Atualizar um repo que já tem o kit: `npm run hyperion:upgrade`.
 
-Sem Node no laptop? Use Docker — [node-and-docker.md](./.github/docs/meta/node-and-docker.md) (`./bin/hyperion doctor`).
-
-Gates de precisão (`*-verify`): [definition-of-done.md](./.github/docs/meta/definition-of-done.md).
+Sem Node: [node-and-docker.md](./.github/docs/meta/node-and-docker.md). Gates: [definition-of-done.md](./.github/docs/meta/definition-of-done.md).
 
 ---
 

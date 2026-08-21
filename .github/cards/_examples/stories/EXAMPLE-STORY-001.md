@@ -13,6 +13,8 @@ categories:
   - Backend
 ---
 
+> **Kit sample** — never synced to your board. Copy the pattern into `epics/` / `features/` / `stories/` with your own IDs.
+
 # [STORY] Login endpoint
 
 > **Context:** REST login with JWT for authenticated sessions.
