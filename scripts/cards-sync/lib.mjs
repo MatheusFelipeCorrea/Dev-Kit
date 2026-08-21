@@ -82,7 +82,24 @@ export function isExampleCardId(cardId) {
 export function isNonSyncCardPath(relativePath) {
   const norm = String(relativePath || "").replace(/\\/g, "/").toLowerCase();
   if (norm.endsWith(".template.md")) return true;
-  return /(^|\/)_examples(\/|$)/.test(norm);
+  if (/(^|\/)_examples(\/|$)/.test(norm)) return true;
+  // Never treat GitHub issue/PR templates as syncable card sources
+  if (/(^|\/)\.github\/issue_template(\/|$)/.test(norm)) return true;
+  if (/(^|\/)\.github\/pull_request_template\.md$/.test(norm)) return true;
+  if (/(^|\/)pull_request_template\.md$/.test(norm)) return true;
+  return false;
+}
+
+/**
+ * Remote issues/PRs that belong to kit samples must not reverse-sync (or map)
+ * unless --include-samples (maintainers only). Same policy as local cards.
+ */
+export function isKitSampleRemoteArtifact({ cardId, sourceFile } = {}, options = {}) {
+  const includeSamples = options.includeSamples ?? shouldIncludeKitSamples(options.argv);
+  if (includeSamples) return false;
+  if (isKitSampleCardId(cardId)) return true;
+  if (sourceFile && isNonSyncCardPath(sourceFile)) return true;
+  return false;
 }
 
 export function shouldIncludeKitSamples(argv = process.argv) {

@@ -8,6 +8,7 @@ import {
   cardIdFromRelativePath,
   isExampleCardId,
   isKitSampleCardId,
+  isKitSampleRemoteArtifact,
   filterKitSampleCards,
   filterExampleSampleCards,
   shouldIncludeKitSamples,
@@ -81,6 +82,38 @@ test("filterKitSampleCards never syncs samples even with --only EXAMPLE", () => 
   assert.equal(result.skipped, 1);
   assert.deepEqual(result.ignoredOnlyTargets, ["EXAMPLE-STORY-001"]);
   assert.deepEqual(result.cards.map((c) => c.cardId), ["PROJ-1"]);
+});
+
+test("isKitSampleRemoteArtifact skips EXAMPLE ids, _examples, and PR templates", () => {
+  assert.equal(
+    isKitSampleRemoteArtifact({ cardId: "EXAMPLE-EPIC-001", sourceFile: ".github/cards/epics/X.md" }),
+    true
+  );
+  assert.equal(
+    isKitSampleRemoteArtifact({
+      cardId: "PROJ-1",
+      sourceFile: ".github/cards/_examples/stories/EXAMPLE-STORY-001.md",
+    }),
+    true
+  );
+  assert.equal(
+    isKitSampleRemoteArtifact({
+      cardId: "PROJ-1",
+      sourceFile: ".github/PULL_REQUEST_TEMPLATE.md",
+    }),
+    true
+  );
+  assert.equal(
+    isKitSampleRemoteArtifact({ cardId: "PROJ-EPIC-001", sourceFile: ".github/cards/epics/PROJ-EPIC-001.md" }),
+    false
+  );
+  assert.equal(
+    isKitSampleRemoteArtifact(
+      { cardId: "EXAMPLE-1", sourceFile: ".github/cards/_examples/x.md" },
+      { includeSamples: true }
+    ),
+    false
+  );
 });
 
 test("shouldIncludeKitSamples respects maintainer flag", () => {
