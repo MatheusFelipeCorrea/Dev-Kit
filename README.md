@@ -25,6 +25,20 @@
 
 ---
 
+## Sumário
+
+1. [O que é](#o-que-é-o-hyperion)
+2. [Mapa rápido](#mapa-rápido--onde-usar)
+3. [Skills por área](#skills-por-área--o-que-fazem)
+4. [Comandos](#comandos--o-que-digitar-no-chat)
+5. [Quickstart](#quickstart)
+6. [Guia de estudo](#guia-de-estudo)
+7. [Compatibilidade](#compatibilidade)
+8. [npm (opcional)](#npm-opcional)
+9. [Contribuir](#contribuir)
+
+---
+
 ## O que é o Hyperion?
 
 **Hyperion** é um kit que você **copia para o seu repositório**. A IA (Cursor, Claude, Copilot) lê os arquivos do kit e passa a seguir receitas prontas — do setup ao release.
@@ -58,20 +72,6 @@ Fluxo visual do dia a dia:
 </p>
 
 Trilha completa: [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md) · Estudo por nível: [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md)
-
----
-
-## Sumário
-
-1. [O que é](#o-que-é-o-hyperion)
-2. [Mapa rápido](#mapa-rápido--onde-usar)
-3. [Skills por área](#skills-por-área--o-que-fazem)
-4. [Comandos](#comandos--o-que-digitar-no-chat)
-5. [Quickstart](#quickstart)
-6. [Guia de estudo](#guia-de-estudo)
-7. [Compatibilidade](#compatibilidade)
-8. [npm (opcional)](#npm-opcional)
-9. [Contribuir](#contribuir)
 
 ---
 
