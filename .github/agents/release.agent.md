@@ -41,7 +41,18 @@ Write/update root `CHANGELOG.md` with new section:
 
 ### Step 3 — Version bump
 
-Update version in canonical manifest(s) only (discover from repo — `package.json`, `pyproject.toml`, etc.).
+Suggest semver from Conventional Commits since the last tag:
+
+| Commit prefix (majority / highest) | Suggested bump |
+|------------------------------------|----------------|
+| `feat:` | **minor** |
+| `fix:` / `perf:` / `refactor:` (no breaking) | **patch** |
+| `BREAKING CHANGE` / `feat!:` / `fix!:` | **major** |
+| docs/chore/test only | **patch** (or skip release) |
+
+Show the suggestion to the user, then update version in canonical manifest(s) only after they confirm (`package.json`, `pyproject.toml`, etc.).
+
+**Never** auto-tag from commits alone — human approval is required.
 
 ### Step 4 — Review diff
 

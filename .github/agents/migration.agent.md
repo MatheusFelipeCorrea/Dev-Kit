@@ -81,6 +81,14 @@ Write `.github/plans/migrations/migration-{date}.md`:
 - Manual follow-ups (gh auth, env vars, board fields)
 - Recommended next: `/refine`, `/spec-review`, `/pipeline`
 
+**Gate:** after writing/merging `project.yml`, run:
+
+```bash
+npm run hyperion:project-verify
+```
+
+If exit ≠ 0 → fix paths/`name`/`version` (and list `uncertainties:` for unknowns). Do **not** declare migration complete until verify passes.
+
 ## Rules
 
 - **Never delete** existing workflows, cards, or product code

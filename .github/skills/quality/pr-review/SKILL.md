@@ -16,11 +16,14 @@ description: >-
 
 ## Adapt to repo
 
-1. Read `.github/project.yml`:
+1. **Prefer `.github/project.yml`** — do not re-run full discovery if the contract exists and paths validate.
+2. Read `.github/project.yml`:
    - `commands.test`, `commands.lint`, `commands.build`
    - `apps` for monorepo scope
    - `conventions.commit_refs_style`
-2. If commands absent, infer from `package.json` scripts or ask once
+3. If commands absent, infer from `package.json` scripts or ask once
+4. Review file **must** include frontmatter `tests_ran: yes|no|skipped` and pass:
+   `npm run hyperion:review-verify -- --review <path>`
 
 ## Output
 

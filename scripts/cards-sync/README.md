@@ -6,9 +6,9 @@ Syncs card files from `.github/cards/` to project management backends:
 |---------|------|------------------------|
 | **GitHub** (default) | forward + reverse | Updates Issues + Project fields; **status safe mode** applies |
 | **Jira** | forward + reverse | Creates/updates issues; **applies workflow transitions** when status names match |
-| **Azure DevOps** | forward only | Creates/updates work items; idempotent via `CARD_ID` marker |
-| **Linear** | forward only | Creates/updates issues; idempotent via `CARD_ID` marker |
-| **GitLab** | forward only | Creates/updates issues; idempotent via `CARD_ID` marker |
+| **Azure DevOps** | forward + reverse | Creates/updates work items; **System.State** via `status_map` |
+| **Linear** | forward only | Creates/updates issues; **workflow state** via `status_map` |
+| **GitLab** | forward + reverse | Creates/updates issues; open/close + `status:` label via `status_map` |
 
 ## How it works
 
@@ -16,7 +16,7 @@ Syncs card files from `.github/cards/` to project management backends:
 2. Forward sync reads them and creates/updates remote items (Issues, work items, etc.)
 3. **GitHub**: populates Project fields, labels, and sub-issue links from `parent` + `## Sub-issues`
 4. **Jira**: encodes card metadata in issue description; `--reverse` rebuilds Markdown from Jira
-5. **Azure / Linear / GitLab**: forward best-effort create/update with `CARD_ID` idempotency marker
+5. **Azure / Linear / GitLab**: create/update with `CARD_ID` idempotency; Azure/GitLab support `--reverse` and status mapping; Linear applies status on forward
 
 See [Backend support (current reality)](#backend-support-current-reality) for the full matrix.
 
@@ -379,11 +379,13 @@ Both methods work together and are deduplicated.
 Current implementation status:
 - **GitHub**: full (Issues + Projects + fields + labels + sub-issues)
 - **Jira**: forward + reverse + **workflow transitions** on forward sync when `status` is set
-- **Azure DevOps**: forward adapter (create/update work items; idempotent by description marker)
-- **Linear**: forward adapter (create/update issues; idempotent by description marker)
-- **GitLab**: forward adapter (create/update issues; idempotent by description marker)
+- **Azure DevOps**: forward + reverse + **System.State** via `management.status_map`
+- **Linear**: forward + **workflow state** via `status_map` (no reverse yet)
+- **GitLab**: forward + reverse + open/close + `status:` label via `status_map`
 
-Reverse sync (`--reverse`) is currently implemented only for Jira and GitHub Projects.
+Reverse sync (`--reverse`) is implemented for **GitHub, Jira, Azure DevOps, and GitLab**.
+
+Doctor remote checks cover **GitHub, Jira, Azure, GitLab, and Linear**.
 
 If you want to integrate another backend, the intended path is:
 - configure connection + field mapping via the `integration-bridge` skill

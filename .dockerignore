@@ -1,0 +1,17 @@
+.git
+.gitignore
+**/node_modules
+.env
+.env.*
+!.env.example
+.github/plans
+.github/audits/results
+.github/memory
+.github/cards/epics
+.github/cards/features
+.github/cards/stories
+.github/cards/tasks
+.github/config
+*.log
+.DS_Store
+canvases

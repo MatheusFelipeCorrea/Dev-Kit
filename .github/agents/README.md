@@ -4,6 +4,8 @@ Agents are **long-running, multi-step flows** with human gates. Skills are reusa
 
 **Adaptability:** all agents read `.github/project.yml` first — especially `commands.*`, `memory.*`, `outputs.*`, and `management.*`.
 
+**Precision gates** ([definition-of-done.md](../docs/meta/definition-of-done.md)): `/execute` → `phase-verify`; `/migrate` → `project-verify`; `/pr-review` → `review-verify`.
+
 ## When to use agent vs skill
 
 | Use **agent** when | Use **skill** when |

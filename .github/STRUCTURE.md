@@ -2,6 +2,7 @@
 
 Canonical layout for the portable kit.
 
+> **Repo:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)  
 > **Start here:** [GETTING-STARTED.md](../GETTING-STARTED.md)  
 > **Doc index:** [docs/README.md](./docs/README.md)  
 > **Organization:** [docs/meta/organizacao.md](./docs/meta/organizacao.md)
@@ -13,10 +14,14 @@ Canonical layout for the portable kit.
 ```
 ./
 ├── GETTING-STARTED.md           ← linear onboarding path
+├── bin/hyperion(.cmd)           ← CLI wrapper (Node 20+ or Docker)
+├── Dockerfile                   ← hyperion-cli image (parity)
 ├── .cursor/rules/hyperion.mdc   ← Cursor (ships with kit)
 ├── .github/                     ← AI kit core
+│   ├── hyperion-origin.json     ← upgrade upstream repo/ref
+│   └── …
 ├── scripts/
-│   ├── hyperion/                ← npm run hyperion:* (help, doctor, setup, sync)
+│   ├── hyperion/                ← npm run hyperion:* + cli.mjs
 │   └── cards-sync/              ← npm run cards:* (sync engine)
 ├── CLAUDE.md                    ← Claude Code slash commands
 ├── package.json                 ← npm shortcuts
@@ -35,7 +40,7 @@ Canonical layout for the portable kit.
 | `integration/` | github-cli-setup, escolher-backend |
 | `quality/` | primeira-auditoria |
 | `troubleshooting/` | armadilhas-comuns |
-| `meta/` | organizacao, output maps, maintenance policy |
+| `meta/` | organizacao, definition-of-done, node-and-docker, output maps, maintenance policy |
 | `adr/`, `retros/` | Generated artifacts |
 
 ![Documentation map](./docs/assets/hyperion-docs-map.png)

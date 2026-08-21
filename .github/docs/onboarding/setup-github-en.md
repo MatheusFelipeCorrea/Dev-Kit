@@ -10,7 +10,7 @@
 
 | # | Step |
 |---|------|
-| 1️⃣ | Copy `.github/`, `scripts/`, `package.json` to repo root |
+| 1️⃣ | Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) and copy `.github/`, `scripts/`, `package.json` (+ `bin/`, `Dockerfile` for Docker) |
 | 2️⃣ | In chat: **`/setup`** (new) or **`/migrate`** (existing code) |
 | 3️⃣ | **`/doctor`** — see what's missing |
 | 4️⃣ | `gh auth login` → **`/sync`** (if using Projects) |
@@ -32,7 +32,7 @@
 
 | Item | Required? |
 |------|-----------|
-| Node 20+ | ✅ Yes |
+| Node 20+ **or** Docker | ✅ Yes — [node-and-docker-en.md](../meta/node-and-docker-en.md) (`./bin/hyperion`) |
 | GitHub repo | ✅ Yes |
 | `gh auth login` | ✅ For local sync — [tutorial](../integration/github-cli-setup-en.md) |
 | Existing Project | ❌ No — sync creates if `autoCreateProject: true` |
@@ -41,11 +41,18 @@
 
 ## 📦 Copy the kit
 
+**Source:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
+
+```bash
+git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
+```
+
 | Folder / file | |
 |---------------|---|
 | `.github/` | ✅ |
 | `scripts/` | ✅ |
 | `package.json` | Recommended |
+| `bin/` + `Dockerfile` | If using Docker without Node — [node-and-docker-en.md](../meta/node-and-docker-en.md) |
 | `.cursor/rules/` | If using Cursor |
 | `CLAUDE.md` | If using Claude Code |
 

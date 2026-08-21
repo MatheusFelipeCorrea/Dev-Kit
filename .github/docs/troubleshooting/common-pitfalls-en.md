@@ -20,6 +20,19 @@ npm remains for CI, power users, and when the agent has no shell.
 
 ---
 
+## 1b. “I don’t have Node on this laptop”
+
+Scripts stay required (kit differentiator). Without Node ≥ 20:
+
+```bash
+./bin/hyperion doctor
+./bin/hyperion --docker sync
+```
+
+See [node-and-docker-en.md](../meta/node-and-docker-en.md).
+
+---
+
 ## 2. Cursor: rules not loading
 
 The kit **includes** `.cursor/rules/hyperion.mdc` in a full clone.
@@ -119,7 +132,7 @@ GitHub Projects is fully mature. Others are best-effort forward sync — see [ch
 
 ## 11. “I’ve never used agents — where do I start?”
 
-You do not need the architecture. Copy the kit → open chat in the repo → **`/setup`** or **`/migrate`**. If the model ignores the slash, say *“Set up Hyperion in this repo”*.
+You do not need the architecture. Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) → copy the kit → open chat in the repo → **`/setup`** or **`/migrate`**. If the model ignores the slash, say *“Set up Hyperion in this repo”*.
 
 | You meant | Use |
 |-----------|-----|

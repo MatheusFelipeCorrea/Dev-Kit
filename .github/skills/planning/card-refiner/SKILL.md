@@ -21,6 +21,9 @@ ${CARD_TYPES="All|Epic only|Frontend only|Backend only|Database only|Prototype o
 
 ## Critical Rules
 
+- Prefer `.github/project.yml` (name, locale, apps, docs) over full-repo rediscovery when the file exists
+- If project.yml is missing or clearly stale, recommend `/discover` once — then continue
+
 1. **NEVER generate cards without understanding the full scope** — ask clarifying questions first
 2. **NEVER advance without approval** — after each step, ask if you can proceed
 3. **NEVER invent requirements** — only structure what the user provides. If something is missing, ASK

@@ -1,0 +1,5 @@
+{
+  "repo": "MatheusFelipeCorrea/Hyperion",
+  "ref": "main",
+  "note": "Upstream Hyperion kit. Change repo/ref if you fork. Used by npm run hyperion:upgrade"
+}

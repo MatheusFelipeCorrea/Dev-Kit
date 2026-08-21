@@ -36,6 +36,14 @@ out (or `null`) instead of guessing, and list them under `uncertainties` for the
 user to confirm. Never overwrite an existing `project.yml` without the user's OK;
 prefer showing a diff first.
 
+After writing in **Configure** mode, run:
+
+```bash
+npm run hyperion:project-verify
+```
+
+Do not declare Configure complete if verify fails. Always include an `uncertainties:` list (empty array or items for the user).
+
 ## Resolution order
 
 1. Read `.github/project.yml` when present.

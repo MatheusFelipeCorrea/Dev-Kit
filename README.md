@@ -1,6 +1,7 @@
 # 🌟 Hyperion
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-MatheusFelipeCorrea%2FHyperion-181717?logo=github)](https://github.com/MatheusFelipeCorrea/Hyperion)
 ![Made for AI](https://img.shields.io/badge/Made%20for-AI%20Agents-blueviolet)
 ![Runtime](https://img.shields.io/badge/Runtime-Copilot%20%7C%20Cursor%20%7C%20Claude-green)
 
@@ -13,6 +14,7 @@
 **Hyperion** is a portable, runtime-agnostic AI agents and skills kit. Works with Copilot, Cursor, Claude Code, or any assistant that reads Markdown.
 
 **Full guides (EN):**
+- **Repo:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 - **[Getting started](./GETTING-STARTED.md)** (glossary + 6 commands)
 - **[Learning path](./.github/docs/onboarding/learning-path-en.md)**
 - **[Skills catalog](./.github/docs/reference/skills-catalog.md)**
@@ -25,13 +27,19 @@ Skill names and paths use English identifiers. User guides available in **PT-BR 
 
 ## 🚀 Quickstart em 3 passos
 
+**Fonte do kit:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
+
+```bash
+git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
+```
+
 Não precisa saber o que é um agent. Abra o chat da IA **no seu repo** (depois de copiar o kit) e digite os comandos.
 
 | # | Passo | Ação |
 |---|-------|------|
-| 1️⃣ | **Copiar** | Copie `.github/` + `scripts/` + `package.json` para seu repo |
-| 2️⃣ | **Configurar** | Repo novo: **`/setup`** · Repo existente: **`/migrate`** |
-| 3️⃣ | **Usar** | **`/refine`** → **`/implement`** → **`/execute`** |
+| 1️⃣ | **Obter** | Clone o repo acima (ou baixe o ZIP) |
+| 2️⃣ | **Copiar** | `.github/` + `scripts/` + `package.json` (+ `bin/`/`Dockerfile` se Docker) |
+| 3️⃣ | **Configurar / usar** | Repo novo: **`/setup`** · legado: **`/migrate`** → depois **`/refine`** |
 
 🟢 **Iniciante:** só esses 6 no começo — `/setup` ou `/migrate`, `/doctor`, `/refine`, `/implement`, `/execute`, `/help`.
 
@@ -63,6 +71,8 @@ Detalhes: **[catalogo-skills.md](./.github/docs/reference/catalogo-skills.md)**
 | 🔧 **Repo existente** | [adaptar-ao-repo.md](./.github/docs/onboarding/adaptar-ao-repo.md) → `/migrate` |
 | 📘 **Setup GitHub** | [setup-github.md](./.github/docs/onboarding/setup-github.md) |
 | 🗺️ **Fluxo SDLC** | [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md) |
+| ✅ **Definition of Done** | [definition-of-done.md](./.github/docs/meta/definition-of-done.md) (`*-verify`) |
+| 🐳 **Node / Docker** | [node-and-docker.md](./.github/docs/meta/node-and-docker.md) |
 | 💬 **Comandos** | [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) |
 | 📁 **Onde ficam outputs** | [onde-ficam-os-outputs.md](./.github/docs/meta/onde-ficam-os-outputs.md) |
 | 🗺️ **Índice** | [docs/README.md](./.github/docs/README.md) |
@@ -97,7 +107,17 @@ npm run hyperion:help              # lista atalhos
 npm run hyperion:doctor            # saúde kit + cards
 npm run hyperion:setup -- --yes    # bootstrap completo
 npm run hyperion:sync              # validate + sync
+npm run hyperion:phase-verify -- --plan <path>
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review <path>
+npm run hyperion:cli -- doctor
+npm run hyperion:upgrade           # checa updates no GitHub (origem Hyperion)
+npm run hyperion:upgrade -- --yes  # baixa + aplica
+./bin/hyperion doctor              # Node nativo ou Docker (mesmo CLI)
+npm run hyperion:docker-build      # imagem hyperion-cli
 ```
+
+Sem Node: [node-and-docker.md](./.github/docs/meta/node-and-docker.md) · Gates: [definition-of-done.md](./.github/docs/meta/definition-of-done.md)
 
 **Mantenedores do kit:**
 
@@ -130,7 +150,7 @@ Pré-requisito GitHub: [`gh auth login`](./.github/docs/integration/github-cli-s
 
 ## 🏆 Contribuindo
 
-Veja [CONTRIBUTING.md](CONTRIBUTING.md) para contribuir com skills, prompts ou melhorias.
+Repo: [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) · guia: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

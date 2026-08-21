@@ -2,7 +2,7 @@
 
 The kit is **generic**; `.github/project.yml` is the **contract** linking Hyperion to **your** product.
 
-**Português:** [adaptar-ao-repo.md](./adaptar-ao-repo.md)
+**Kit repo:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) · **Português:** [adaptar-ao-repo.md](./adaptar-ao-repo.md)
 
 ---
 
@@ -45,6 +45,18 @@ memory:
 ## Session outputs
 
 See [skills-output-map.md](../reference/skills-output-map.md) for where `/migrate`, `/implement`, `/audit`, and other commands write files.
+
+---
+
+## Post-adapt checklist
+
+```bash
+npm run hyperion:doctor
+npm run hyperion:project-verify
+# no Node: ./bin/hyperion doctor && ./bin/hyperion project-verify
+```
+
+Gates: [definition-of-done.md](../meta/definition-of-done.md) · Docker: [node-and-docker-en.md](../meta/node-and-docker-en.md).
 
 ---
 

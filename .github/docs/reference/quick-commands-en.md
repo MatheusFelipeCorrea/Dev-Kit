@@ -61,7 +61,7 @@ Slash commands work natively in **Claude Code** (`CLAUDE.md`). In **Cursor**, us
 
 ## npm one-liners
 
-Requires Node 20+ at repo root.
+**Node 20+** at repo root **or** `./bin/hyperion` (Docker) — [node-and-docker-en.md](../meta/node-and-docker-en.md).
 
 ```bash
 npm run hyperion:help              # list all
@@ -69,7 +69,19 @@ npm run hyperion:doctor            # kit + cards health
 npm run hyperion:setup -- --yes    # full cards bootstrap
 npm run hyperion:sync              # validate + sync
 npm run hyperion:sync -- --dry-run # simulate only
+npm run hyperion:phase-verify -- --plan <path>
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review <path>
+npm run hyperion:cli -- doctor     # unified CLI
+npm run hyperion:upgrade                          # GitHub origin: check + plan
+npm run hyperion:upgrade -- --yes                 # fetch origin + apply
+npm run hyperion:upgrade -- --check               # exit 1 if behind
+npm run hyperion:upgrade -- --from <kit> --yes    # offline / local path
+./bin/hyperion doctor                             # native Node or Docker
+npm run hyperion:docker-build                     # hyperion-cli image
 ```
+
+Gates: [definition-of-done.md](../meta/definition-of-done.md). No Node: [node-and-docker-en.md](../meta/node-and-docker-en.md).
 
 ### First time (GitHub)
 

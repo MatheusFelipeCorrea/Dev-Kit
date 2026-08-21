@@ -8,7 +8,7 @@
 | 🟡 | Intermediário — GitHub, cards, repo |
 | 🔵 | Avançado — SDLC completo, referência, contribuição |
 
-**English:** [learning-path-en.md](./learning-path-en.md)
+**English:** [learning-path-en.md](./learning-path-en.md) · **Repo:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
 ---
 
@@ -30,7 +30,7 @@
 
 [GETTING-STARTED.md](../../../GETTING-STARTED.md) — glossário + 6 comandos.
 
-**Faça agora:** copie o kit → **`/setup`** ou **`/migrate`** → **`/doctor`**.
+**Faça agora:** clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) → copie o kit → **`/setup`** ou **`/migrate`** → **`/doctor`**.
 
 ---
 
@@ -69,6 +69,8 @@ npm run hyperion:repo-detect   # opcional — sugere commands.test, lint, etc.
 |-----|----------|
 | [catalogo-skills.md](../reference/catalogo-skills.md) | 🧩 **Qual skill usar** (30 skills + agents) |
 | [comandos-rapidos.md](../reference/comandos-rapidos.md) | 💬 Slash commands |
+| [definition-of-done.md](../meta/definition-of-done.md) | ✅ Gates `*-verify` |
+| [node-and-docker.md](../meta/node-and-docker.md) | 🐳 Node nativo ou Docker |
 | [skills-output-map.md](../reference/skills-output-map.md) | 📁 Onde grava cada output |
 | [cheatsheet-metodologia.md](../reference/cheatsheet-metodologia.md) | Agent vs skill vs script |
 

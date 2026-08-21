@@ -54,16 +54,29 @@ Repo **já tem código** → `/migrate`. Repo **novo** → `/setup`.
 
 ## 📦 1 — Copiar o kit
 
-Copie para a **raiz do seu repositório**:
+**Repositório oficial:** [https://github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
+
+```bash
+git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
+```
+
+Depois copie para a **raiz do seu repositório**:
 
 | Pasta / arquivo | Obrigatório? |
 |-----------------|--------------|
 | `.github/` | Sim |
 | `scripts/` | Sim |
 | `package.json` | Recomendado |
+| `bin/` + `Dockerfile` | Se host sem Node — [node-and-docker](./.github/docs/meta/node-and-docker.md) |
 | `.env.example` | Recomendado |
 | `CLAUDE.md` | Se usar Claude Code |
 | `.cursor/rules/` | Se usar Cursor |
+
+Atualizar um repo que já tem o kit: `npm run hyperion:upgrade` (consulta esse mesmo origin).
+
+Sem Node no laptop? Use Docker — [node-and-docker.md](./.github/docs/meta/node-and-docker.md) (`./bin/hyperion doctor`).
+
+Gates de precisão (`*-verify`): [definition-of-done.md](./.github/docs/meta/definition-of-done.md).
 
 ---
 

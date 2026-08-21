@@ -13,7 +13,7 @@ Works in any coding agent runtime (Cursor, Copilot, Claude Code, etc.). Prefer t
 
 ## Bootstrap (always first)
 
-1. **Read `.github/project.yml` if it exists.** Validate every configured path before using it; stale or missing paths fall back to discovery. Use valid config for stack hints, layout roots, docs paths, locale, and output dirs (`outputs.implementations`, `outputs.cards`, `docs.*`).
+1. **Read `.github/project.yml` if it exists.** Validate every configured path before using it; stale or missing paths fall back to discovery. Use valid config for stack hints, layout roots, docs paths, locale, and output dirs (`outputs.implementations`, `outputs.cards`, `docs.*`). **Do not rediscover the whole repo when project.yml is healthy** — only fill gaps.
 2. **If absent**, discover — never invent paths:
    - Layout: monorepo roots, `apps/`, `packages/`, `src/`, `backend/`, `frontend/`, etc.
    - Manifests: `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, etc.

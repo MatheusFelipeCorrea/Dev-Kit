@@ -16,8 +16,8 @@ Users should **not** need to memorize npm scripts. When this skill applies,
 
 | User says | You run |
 |-----------|---------|
-| `/doctor` / "doctor do Hyperion" / "está tudo ok?" | `npm run hyperion:doctor` |
-| `/sync` / "sincroniza os cards" / "sobe pro GitHub" | `npm run hyperion:sync` |
+| `/doctor` / "doctor do Hyperion" / "está tudo ok?" | `npm run hyperion:doctor` (ou `./bin/hyperion doctor`) |
+| `/sync` / "sincroniza os cards" / "sobe pro GitHub" | `npm run hyperion:sync` (ou `./bin/hyperion sync`) |
 | "dry-run dos cards" / "simula sync" | `npm run hyperion:sync -- --dry-run` |
 | "setup Hyperion" (cards only, project.yml exists) | `npm run hyperion:setup -- --yes` |
 | "valida os cards" | `npm run cards:validate` |
@@ -26,6 +26,12 @@ Users should **not** need to memorize npm scripts. When this skill applies,
 | "ajusta labels" | `npm run cards:labels-reset -- --yes` (confirm with user first) |
 | "lista comandos" / `/help` | `npm run hyperion:help` (paste summary) |
 | `/pipeline` / "detecta CI" / "aplica pipeline Hyperion" | `npm run hyperion:pipeline-detect` then `pipeline-plan`; apply only with user OK |
+| "upgrade do kit" / "atualiza Hyperion" | `npm run hyperion:upgrade` then `--yes` with user OK |
+| "project-verify" / "valida project.yml" | `npm run hyperion:project-verify` |
+| "phase-verify" | `npm run hyperion:phase-verify -- --plan <path>` |
+| "review-verify" | `npm run hyperion:review-verify -- --review <path>` |
+
+If Node is missing, use `./bin/hyperion <cmd>` (Docker) — see `.github/docs/meta/node-and-docker.md`. Gates: `.github/docs/meta/definition-of-done.md`.
 
 Full guided setup (project.yml + memory + cards) → use **project-startup** (`/setup`), not this skill alone.
 

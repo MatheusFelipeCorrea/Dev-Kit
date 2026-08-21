@@ -45,6 +45,16 @@ See [adapt-repo-en.md](../onboarding/adapt-repo-en.md) and [skills-output-map.md
 
 `/implement` → `/execute` (uses `commands.test` from **your** `project.yml`)
 
+After each phase, `/execute` writes a **Verification** block (`tests_result: PASS|FAIL`). Enforce with:
+
+```bash
+npm run hyperion:phase-verify -- --plan .github/plans/implementations/<plan>.md
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review .github/plans/reviews/<file>.md
+```
+
+Full gates: [definition-of-done.md](./definition-of-done.md) (PT).
+
 ---
 
 ## Phase 3 — Quality → Release
