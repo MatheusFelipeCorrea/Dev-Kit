@@ -18,14 +18,14 @@ const outEn = join(root, ".github/docs/reference/skills-catalog.md");
 const PHASE_ORDER = ["bootstrap", "plan", "deliver", "quality", "docs"];
 const PHASE_LABEL = {
   pt: {
-    bootstrap: "🚀 Bootstrap",
+    bootstrap: "🧭 Bootstrap",
     plan: "📋 Planejamento",
     deliver: "⚡ Entrega",
     quality: "🔍 Qualidade",
     docs: "📚 Documentação",
   },
   en: {
-    bootstrap: "🚀 Bootstrap",
+    bootstrap: "🧭 Bootstrap",
     plan: "📋 Planning",
     deliver: "⚡ Delivery",
     quality: "🔍 Quality",
@@ -79,17 +79,50 @@ function render(locale, meta, commands, skillIndex) {
   const lines = [];
   lines.push(isPt ? "# 🧩 Catálogo de skills Hyperion" : "# 🧩 Hyperion skills catalog");
   lines.push("");
+  lines.push('<p align="center">');
   lines.push(
-    isPt
-      ? "Índice humano: **quando usar**, **comando**, **output**. 🟢 Comece pelos 6 comandos em [GETTING-STARTED.md](../../../GETTING-STARTED.md)."
-      : "Human index: **when to use**, **command**, **output**. 🟢 Start with the 6 commands in [GETTING-STARTED.md](../../../GETTING-STARTED.md)."
+    '  <img src="https://img.shields.io/badge/skills-30-F5D76E?style=for-the-badge&labelColor=0B1220" alt="30 skills">'
   );
+  lines.push(
+    '  <img src="https://img.shields.io/badge/agents-8-F5D76E?style=for-the-badge&labelColor=0B1220" alt="8 agents">'
+  );
+  if (isPt) {
+    lines.push(
+      '  <img src="https://img.shields.io/badge/áreas-5-2563EB?style=for-the-badge&labelColor=0B1220" alt="5 áreas">'
+    );
+  }
+  lines.push("</p>");
   lines.push("");
   lines.push(
     isPt
-      ? "**English:** [skills-catalog.md](./skills-catalog.md) · **Outputs:** [skills-output-map.md](./skills-output-map.md) · **Comandos:** [comandos-rapidos.md](./comandos-rapidos.md)"
-      : "**Português:** [catalogo-skills.md](./catalogo-skills.md) · **Outputs:** [skills-output-map.md](./skills-output-map.md) · **Commands:** [quick-commands-en.md](./quick-commands-en.md)"
+      ? "Índice humano: **quando usar**, **comando**, **output**."
+      : "Human index: **when**, **command**, **output**."
   );
+  lines.push("");
+  if (isPt) {
+    lines.push("| Como estudar | Link |");
+    lines.push("|--------------|------|");
+    lines.push("| 🟢 Só os 6 comandos | [GETTING-STARTED.md](../../../GETTING-STARTED.md) |");
+    lines.push("| 🗺️ Visão no hub | [README.md](../../../README.md#skills-por-área--o-que-fazem) |");
+    lines.push("| 💬 Frases no chat | [comandos-rapidos.md](./comandos-rapidos.md) |");
+    lines.push("| 📁 Onde grava | [skills-output-map.md](./skills-output-map.md) |");
+    lines.push("");
+    lines.push("**English:** [skills-catalog.md](./skills-catalog.md)");
+    lines.push("");
+    lines.push("Legenda de área: 🧭 Bootstrap · 📋 Planejamento · ⚡ Entrega · 🔍 Qualidade · 📚 Docs");
+  } else {
+    lines.push("| Study path | Link |");
+    lines.push("|------------|------|");
+    lines.push("| 🟢 Six commands | [GETTING-STARTED.md](../../../GETTING-STARTED.md) |");
+    lines.push("| 🗺️ Hub overview | [README.md](../../../README.md) |");
+    lines.push("| 💬 Chat phrases | [quick-commands-en.md](./quick-commands-en.md) |");
+    lines.push("");
+    lines.push(
+      "**Português:** [catalogo-skills.md](./catalogo-skills.md) · Areas: 🧭 Bootstrap · 📋 Planning · ⚡ Delivery · 🔍 Quality · 📚 Docs"
+    );
+  }
+  lines.push("");
+  lines.push("---");
   lines.push("");
 
   for (const phase of PHASE_ORDER) {
