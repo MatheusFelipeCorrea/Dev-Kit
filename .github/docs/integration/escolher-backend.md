@@ -35,9 +35,9 @@ Você usa qual ferramenta de gestão?
 |---------|-------|------|-----------------|---------|
 | **GitHub** | Mais fácil (`gh auth login`) | Completo | Coluna Status ✅ | ✅ |
 | **Jira** | API token + env vars | Forward + reverse | Transição workflow ✅ | ✅ |
-| **Azure DevOps** | PAT + env vars | Forward | Metadata ⚠️ | ❌ |
+| **Azure DevOps** | PAT + env vars | Forward + reverse | `System.State` via `status_map` ✅ | ✅ |
 | **Linear** | API token | Forward + **status** | `status_map` optional | ❌ |
-| **GitLab** | Token + project ID | Forward | Metadata ⚠️ | ❌ |
+| **GitLab** | Token + project ID | Forward + reverse | open/close + label `status:` ✅ | ✅ |
 
 > **Recomendação:** se você já está no GitHub, use GitHub Projects — é o caminho com mais automação.
 

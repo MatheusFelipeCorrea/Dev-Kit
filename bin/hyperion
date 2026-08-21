@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Hyperion launcher — Node 20+ on host if available, else Docker (hyperion-cli).
+# Usage: ./bin/hyperion doctor
+#        ./bin/hyperion --docker project-verify
+#        HYPERION_USE_DOCKER=1 ./bin/hyperion sync
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+IMAGE="${HYPERION_DOCKER_IMAGE:-hyperion-cli}"
+USE_DOCKER="${HYPERION_USE_DOCKER:-}"
+
+ARGS=()
+for a in "$@"; do
+  if [[ "$a" == "--docker" ]]; then
+    USE_DOCKER=1
+  else
+    ARGS+=("$a")
+  fi
+done
+
+node_ok() {
+  command -v node >/dev/null 2>&1 || return 1
+  local major
+  major="$(node -p "process.versions.node.split('.')[0]" 2>/dev/null || echo 0)"
+  [[ "$major" -ge 20 ]]
+}
+
+run_node() {
+  exec node "$ROOT/scripts/hyperion/cli.mjs" "${ARGS[@]}"
+}
+
+run_docker() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "[Hyperion] Need Node.js >= 20 or Docker." >&2
+    echo "  Install Node: https://nodejs.org  OR  Docker Desktop" >&2
+    exit 1
+  fi
+  if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+    echo "[Hyperion] Building Docker image $IMAGE (one-time)…"
+    docker build -t "$IMAGE" -f "$ROOT/Dockerfile" "$ROOT"
+  fi
+  # Mount the *current* project (cwd), not only the kit root — scripts must exist in cwd.
+  extra=()
+  if [[ -n "${GITHUB_TOKEN:-}" ]]; then extra+=(-e "GITHUB_TOKEN"); fi
+  if [[ -n "${PROJECT_SYNC_TOKEN:-}" ]]; then extra+=(-e "PROJECT_SYNC_TOKEN"); fi
+  if [[ -n "${GH_TOKEN:-}" ]]; then extra+=(-e "GH_TOKEN"); fi
+  exec docker run --rm \
+    -v "$(pwd):/workspace" \
+    -w /workspace \
+    "${extra[@]}" \
+    "$IMAGE" \
+    "${ARGS[@]}"
+}
+
+if [[ -n "$USE_DOCKER" ]]; then
+  run_docker
+elif node_ok; then
+  run_node
+else
+  echo "[Hyperion] Node >= 20 not found — trying Docker…"
+  run_docker
+fi

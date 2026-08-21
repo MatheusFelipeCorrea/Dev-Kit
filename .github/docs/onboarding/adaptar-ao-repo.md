@@ -1,7 +1,8 @@
 # ⚙️ Adaptar o Hyperion ao seu repositório
 
 🟡 **Intermediário** — o kit é **genérico**; o arquivo `.github/project.yml` é o **contrato** que liga o Hyperion ao **seu** produto (stack, comandos, backend, memória).
-**English:** [adapt-repo-en.md](./adapt-repo-en.md)
+
+**Repo do kit:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) · **English:** [adapt-repo-en.md](./adapt-repo-en.md)
 
 ---
 
@@ -91,10 +92,12 @@ Outputs de `/migrate`, `/implement`, `/audit`, etc. ficam em `.github/plans/` e 
 
 ```bash
 npm run hyperion:doctor
+npm run hyperion:project-verify
 npm run hyperion:pipeline-detect   # CI opcional
+# sem Node: ./bin/hyperion doctor && ./bin/hyperion project-verify
 ```
 
-Peça ao agente: **`/doctor`**
+Peça ao agente: **`/doctor`**. Gates: [definition-of-done.md](../meta/definition-of-done.md).
 
 ---
 

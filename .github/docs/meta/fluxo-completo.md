@@ -23,7 +23,7 @@ Fonte: [`hyperion-journey-full.mmd`](../assets/hyperion-journey-full.mmd)
 
 | Passo | Comando | Script npm | Output |
 |-------|---------|------------|--------|
-| Copiar kit | Manual | — | `.github/`, `scripts/`, `package.json` |
+| Copiar kit | Manual | — | Seletivo — ver [README](../../../README.md) (não `project.yml` / `workflows` do kit) |
 | Repo legado | `/migrate` | — | `.github/plans/migrations/` |
 | Setup greenfield | `/setup` | `hyperion:setup -- --yes` | `project.yml`, cards config |
 | Adaptar comandos | — | `hyperion:repo-detect` | Sugestão `commands.*` |
@@ -64,12 +64,23 @@ O **implementation-executor** não termina uma fase sem:
 
 1. Implementar arquivos da fase
 2. Escrever/atualizar testes conforme plano
-3. Rodar comando de teste do projeto (`npm test`, `pytest`, etc.)
+3. Rodar comando de teste do projeto (`commands.test` em `project.yml`)
 4. Reportar output — falhas bloqueiam avanço
-5. Atualizar checkboxes no plano
-6. Pedir aprovação humana para fase seguinte
+5. Gravar bloco **Verification** no plano (`tests_result: PASS|FAIL`)
+6. Atualizar checkboxes no plano
+7. Pedir aprovação humana para fase seguinte
 
-Isso fecha o gap **"plano sem verificação"** — o fluxo de testes não é skill separada; é **obrigatório dentro do agent de execução**.
+Gate opcional (humano/CI):
+
+```bash
+npm run hyperion:phase-verify -- --plan .github/plans/implementations/<plano>.md
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review .github/plans/reviews/<arquivo>.md
+```
+
+Gates completos: [definition-of-done.md](./definition-of-done.md).
+
+Isso fecha o gap **"plano sem verificação"** — o fluxo de testes é **obrigatório dentro do agent de execução**.
 
 ---
 
@@ -110,4 +121,4 @@ Ver [skills-output-map.md](../reference/skills-output-map.md) e [onde-ficam-os-o
 
 [trilha-de-aprendizado.md](../onboarding/trilha-de-aprendizado.md) · [comandos-rapidos.md](../reference/comandos-rapidos.md)
 
-Mantenedores: [doc-maintenance-policy.md](./doc-maintenance-policy.md) · [CONTRIBUTING.md](../../../CONTRIBUTING.md)
+Mantenedores do **repositório Hyperion** (não do seu produto): [CONTRIBUTING.md](../../../CONTRIBUTING.md)

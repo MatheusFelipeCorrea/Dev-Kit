@@ -26,9 +26,9 @@ Which management tool do you use?
 |---------|-------|------|-----------------|---------|
 | **GitHub** | Easiest (`gh auth login`) | Full | Status column ✅ | ✅ |
 | **Jira** | API token + env vars | Forward + reverse | Workflow transition ✅ | ✅ |
-| **Azure DevOps** | PAT + env vars | Forward | Metadata ⚠️ | ❌ |
+| **Azure DevOps** | PAT + env vars | Forward + reverse | `System.State` via `status_map` ✅ | ✅ |
 | **Linear** | API token | Forward + **status** | optional `status_map` | ❌ |
-| **GitLab** | Token + project ID | Forward | Metadata ⚠️ | ❌ |
+| **GitLab** | Token + project ID | Forward + reverse | open/close + `status:` label ✅ | ✅ |
 
 ---
 

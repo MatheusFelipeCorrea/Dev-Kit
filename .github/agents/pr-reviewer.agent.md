@@ -62,6 +62,7 @@ Write `.github/plans/reviews/pr-{number}-review.md` (or `pr-{branch}-review.md`)
 ---
 pr: 123
 verdict: APPROVE | REQUEST_CHANGES | COMMENT
+tests_ran: yes | no | skipped
 review_date: YYYY-MM-DD
 ---
 
@@ -75,7 +76,25 @@ review_date: YYYY-MM-DD
 
 Verdict: **APPROVE** | **REQUEST_CHANGES** | **COMMENT**
 
-### Step 5 — Memory capture (optional)
+**Gate:** before declaring the review done, run:
+
+```bash
+npm run hyperion:review-verify -- --review .github/plans/reviews/pr-<n>-review.md
+```
+
+If exit ≠ 0 → fix the artifact (verdict, Summary, Findings, tests_ran). Do not say the review is complete.
+
+### Step 5 — Optional GitHub comment
+
+If `gh` is authenticated and the user asks to post the review (or says "comenta no PR"):
+
+```bash
+gh pr comment <number> --body-file .github/plans/reviews/pr-<number>-review.md
+```
+
+Do **not** post automatically without asking — reviews may contain internal notes.
+
+### Step 6 — Memory capture (optional)
 
 If `memory.auto_capture: true` in project.yml, append session decisions via `memory-capture` skill.
 

@@ -5,6 +5,7 @@ import { workspaceRoot, pathExists, readTextIfExists } from "./lib.mjs";
 export const HYPERION_PREFIX = "hyperion-";
 export const WORKFLOWS_DIR = ".github/workflows";
 export const TEMPLATES_DIR = path.join("scripts", "hyperion", "templates", "workflows");
+export const CI_TEMPLATES_DIR = path.join("scripts", "hyperion", "templates", "ci");
 
 export const HYPERION_WORKFLOWS = {
   syncCards: "hyperion-sync-cards.yml",
@@ -137,6 +138,9 @@ export async function detectExternalProviders(root = workspaceRoot) {
 }
 
 export async function detectStack(root = workspaceRoot) {
+  if (await pathExists(path.join(root, "bun.lockb")) || (await pathExists(path.join(root, "bun.lock")))) {
+    return "node-bun";
+  }
   if (await pathExists(path.join(root, "package.json"))) {
     if (await pathExists(path.join(root, "pnpm-lock.yaml"))) return "node-pnpm";
     if (await pathExists(path.join(root, "yarn.lock"))) return "node-yarn";
@@ -145,11 +149,30 @@ export async function detectStack(root = workspaceRoot) {
   if (await pathExists(path.join(root, "pyproject.toml")) || (await pathExists(path.join(root, "requirements.txt")))) {
     return "python";
   }
+  if (await pathExists(path.join(root, "go.mod"))) return "go";
+  if (await pathExists(path.join(root, "Cargo.toml"))) return "rust";
+  if (await pathExists(path.join(root, "pom.xml"))) return "java-maven";
+  if (
+    (await pathExists(path.join(root, "build.gradle"))) ||
+    (await pathExists(path.join(root, "build.gradle.kts"))) ||
+    (await pathExists(path.join(root, "settings.gradle"))) ||
+    (await pathExists(path.join(root, "settings.gradle.kts")))
+  ) {
+    return "java-gradle";
+  }
+  if (await pathExists(path.join(root, "composer.json"))) return "php";
+  if (await pathExists(path.join(root, "Gemfile"))) return "ruby";
+  if (await pathExists(path.join(root, "Directory.Build.props"))) return "dotnet";
+  try {
+    const { readdir } = await import("node:fs/promises");
+    const names = await readdir(root);
+    if (names.some((n) => n.endsWith(".sln") || n.endsWith(".csproj"))) return "dotnet";
+  } catch {
+    /* ignore */
+  }
   if (await pathExists(path.join(root, "Dockerfile")) || (await pathExists(path.join(root, "docker-compose.yml")))) {
     return "docker";
   }
-  if (await pathExists(path.join(root, "go.mod"))) return "go";
-  if (await pathExists(path.join(root, "Cargo.toml"))) return "rust";
   return "unknown";
 }
 
@@ -192,7 +215,7 @@ export async function detectPipeline(root = workspaceRoot) {
 }
 
 export function buildPipelinePlan(detection) {
-  const { config, hasProductCi, classified, stack } = detection;
+  const { config, hasProductCi, classified, stack, external } = detection;
   const plan = {
     policy: config.policy,
     provider: config.provider,
@@ -215,52 +238,86 @@ export function buildPipelinePlan(detection) {
   }
 
   const h = config.hyperion;
+  const externalProviders = new Set((external || []).map((e) => e.provider));
+  const provider = config.provider || "";
+  const isGitLab = provider === "gitlab-ci" || externalProviders.has("gitlab-ci");
+  const isAzure = provider === "azure-pipelines" || externalProviders.has("azure-pipelines");
+  const useGithubActions =
+    !isGitLab && !isAzure && (provider === "github-actions" || provider === "none" || !provider);
 
-  if (h.cards_sync) {
-    plan.actions.push({
-      file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.syncCards}`,
-      template: HYPERION_WORKFLOWS.syncCards,
-      reason: "Cards sync on push to .github/cards/",
-    });
+  if (useGithubActions) {
+    if (h.cards_sync) {
+      plan.actions.push({
+        file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.syncCards}`,
+        template: HYPERION_WORKFLOWS.syncCards,
+        templateDir: "workflows",
+        reason: "Cards sync on push to .github/cards/",
+      });
+    }
+
+    if (h.security_scan) {
+      plan.actions.push({
+        file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.security}`,
+        template: HYPERION_WORKFLOWS.security,
+        templateDir: "workflows",
+        reason: "Optional security scan (npm audit, pip-audit, trufflehog)",
+      });
+    }
+
+    if (h.kit_validation) {
+      plan.actions.push({
+        file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.validate}`,
+        template: HYPERION_WORKFLOWS.validate,
+        templateDir: "workflows",
+        reason: "Hyperion kit validation (docs, skills, runtime rules, cards tests)",
+      });
+    }
+
+    const wantProductCi =
+      h.product_ci === true || (h.product_ci === "auto" && !hasProductCi && config.policy !== "merge");
+
+    if (wantProductCi && config.policy === "hyperion-only") {
+      plan.actions.push({
+        file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.productCi}`,
+        template: HYPERION_WORKFLOWS.productCi,
+        templateDir: "workflows",
+        reason: `Greenfield product CI for stack: ${stack}`,
+      });
+    } else if (wantProductCi && config.policy === "detect" && !hasProductCi) {
+      plan.actions.push({
+        file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.productCi}`,
+        template: HYPERION_WORKFLOWS.productCi,
+        templateDir: "workflows",
+        reason: `No product CI detected — generating minimal pipeline for ${stack}`,
+      });
+    } else if (hasProductCi && config.policy === "detect") {
+      plan.skips.push("Product CI already exists — hyperion-product-ci.yml not written (ci.policy=detect).");
+    }
   }
 
-  if (h.security_scan) {
+  // Native include snippets for GitLab / Azure (never overwrite product CI files)
+  if (isGitLab && (h.cards_sync || h.kit_validation || h.security_scan)) {
     plan.actions.push({
-      file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.security}`,
-      template: HYPERION_WORKFLOWS.security,
-      reason: "Optional security scan (npm audit, pip-audit, trufflehog)",
+      file: ".gitlab/hyperion-ci.yml",
+      template: "gitlab-hyperion.yml",
+      templateDir: "ci",
+      reason: "GitLab CI include snippet for Hyperion jobs (merge into .gitlab-ci.yml)",
     });
+    plan.warnings.push("GitLab: add `include: - local: .gitlab/hyperion-ci.yml` to .gitlab-ci.yml — see pipeline-merge.md");
   }
 
-  if (h.kit_validation) {
+  if (isAzure && (h.cards_sync || h.kit_validation || h.security_scan)) {
     plan.actions.push({
-      file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.validate}`,
-      template: HYPERION_WORKFLOWS.validate,
-      reason: "Hyperion kit validation (docs, skills, runtime rules, cards tests)",
+      file: "hyperion-azure-pipelines.yml",
+      template: "azure-pipelines-hyperion.yml",
+      templateDir: "ci",
+      reason: "Azure Pipelines job template for Hyperion (reference from azure-pipelines.yml)",
     });
-  }
-
-  const wantProductCi =
-    h.product_ci === true || (h.product_ci === "auto" && !hasProductCi && config.policy !== "merge");
-
-  if (wantProductCi && config.policy === "hyperion-only") {
-    plan.actions.push({
-      file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.productCi}`,
-      template: HYPERION_WORKFLOWS.productCi,
-      reason: `Greenfield product CI for stack: ${stack}`,
-    });
-  } else if (wantProductCi && config.policy === "detect" && !hasProductCi) {
-    plan.actions.push({
-      file: `${WORKFLOWS_DIR}/${HYPERION_WORKFLOWS.productCi}`,
-      template: HYPERION_WORKFLOWS.productCi,
-      reason: `No product CI detected — generating minimal pipeline for ${stack}`,
-    });
-  } else if (hasProductCi && config.policy === "detect") {
-    plan.skips.push("Product CI already exists — hyperion-product-ci.yml not written (ci.policy=detect).");
+    plan.warnings.push("Azure: reference hyperion-azure-pipelines.yml from your pipeline — see pipeline-merge.md");
   }
 
   if (config.policy === "merge") {
-    plan.skips.push("Merge mode — add Hyperion jobs manually or via pipeline-architect skill; no overwrites.");
+    plan.skips.push("Merge mode — Hyperion include snippets may still be written; product CI is never overwritten.");
     plan.warnings.push("See .github/docs/integration/pipeline-merge.md for injection snippets.");
   }
 

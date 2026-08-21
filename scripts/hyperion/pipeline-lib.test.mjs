@@ -47,6 +47,7 @@ describe("buildPipelinePlan", () => {
       hasProductCi: true,
       classified: { legacy: [], product: ["deploy.yml"], hyperion: [] },
       stack: "node-npm",
+      external: [],
     };
     const plan = buildPipelinePlan(detection);
     assert.ok(plan.skips.some((s) => s.includes("hyperion-product-ci")));
@@ -59,6 +60,7 @@ describe("buildPipelinePlan", () => {
       hasProductCi: false,
       classified: { legacy: [], product: [], hyperion: [] },
       stack: "node-npm",
+      external: [],
     };
     const plan = buildPipelinePlan(detection);
     assert.ok(plan.actions.some((a) => a.template === "hyperion-product-ci.yml"));
@@ -70,9 +72,45 @@ describe("buildPipelinePlan", () => {
       hasProductCi: false,
       classified: { legacy: [], product: [], hyperion: [] },
       stack: "unknown",
+      external: [],
     };
     const plan = buildPipelinePlan(detection);
     assert.equal(plan.actions.length, 0);
     assert.ok(plan.skips.length > 0);
+  });
+
+  it("plans GitLab include snippet when gitlab-ci detected", () => {
+    const detection = {
+      config: {
+        ...DEFAULT_CI_CONFIG,
+        provider: "gitlab-ci",
+        policy: "merge",
+        hyperion: { ...DEFAULT_CI_CONFIG.hyperion, cards_sync: true, kit_validation: true },
+      },
+      hasProductCi: true,
+      classified: { legacy: [], product: [], hyperion: [] },
+      stack: "node-npm",
+      external: [{ provider: "gitlab-ci", file: ".gitlab-ci.yml" }],
+    };
+    const plan = buildPipelinePlan(detection);
+    assert.ok(plan.actions.some((a) => a.file === ".gitlab/hyperion-ci.yml" && a.templateDir === "ci"));
+    assert.ok(!plan.actions.some((a) => a.template === "hyperion-sync-cards.yml"));
+  });
+
+  it("plans Azure Pipelines template when azure-pipelines detected", () => {
+    const detection = {
+      config: {
+        ...DEFAULT_CI_CONFIG,
+        provider: "azure-pipelines",
+        policy: "detect",
+        hyperion: { ...DEFAULT_CI_CONFIG.hyperion, security_scan: true },
+      },
+      hasProductCi: true,
+      classified: { legacy: [], product: [], hyperion: [] },
+      stack: "dotnet",
+      external: [{ provider: "azure-pipelines", file: "azure-pipelines.yml" }],
+    };
+    const plan = buildPipelinePlan(detection);
+    assert.ok(plan.actions.some((a) => a.file === "hyperion-azure-pipelines.yml"));
   });
 });

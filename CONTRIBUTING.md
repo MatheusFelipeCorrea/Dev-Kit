@@ -2,9 +2,11 @@
 
 Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 
+**Repositório:** [https://github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
+
 ## Como contribuir
 
-1. Fork o repositório
+1. Fork [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 2. Crie uma branch para sua feature (`git checkout -b feature/minha-skill`)
 3. Faça suas alterações
 4. Valide localmente antes do PR:
@@ -12,9 +14,12 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
    npm run docs:check              # links em markdown
    npm run skills:validate         # frontmatter + ## Output das skills
    npm run hyperion:check-rules    # runtime rules sincronizadas
+   npm run hyperion:project-verify # smoke do project.yml do kit
    npm run cards:test              # testes do cards-sync
+   npm test                        # hyperion + cards
    node scripts/cards-sync/sync.mjs --dry-run   # se alterou cards/sync
    ```
+   Sem Node: `./bin/hyperion` — [node-and-docker.md](.github/docs/meta/node-and-docker.md). Gates: [definition-of-done.md](.github/docs/meta/definition-of-done.md).
 5. Commit com mensagem descritiva
 6. Abra um Pull Request
 
@@ -70,3 +75,16 @@ Leia `project.yml` → `outputs` antes de inventar paths. Registre auditorias em
 ## Licença
 
 Ao contribuir, você concorda que suas contribuições serão licenciadas sob MIT.
+
+## Manutenção de docs (só mantenedores do kit)
+
+Política interna de cadência e anti-duplicação: [doc-maintenance-policy.md](.github/docs/meta/doc-maintenance-policy.md).
+
+Comandos extras após editar o kit:
+
+```bash
+npm run hyperion:generate-rules
+npm run hyperion:skills-eval
+npm run docs:check
+npm test
+```

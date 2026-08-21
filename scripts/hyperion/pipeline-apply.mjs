@@ -10,14 +10,16 @@ import {
   buildPipelinePlan,
   LEGACY_WORKFLOWS,
   TEMPLATES_DIR,
+  CI_TEMPLATES_DIR,
 } from "./pipeline-lib.mjs";
 import { workspaceRoot, log, ok, warn, fail } from "./lib.mjs";
 
 const argYes = process.argv.includes("--yes");
 const argMigrateLegacy = process.argv.includes("--migrate-legacy");
 
-async function readTemplate(name) {
-  const p = path.join(workspaceRoot, TEMPLATES_DIR, name);
+async function readTemplate(action) {
+  const dir = action.templateDir === "ci" ? CI_TEMPLATES_DIR : TEMPLATES_DIR;
+  const p = path.join(workspaceRoot, dir, action.template);
   return fs.readFile(p, "utf8");
 }
 
@@ -71,7 +73,8 @@ async function main() {
       warn(`Exists — skipped: ${action.file}`);
       continue;
     }
-    const content = await readTemplate(action.template);
+    const content = await readTemplate(action);
+    await fs.mkdir(path.dirname(abs), { recursive: true });
     await fs.writeFile(abs, content, "utf8");
     ok(`Wrote ${action.file}`);
     written++;

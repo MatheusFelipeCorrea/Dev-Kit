@@ -560,7 +560,7 @@ If the project is a monorepo with multiple sub-projects:
 
 The prompt adapts automatically. Here are examples of how different architectures would look:
 
-MVC + Service + Repository (like Agrofarm):
+MVC + Service + Repository (typical layered app):
 - Layers: Express → Middlewares → Controllers → Services → Views → Repositories → Database
 - Background: Cron Jobs section
 - External: API integrations column

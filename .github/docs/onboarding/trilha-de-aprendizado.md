@@ -1,14 +1,22 @@
 # 📚 Trilha de aprendizado Hyperion
 
+<p align="center">
+  <img src="https://img.shields.io/badge/🟢-dia_1-22C55E?style=flat-square&labelColor=0B1220" alt="dia 1">
+  <img src="https://img.shields.io/badge/🟡-github-EAB308?style=flat-square&labelColor=0B1220" alt="github">
+  <img src="https://img.shields.io/badge/🔵-sdlc-2563EB?style=flat-square&labelColor=0B1220" alt="sdlc">
+</p>
+
 **Duas velocidades.** Não leia o kit inteiro — escolha seu nível e siga em ordem.
+
+Antes de aprofundar, leia no hub: [o que é](../../../README.md#o-que-é-o-hyperion) · [áreas](../../../README.md#mapa-rápido--onde-usar) · [skills](../../../README.md#skills-por-área--o-que-fazem)
 
 | Legenda | Significado |
 |---------|-------------|
 | 🟢 | Iniciante — chat + 6 comandos |
 | 🟡 | Intermediário — GitHub, cards, repo |
-| 🔵 | Avançado — SDLC completo, referência, contribuição |
+| 🔵 | Avançado — SDLC completo, referência |
 
-**English:** [learning-path-en.md](./learning-path-en.md)
+**English:** [learning-path-en.md](./learning-path-en.md) · **Repo:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
 ---
 
@@ -30,7 +38,7 @@
 
 [GETTING-STARTED.md](../../../GETTING-STARTED.md) — glossário + 6 comandos.
 
-**Faça agora:** copie o kit → **`/setup`** ou **`/migrate`** → **`/doctor`**.
+**Faça agora:** clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) → copie o kit → **`/setup`** ou **`/migrate`** → **`/doctor`**.
 
 ---
 
@@ -69,6 +77,8 @@ npm run hyperion:repo-detect   # opcional — sugere commands.test, lint, etc.
 |-----|----------|
 | [catalogo-skills.md](../reference/catalogo-skills.md) | 🧩 **Qual skill usar** (30 skills + agents) |
 | [comandos-rapidos.md](../reference/comandos-rapidos.md) | 💬 Slash commands |
+| [definition-of-done.md](../meta/definition-of-done.md) | ✅ Gates `*-verify` |
+| [node-and-docker.md](../meta/node-and-docker.md) | 🐳 Node nativo ou Docker |
 | [skills-output-map.md](../reference/skills-output-map.md) | 📁 Onde grava cada output |
 | [cheatsheet-metodologia.md](../reference/cheatsheet-metodologia.md) | Agent vs skill vs script |
 

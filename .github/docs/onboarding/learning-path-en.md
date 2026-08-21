@@ -8,7 +8,7 @@ Two speeds. Do not read the whole kit — pick your level and follow in order.
 | 🟡 | Intermediate — GitHub, cards, repo |
 | 🔵 | Advanced — full SDLC, reference, contributing |
 
-**Português:** [trilha-de-aprendizado.md](./trilha-de-aprendizado.md)
+**Português:** [trilha-de-aprendizado.md](./trilha-de-aprendizado.md) · **Repo:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
 ---
 
@@ -30,7 +30,7 @@ Two speeds. Do not read the whole kit — pick your level and follow in order.
 
 [GETTING-STARTED.md](../../../GETTING-STARTED.md) — glossary + 6 commands.
 
-**Do now:** copy kit → **`/setup`** or **`/migrate`** → **`/doctor`**.
+**Do now:** clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) → copy the kit → **`/setup`** or **`/migrate`** → **`/doctor`**.
 
 ---
 
@@ -65,6 +65,8 @@ Two speeds. Do not read the whole kit — pick your level and follow in order.
 |-----|-----|
 | [skills-catalog.md](../reference/skills-catalog.md) | 🧩 **Which skill to use** |
 | [quick-commands-en.md](../reference/quick-commands-en.md) | 💬 Slash commands |
+| [definition-of-done.md](../meta/definition-of-done.md) | ✅ `*-verify` gates |
+| [node-and-docker-en.md](../meta/node-and-docker-en.md) | 🐳 Native Node or Docker |
 | [skills-output-map.md](../reference/skills-output-map.md) | 📁 Output paths |
 | [methodology-cheatsheet.md](../reference/methodology-cheatsheet.md) | Agent vs skill vs script |
 

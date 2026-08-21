@@ -15,8 +15,7 @@ results. Heavy, so it works dimension-by-dimension and pauses for the user.
 
 ## Step 1 — Context
 
-Run `project-discovery` (Context mode) or read `.github/project.yml`. Capture
-apps, docs, `outputs.audits`, locale, and any `audits.overlay`. Never invent paths.
+**Prefer reading `.github/project.yml`.** Only run `project-discovery` (Context mode) if the contract is missing or paths are stale. Capture apps, docs, `outputs.audits`, locale, and any `audits.overlay`. Never invent paths.
 
 ## Step 2 — Read the manifest
 

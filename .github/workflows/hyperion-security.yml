@@ -14,18 +14,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Audit Node dependencies
         if: hashFiles('package-lock.json') != '' || hashFiles('package.json') != ''
-        run: npm audit --audit-level=high || true
+        env:
+          HYPERION_AUDIT_SOFT: ${{ vars.HYPERION_AUDIT_SOFT }}
+        run: |
+          set -e
+          if [ "${HYPERION_AUDIT_SOFT}" = "1" ]; then
+            npm audit --audit-level=high || true
+          else
+            npm audit --audit-level=high
+          fi
 
       - name: Audit Python dependencies
         if: hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != ''
+        env:
+          HYPERION_AUDIT_SOFT: ${{ vars.HYPERION_AUDIT_SOFT }}
         run: |
-          pip install pip-audit 2>/dev/null
-          pip-audit -r requirements.txt 2>/dev/null || pip-audit 2>/dev/null || true
+          set -e
+          pip install pip-audit
+          if [ "${HYPERION_AUDIT_SOFT}" = "1" ]; then
+            pip-audit -r requirements.txt 2>/dev/null || pip-audit || true
+          else
+            pip-audit -r requirements.txt 2>/dev/null || pip-audit
+          fi
 
       - name: Check for secrets
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@v3.97.0
         with:
           extra_args: --only-verified

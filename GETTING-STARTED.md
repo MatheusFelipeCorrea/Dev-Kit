@@ -1,12 +1,36 @@
 # 🚀 Getting Started — Hyperion
 
-Do zero (ou repo legado) ao primeiro release. **Não precisa saber o que é um “agent”.** No primeiro dia, pare na figura dos **6 passos** — o resto deste arquivo é para depois.
+<p align="center">
+  <img src="./.github/docs/assets/hyperion-logo.png" alt="Hyperion" width="180">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/🟢-iniciante-22C55E?style=flat-square&labelColor=0B1220" alt="iniciante">
+  <img src="https://img.shields.io/badge/chat-não_terminal-F5D76E?style=flat-square&labelColor=0B1220" alt="chat">
+  <img src="https://img.shields.io/badge/6_comandos-primeira_semana-2563EB?style=flat-square&labelColor=0B1220" alt="6">
+</p>
+
+Do zero (ou repo legado) ao primeiro release. **Não precisa saber o que é um “agent”.** No primeiro dia, pare nos **6 comandos** — o resto é para depois.
+
+### O que o Hyperion faz (em uma frase)
+
+Você copia o kit para o **seu** repo → fala com a IA no chat (`/setup`, `/refine`, `/execute`…) → ela segue receitas prontas e grava cards, planos e audits em pastas padrão. Opcionalmente **`/sync`** sobe o board.
+
+| Área | Exemplos no chat |
+|------|------------------|
+| 🧭 Ligar o kit | `/setup` · `/migrate` · `/doctor` |
+| 📋 Planejar | `/refine` · `/spec` · `/explore` |
+| ⚡ Entregar | `/implement` · `/execute` · `/pr-review` |
+| 🔍 Qualidade | `/audit` · `/deps` |
+| 📚 Docs / release | `/diagram` · `/release` |
+
+Visão geral + catálogo: [README.md](./README.md) · [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md)
 
 | Nível | Você | Comece aqui |
 |-------|------|-------------|
-| 🟢 **Iniciante** | Primeira vez com IA no repo | Seção [Dois caminhos](#dois-caminhos-não-leia-os-30-skills) → 6 comandos |
-| 🟡 **Intermediário** | Já usa Cursor/Copilot no dia a dia | Passos 1–4 abaixo + [setup-github](./.github/docs/onboarding/setup-github.md) |
-| 🔵 **Avançado** | Mantenedor / CI / multi-backend | [catálogo](./.github/docs/reference/catalogo-skills.md) · [comandos](./.github/docs/reference/comandos-rapidos.md) · [CONTRIBUTING](./CONTRIBUTING.md) |
+| 🟢 **Iniciante** | Primeira vez com IA no repo | [Dois caminhos](#dois-caminhos-não-leia-os-30-skills) → 6 comandos |
+| 🟡 **Intermediário** | Já usa Cursor/Copilot | Passos 1–4 + [setup-github](./.github/docs/onboarding/setup-github.md) |
+| 🔵 **Avançado** | Multi-app, CI, vários boards | [catálogo](./.github/docs/reference/catalogo-skills.md) · [comandos](./.github/docs/reference/comandos-rapidos.md) · [fluxo](./.github/docs/meta/fluxo-completo.md) |
 
 **English:** [learning-path-en.md](./.github/docs/onboarding/learning-path-en.md) · **Trilha:** [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md) · **Fluxo:** [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md)
 
@@ -47,23 +71,31 @@ Repo **já tem código** → `/migrate`. Repo **novo** → `/setup`.
 
 ### 🔵 Já uso agents no dia a dia
 
-- [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) · [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md)
-- Mantenedor: [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) · [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) · [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md)
 
 ---
 
 ## 📦 1 — Copiar o kit
 
-Copie para a **raiz do seu repositório**:
+**Repositório oficial:** [https://github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
-| Pasta / arquivo | Obrigatório? |
-|-----------------|--------------|
-| `.github/` | Sim |
-| `scripts/` | Sim |
-| `package.json` | Recomendado |
-| `.env.example` | Recomendado |
-| `CLAUDE.md` | Se usar Claude Code |
-| `.cursor/rules/` | Se usar Cursor |
+```bash
+git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
+```
+
+Copie para a **raiz do seu repositório** (não o `.git` do Hyperion):
+
+| Copiar | Não copiar / cuidado |
+|--------|----------------------|
+| `.github/skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/` (templates), `cards/` (template + config limpo), `diagrams/`, `project.example.yml`, `project.schema.json`, `hyperion-origin.json` | **`.github/project.yml`** do Hyperion → use `project.example.yml` ou `/setup` |
+| `scripts/` | **`.github/workflows/`** → **`/pipeline`** no seu repo |
+| Scripts `hyperion:*` / `cards:*` no **seu** `package.json` (**merge**) | Substituir o `package.json` do produto |
+| `bin/` + `Dockerfile` (sem Node) | `projects-map` de outro time |
+| `.env.example`, `CLAUDE.md`, `.cursor/rules/` conforme a IDE | Artefatos gerados (`plans/`, audit results) |
+
+Atualizar um repo que já tem o kit: `npm run hyperion:upgrade`.
+
+Sem Node: [node-and-docker.md](./.github/docs/meta/node-and-docker.md). Gates: [definition-of-done.md](./.github/docs/meta/definition-of-done.md).
 
 ---
 

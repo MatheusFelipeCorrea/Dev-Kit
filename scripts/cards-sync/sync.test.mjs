@@ -20,6 +20,9 @@ import {
   parseSyncMetadataFromDescription,
   parseIssueSummaryTypeTitle,
   jiraIssueToCardMarkdown,
+  remoteIssueToCardMarkdown,
+  resolveMappedStatus,
+  resolveGitLabStatusAction,
   jiraRequest,
   graphql,
 } from "./sync.mjs";
@@ -364,6 +367,52 @@ test("pickJiraTransition matches canonical and localized status names", () => {
 
   const missing = pickJiraTransition(transitions, "Backlog", repoConfig);
   assert.equal(missing, null);
+});
+
+test("resolveMappedStatus uses status_map then identity", () => {
+  assert.equal(resolveMappedStatus({ Done: "Closed" }, "Done"), "Closed");
+  assert.equal(resolveMappedStatus({}, "In Progress"), "In Progress");
+  assert.equal(resolveMappedStatus(null, null), null);
+});
+
+test("resolveGitLabStatusAction maps Done-like to close", () => {
+  const done = resolveGitLabStatusAction({ Done: "Done" }, "Done");
+  assert.equal(done.state_event, "close");
+  const progress = resolveGitLabStatusAction({ "In Progress": "Doing" }, "In Progress");
+  assert.equal(progress.state_event, "reopen");
+  assert.equal(progress.label, "Doing");
+});
+
+test("remoteIssueToCardMarkdown rebuilds card from SYNC_METADATA", () => {
+  const description = [
+    "Body text",
+    "",
+    "---",
+    "<!-- SYNC_METADATA — do not edit below this line -->",
+    "CARD_ID: STORY-1",
+    "SOURCE_FILE: .github/cards/stories/STORY-1.md",
+    "TYPE: Story",
+    "STATUS: In Progress",
+    "CATEGORIES: Backend",
+    "PARENT_CARD_ID: ",
+    "STORY_POINTS: 3",
+    "PRIORITY: High",
+    "SPRINT: ",
+    "REPORTER: ",
+    "DUE_DATE: ",
+    "<!-- /SYNC_METADATA -->",
+  ].join("\n");
+  const converted = remoteIssueToCardMarkdown({
+    title: "[Story] Login SSO",
+    description,
+    labels: ["Backend"],
+    statusOverride: "Active",
+  });
+  assert.ok(converted);
+  assert.equal(converted.sourceFile, ".github/cards/stories/STORY-1.md");
+  assert.match(converted.markdown, /card_id: "STORY-1"/);
+  assert.match(converted.markdown, /status: "Active"/);
+  assert.match(converted.markdown, /Login SSO/);
 });
 
 test("pickIterationOption matches iteration title exactly and fuzzily", () => {

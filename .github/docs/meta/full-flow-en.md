@@ -23,7 +23,7 @@ Source: [`hyperion-sdlc-full-en.mmd`](../assets/hyperion-sdlc-full-en.mmd)
 
 | Step | Command | Output |
 |------|---------|--------|
-| Copy kit | Manual | `.github/`, `scripts/` |
+| Copy kit | Manual | Selective — see [README](../../../README.md) (not kit `project.yml` / `workflows`) |
 | Legacy repo | `/migrate` | `.github/plans/migrations/` |
 | Greenfield | `/setup` | `project.yml`, cards |
 | Adapt commands | `hyperion:repo-detect` | Suggested `commands.*` |
@@ -45,6 +45,16 @@ See [adapt-repo-en.md](../onboarding/adapt-repo-en.md) and [skills-output-map.md
 
 `/implement` → `/execute` (uses `commands.test` from **your** `project.yml`)
 
+After each phase, `/execute` writes a **Verification** block (`tests_result: PASS|FAIL`). Enforce with:
+
+```bash
+npm run hyperion:phase-verify -- --plan .github/plans/implementations/<plan>.md
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review .github/plans/reviews/<file>.md
+```
+
+Full gates: [definition-of-done.md](./definition-of-done.md) (PT).
+
 ---
 
 ## Phase 3 — Quality → Release
@@ -63,4 +73,4 @@ See [adapt-repo-en.md](../onboarding/adapt-repo-en.md) and [skills-output-map.md
 
 [learning-path-en.md](../onboarding/learning-path-en.md) · [quick-commands-en.md](../reference/quick-commands-en.md)
 
-Maintainers: [doc-maintenance-policy.md](./doc-maintenance-policy.md)
+Contributing to the Hyperion repo: [CONTRIBUTING.md](../../../CONTRIBUTING.md)

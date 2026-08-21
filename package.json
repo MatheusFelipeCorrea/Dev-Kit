@@ -2,6 +2,11 @@
   "name": "hyperion",
   "private": true,
   "description": "Hyperion — portable AI agents and skills for software projects",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MatheusFelipeCorrea/Hyperion.git"
+  },
+  "homepage": "https://github.com/MatheusFelipeCorrea/Hyperion",
   "type": "module",
   "scripts": {
     "hyperion:help": "node scripts/hyperion/help.mjs",
@@ -19,6 +24,13 @@
     "hyperion:repo-detect": "node scripts/hyperion/repo-detect.mjs",
     "hyperion:skills-eval": "node scripts/hyperion/skills-eval.mjs",
     "hyperion:skills-catalog": "node scripts/hyperion/skills-catalog.mjs",
+    "hyperion:phase-verify": "node scripts/hyperion/phase-verify.mjs",
+    "hyperion:project-verify": "node scripts/hyperion/project-verify.mjs",
+    "hyperion:review-verify": "node scripts/hyperion/review-verify.mjs",
+    "hyperion:init": "node scripts/hyperion/init.mjs",
+    "hyperion:upgrade": "node scripts/hyperion/upgrade.mjs",
+    "hyperion:cli": "node scripts/hyperion/cli.mjs",
+    "hyperion:docker-build": "docker build -t hyperion-cli -f Dockerfile .",
     "cards:init": "node scripts/cards-sync/init.mjs",
     "cards:validate": "node scripts/cards-sync/validate.mjs",
     "cards:sync": "node scripts/cards-sync/sync.mjs",
@@ -34,5 +46,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "bin": {
+    "hyperion": "./scripts/hyperion/cli.mjs"
   }
 }

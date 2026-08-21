@@ -429,10 +429,94 @@ if (backend === "jira") {
   process.exit(0);
 }
 
-if (backend !== "github" && backend !== "jira") {
-  warn(`Doctor remote checks are only implemented for GitHub Projects and Jira.`);
-  warn(`For backend="${backend}", use: node scripts/cards-sync/sync.mjs --dry-run`);
+if (backend === "azure-devops" || backend === "azure") {
+  const azureOrgUrl = process.env.AZDO_ORG_URL || repoConfig.org || null;
+  const azureProject = process.env.AZDO_PROJECT || repoConfig.project || null;
+  const azurePat = process.env.AZDO_PAT || null;
+  if (!azureOrgUrl || !azureProject || !azurePat) {
+    warn("Azure DevOps backend detected. Missing one or more required env vars:");
+    warn("AZDO_ORG_URL, AZDO_PROJECT, AZDO_PAT");
+    process.exit(1);
+  }
+  const baseUrl = String(azureOrgUrl).replace(/\/+$/, "");
+  const auth = Buffer.from(`:${azurePat}`).toString("base64");
+  const url = `${baseUrl}/_apis/projects/${encodeURIComponent(azureProject)}?api-version=7.0`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Basic ${auth}`, Accept: "application/json" },
+  });
+  if (!response.ok) {
+    error(`Azure project check failed (${response.status}).`);
+    process.exit(1);
+  }
+  ok(`Azure project OK: ${azureProject}`);
+  const statusMap = repoConfig.status_map || repoConfig.statusMap || {};
+  if (!statusMap || Object.keys(statusMap).length === 0) {
+    warn("status_map is empty — Azure System.State updates will use Hyperion status names as-is.");
+  } else {
+    ok("status_map present for Azure state mapping.");
+  }
+  ok("Doctor finished (Azure remote checks passed).");
   process.exit(0);
+}
+
+if (backend === "gitlab") {
+  const gitlabUrl = String(process.env.GITLAB_URL || repoConfig.url || "https://gitlab.com").replace(/\/+$/, "");
+  const gitlabProjectId = process.env.GITLAB_PROJECT_ID || repoConfig.project_id || null;
+  const gitlabToken = process.env.GITLAB_TOKEN || null;
+  if (!gitlabProjectId || !gitlabToken) {
+    warn("GitLab backend detected. Missing one or more required env vars:");
+    warn("GITLAB_PROJECT_ID, GITLAB_TOKEN (optional GITLAB_URL)");
+    process.exit(1);
+  }
+  const response = await fetch(`${gitlabUrl}/api/v4/projects/${encodeURIComponent(gitlabProjectId)}`, {
+    headers: { "PRIVATE-TOKEN": gitlabToken, Accept: "application/json" },
+  });
+  if (!response.ok) {
+    error(`GitLab project check failed (${response.status}).`);
+    process.exit(1);
+  }
+  ok(`GitLab project OK: ${gitlabProjectId}`);
+  const statusMap = repoConfig.status_map || repoConfig.statusMap || {};
+  if (!statusMap || Object.keys(statusMap).length === 0) {
+    warn("status_map is empty — GitLab status will map Done→close and others→reopen + status: label.");
+  } else {
+    ok("status_map present for GitLab status mapping.");
+  }
+  ok("Doctor finished (GitLab remote checks passed).");
+  process.exit(0);
+}
+
+if (backend === "linear") {
+  const linearTeamId = process.env.LINEAR_TEAM_ID || repoConfig.team || null;
+  const linearApiToken = process.env.LINEAR_API_TOKEN || null;
+  if (!linearTeamId || !linearApiToken) {
+    warn("Linear backend detected. Missing LINEAR_TEAM_ID and/or LINEAR_API_TOKEN.");
+    process.exit(1);
+  }
+  const response = await fetch("https://api.linear.app/graphql", {
+    method: "POST",
+    headers: {
+      Authorization: linearApiToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `query($id: String!) { team(id: $id) { id name } }`,
+      variables: { id: linearTeamId },
+    }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || payload.errors || !payload?.data?.team) {
+    error(`Linear team check failed: ${JSON.stringify(payload.errors || payload)}`);
+    process.exit(1);
+  }
+  ok(`Linear team OK: ${payload.data.team.name || linearTeamId}`);
+  ok("Doctor finished (Linear remote checks passed).");
+  process.exit(0);
+}
+
+if (backend !== "github") {
+  warn(`Unknown backend="${backend}". Supported: github, jira, azure-devops, linear, gitlab.`);
+  process.exit(1);
 }
 
 if (!projectNumber || projectNumber <= 0) {

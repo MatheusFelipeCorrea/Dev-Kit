@@ -1,18 +1,44 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "darkMode": true,
+    "background": "#0B1220",
+    "primaryColor": "#1E3A5F",
+    "primaryTextColor": "#F8FAFC",
+    "primaryBorderColor": "#2563EB",
+    "secondaryColor": "#111827",
+    "secondaryTextColor": "#F8FAFC",
+    "secondaryBorderColor": "#F5D76E",
+    "tertiaryColor": "#0B1220",
+    "lineColor": "#94A3B8",
+    "textColor": "#F8FAFC",
+    "mainBkg": "#1E3A5F",
+    "nodeBorder": "#2563EB",
+    "clusterBkg": "#111827",
+    "clusterBorder": "#F5D76E",
+    "titleColor": "#F5D76E",
+    "edgeLabelBackground": "#0B1220",
+    "fontFamily": "Segoe UI, Helvetica, Arial, sans-serif"
+  }
+}}%%
 flowchart TB
-  subgraph config ["Config"]
+  subgraph config ["⚙️ Config"]
     PY["project.yml"]
     MEM["memory/"]
     MAP["projects-map.json"]
   end
-  subgraph work ["Trabalho"]
+  subgraph work ["🧩 Trabalho"]
     CARDS["cards/"]
     SKILLS["skills/"]
     AGENTS["agents/"]
   end
-  subgraph auto ["Automacao"]
+  subgraph auto ["⚡ Automacao"]
     DF["hyperion:*"]
     CS["cards-sync"]
     WF["workflows/"]
   end
   config --> work
   work --> auto
+
+  style PY fill:#1D4ED8,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC
+  style DF fill:#1E3A5F,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC

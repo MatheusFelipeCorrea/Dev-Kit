@@ -10,7 +10,7 @@ Guia **curto** para GitHub Projects. 🟢 Primeira vez? Comece em [GETTING-START
 
 | # | Passo |
 |---|-------|
-| 1️⃣ | Copie `.github/`, `scripts/`, `package.json` para a raiz do repo |
+| 1️⃣ | Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) e copie o kit **seletivo** (ver tabela abaixo) — nunca o `project.yml` nem os `workflows/` do kit |
 | 2️⃣ | No chat: **`/setup`** (novo) ou **`/migrate`** (já tem código) |
 | 3️⃣ | **`/doctor`** — veja o que falta |
 | 4️⃣ | `gh auth login` → **`/sync`** (se usar Projects) |
@@ -32,7 +32,7 @@ Guia **curto** para GitHub Projects. 🟢 Primeira vez? Comece em [GETTING-START
 
 | Item | Obrigatório? |
 |------|--------------|
-| Node 20+ | ✅ Sim |
+| Node 20+ **ou** Docker | ✅ Sim — [node-and-docker.md](../meta/node-and-docker.md) (`./bin/hyperion`) |
 | Repo GitHub | ✅ Sim |
 | `gh auth login` | ✅ Para sync local — [tutorial](../integration/github-cli-setup.md) |
 | Project existente | ❌ Não — sync cria se `autoCreateProject: true` |
@@ -41,13 +41,21 @@ Guia **curto** para GitHub Projects. 🟢 Primeira vez? Comece em [GETTING-START
 
 ## 📦 Copiar o kit
 
-| Pasta / arquivo | |
-|-----------------|---|
-| `.github/` | ✅ |
-| `scripts/` | ✅ |
-| `package.json` | Recomendado |
-| `.cursor/rules/` | Se usar Cursor |
-| `CLAUDE.md` | Se usar Claude Code |
+**Fonte:** [github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
+
+```bash
+git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
+```
+
+| Copiar | Não / cuidado |
+|--------|----------------|
+| `skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/`, `cards/` (limpo), `project.example.yml`, … sob `.github/` | **`project.yml`** do kit → `cp project.example.yml project.yml` |
+| `scripts/` | **`workflows/`** do kit → **`/pipeline`** no seu repo |
+| Scripts `hyperion:*` / `cards:*` (**merge** no seu `package.json`) | Substituir o `package.json` do produto |
+| `bin/` + `Dockerfile` | Se precisar Docker sem Node |
+| `.cursor/rules/` / `CLAUDE.md` | Conforme a IDE |
+
+Detalhe: [GETTING-STARTED.md](../../../GETTING-STARTED.md) · hub: [README.md](../../../README.md)
 
 ---
 

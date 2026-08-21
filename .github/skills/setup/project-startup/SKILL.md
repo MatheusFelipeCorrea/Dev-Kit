@@ -24,11 +24,11 @@ One conversation to bootstrap the kit. **Prefer running terminal commands yourse
 ## Prerequisites (check first)
 
 1. Hyperion present (`.github/skills/`, `.github/cards/`)
-2. Node.js 20+ (`node -v`)
+2. Node.js 20+ (`node -v`) **or** Docker (`./bin/hyperion` — see `.github/docs/meta/node-and-docker.md`)
 3. For GitHub sync: `gh auth login` — if missing, guide user through
    `.github/docs/integration/github-cli-setup.md` and continue other steps
 
-Run `npm run hyperion:doctor` (or read checks manually) and report blockers vs warnings.
+Run `npm run hyperion:doctor` (or `./bin/hyperion doctor`) and report blockers vs warnings.
 
 ## Flow (in order — pause only on blockers)
 
@@ -39,6 +39,7 @@ If `.github/project.yml` is missing or user asked to refresh:
 1. Read and follow `.github/skills/setup/project-discovery/SKILL.md` in **Configure** mode
 2. Write validated `project.yml` (show diff if overwriting)
 3. Confirm `management.backend` (default `github` when `.github/` present)
+4. Run `npm run hyperion:project-verify` — fix until exit 0 before continuing
 
 ### Step 2 — Memory (lightweight)
 

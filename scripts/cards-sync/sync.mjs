@@ -2096,8 +2096,7 @@ async function runForwardSyncJira(repoConfig, management) {
 // ---------------------------------------------------------------------------
 
 function buildRemoteDescriptionFromCard(card) {
-  // Reuse the same metadata block for idempotent search across backends.
-  // Only Jira reverse sync is implemented; others are currently "forward best-effort".
+  // Reuse the same metadata block for idempotent search across backends (Jira/Azure/GitLab reverse).
   return buildJiraDescription(card);
 }
 
@@ -2118,6 +2117,90 @@ function buildAzureWiqlForCardId(cardId) {
   return `SELECT [System.Id] FROM WorkItems WHERE [System.Description] CONTAINS 'CARD_ID: ${cardId}' ORDER BY [System.Changed Date] DESC`;
 }
 
+function buildAzureWiqlForAllCardIds() {
+  return `SELECT [System.Id] FROM WorkItems WHERE [System.Description] CONTAINS 'CARD_ID:' ORDER BY [System.Changed Date] DESC`;
+}
+
+/** Map Hyperion card.status → remote state label via status_map (or identity). */
+function resolveMappedStatus(statusMap, hyperionStatus) {
+  if (!hyperionStatus) return null;
+  const map = statusMap && typeof statusMap === "object" ? statusMap : {};
+  return map[hyperionStatus] || hyperionStatus;
+}
+
+/**
+ * GitLab issues only have open/closed. Map Done-like statuses to close;
+ * otherwise reopen + optional status label.
+ */
+function resolveGitLabStatusAction(statusMap, hyperionStatus) {
+  const mapped = resolveMappedStatus(statusMap, hyperionStatus);
+  if (!mapped) return null;
+  const n = normalizeText(mapped);
+  const closeNames = new Set([
+    "closed",
+    "close",
+    "done",
+    "resolved",
+    "completo",
+    "concluido",
+    "concluído",
+    "fechado",
+  ]);
+  if (closeNames.has(n)) {
+    return { state_event: "close", label: mapped, mapped };
+  }
+  return { state_event: "reopen", label: mapped, mapped };
+}
+
+/** Build card markdown from SYNC_METADATA description (shared by Jira/Azure/GitLab reverse). */
+function remoteIssueToCardMarkdown({ title, description, labels, statusOverride }) {
+  const parsed = parseSyncMetadataFromDescription(description);
+  if (!parsed) return null;
+
+  const meta = parsed.meta || {};
+  const { type, title: parsedTitle } = parseIssueSummaryTypeTitle(title);
+  const cardId = meta.CARD_ID || null;
+  const sourceFile = meta.SOURCE_FILE || null;
+  if (!cardId || !sourceFile) return null;
+
+  const categoriesFromMeta = meta.CATEGORIES
+    ? meta.CATEGORIES.split(",").map((x) => x.trim()).filter(Boolean)
+    : null;
+  const categories = Array.isArray(labels) && labels.length ? labels : categoriesFromMeta || [];
+  const typeValue = meta.TYPE || type;
+  const statusValue =
+    statusOverride !== undefined && statusOverride !== null && String(statusOverride).trim() !== ""
+      ? statusOverride
+      : meta.STATUS;
+
+  const yaml = [];
+  yaml.push("---");
+  yaml.push(`card_id: ${yamlQuote(cardId)}`);
+  yaml.push(`title: ${yamlQuote(parsedTitle)}`);
+  yaml.push(`status: ${yamlNullIfEmpty(statusValue)}`);
+  yaml.push(`type: ${yamlQuote(typeValue)}`);
+  yaml.push(`priority: ${yamlNullIfEmpty(meta.PRIORITY)}`);
+  yaml.push(`sprint: ${yamlNullIfEmpty(meta.SPRINT)}`);
+  yaml.push(`story_points: ${yamlNullIfEmptyNumber(meta.STORY_POINTS)}`);
+  yaml.push(`reporter: ${yamlNullIfEmpty(meta.REPORTER)}`);
+  yaml.push(`parent: ${yamlNullIfEmpty(meta.PARENT_CARD_ID)}`);
+  yaml.push(`due_date: ${yamlNullIfEmpty(meta.DUE_DATE)}`);
+
+  if (categories.length) {
+    yaml.push("categories:");
+    for (const c of categories) yaml.push(`  - ${yamlQuote(c)}`);
+  } else {
+    yaml.push("categories: []");
+  }
+
+  yaml.push("---");
+  yaml.push("");
+  yaml.push(parsed.bodyContent.trimEnd());
+  yaml.push("");
+
+  return { sourceFile, markdown: yaml.join("\n") };
+}
+
 async function runForwardSyncAzure(repoConfig, management) {
   if (!management.azureOrgUrl || !management.azureProject || !management.azurePat) {
     throw new Error("Azure DevOps backend requires AZDO_ORG_URL, AZDO_PROJECT, and AZDO_PAT (env or config).");
@@ -2126,21 +2209,22 @@ async function runForwardSyncAzure(repoConfig, management) {
   const baseUrl = String(management.azureOrgUrl).replace(/\/+$/, "");
   const project = String(management.azureProject);
   const workItemType = String(management.azureWorkItemType || "Task");
+  const statusMap = management.statusMap || {};
 
   const auth = basicAuthHeaderFromPat(management.azurePat);
 
-  async function azureRequest(endpoint, method = "GET", body = undefined) {
+  async function azureRequest(endpoint, method = "GET", body = undefined, contentType = "application/json") {
     const url = `${baseUrl}/${encodeURIComponent(project)}${endpoint}`;
     const headers = {
       Authorization: `Basic ${auth}`,
-      "Content-Type": "application/json",
+      "Content-Type": contentType,
       Accept: "application/json",
     };
 
     const response = await fetch(url, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? (typeof body === "string" ? body : JSON.stringify(body)) : undefined,
     });
     const text = await response.text();
     let payload = null;
@@ -2157,11 +2241,7 @@ async function runForwardSyncAzure(repoConfig, management) {
 
   async function azureFindWorkItemIdByCardId(cardId) {
     const wiql = buildAzureWiqlForCardId(cardId);
-    const data = await azureRequest(
-      `/_apis/wit/wiql?api-version=7.0`,
-      "POST",
-      { query: wiql }
-    );
+    const data = await azureRequest(`/_apis/wit/wiql?api-version=7.0`, "POST", { query: wiql });
     const id = data?.workItems?.[0]?.id;
     return id || null;
   }
@@ -2177,7 +2257,8 @@ async function runForwardSyncAzure(repoConfig, management) {
     const data = await azureRequest(
       `/_apis/wit/workitems/${encodeURIComponent(workItemType)}?api-version=7.0`,
       "POST",
-      ops
+      ops,
+      "application/json-patch+json"
     );
     return data?.id || null;
   }
@@ -2190,7 +2271,29 @@ async function runForwardSyncAzure(repoConfig, management) {
       { op: "add", path: "/fields/System.Description", value: description },
     ];
 
-    await azureRequest(`/_apis/wit/workitems/${id}?api-version=7.0`, "PATCH", ops);
+    await azureRequest(
+      `/_apis/wit/workitems/${id}?api-version=7.0`,
+      "PATCH",
+      ops,
+      "application/json-patch+json"
+    );
+  }
+
+  async function azureApplyState(workItemId, hyperionStatus) {
+    const state = resolveMappedStatus(statusMap, hyperionStatus);
+    if (!state) return { applied: false, reason: "no_status" };
+    const ops = [{ op: "add", path: "/fields/System.State", value: state }];
+    try {
+      await azureRequest(
+        `/_apis/wit/workitems/${workItemId}?api-version=7.0`,
+        "PATCH",
+        ops,
+        "application/json-patch+json"
+      );
+      return { applied: true, azureState: state };
+    } catch (error) {
+      return { applied: false, reason: error.message, azureState: state };
+    }
   }
 
   const allMd = await listMarkdownFiles(cardsRoot);
@@ -2222,15 +2325,31 @@ async function runForwardSyncAzure(repoConfig, management) {
   for (const card of syncableCards) {
     const existingId = await azureFindWorkItemIdByCardId(card.cardId);
     if (dryRun) {
-      actions.push({ action: existingId ? "UPDATE" : "CREATE", cardId: card.cardId, workItemId: existingId || null });
+      actions.push({
+        action: existingId ? "UPDATE" : "CREATE",
+        cardId: card.cardId,
+        workItemId: existingId || null,
+        status: card.status || null,
+      });
       continue;
     }
+    let workItemId = existingId;
     if (existingId) {
       await azureUpdateWorkItem(existingId, card);
       actions.push({ action: "UPDATED", cardId: card.cardId, workItemId: existingId });
     } else {
-      const createdId = await azureCreateWorkItem(card);
-      actions.push({ action: "CREATED", cardId: card.cardId, workItemId: createdId });
+      workItemId = await azureCreateWorkItem(card);
+      actions.push({ action: "CREATED", cardId: card.cardId, workItemId });
+    }
+    if (workItemId && card.status) {
+      const st = await azureApplyState(workItemId, card.status);
+      actions.push({
+        action: st.applied ? "STATUS_SET" : "STATUS_SKIPPED",
+        cardId: card.cardId,
+        workItemId,
+        status: card.status,
+        ...st,
+      });
     }
   }
 
@@ -2247,6 +2366,7 @@ async function runForwardSyncGitLab(repoConfig, management) {
   const projectId = management.gitlabProjectId;
   const token = management.gitlabToken;
   const gitlabBase = management.gitlabUrl || "https://gitlab.com";
+  const statusMap = management.statusMap || {};
 
   const headers = {
     "PRIVATE-TOKEN": token,
@@ -2273,21 +2393,23 @@ async function runForwardSyncGitLab(repoConfig, management) {
   async function gitlabFindIssueByCardId(card) {
     const term = gitlabCardSearchTerm(card);
     const data = await gitlabRequest(
-      `/api/v4/projects/${encodeURIComponent(projectId)}/issues?search=${encodeURIComponent(term)}&state=opened&per_page=1`,
+      `/api/v4/projects/${encodeURIComponent(projectId)}/issues?search=${encodeURIComponent(term)}&state=all&per_page=20`,
       "GET"
     );
-    return data?.[0] || null;
+    const list = Array.isArray(data) ? data : [];
+    const exact = list.find((issue) => String(issue?.description || "").includes(`CARD_ID: ${card.cardId}`));
+    return exact || list[0] || null;
   }
 
   async function gitlabCreateIssue(card) {
     const title = buildIssueTitle(card);
     const description = buildRemoteDescriptionFromCard(card);
     const labels = card.categories || [];
-    const data = await gitlabRequest(
-      `/api/v4/projects/${encodeURIComponent(projectId)}/issues`,
-      "POST",
-      { title, description, labels }
-    );
+    const data = await gitlabRequest(`/api/v4/projects/${encodeURIComponent(projectId)}/issues`, "POST", {
+      title,
+      description,
+      labels,
+    });
     return data;
   }
 
@@ -2295,11 +2417,30 @@ async function runForwardSyncGitLab(repoConfig, management) {
     const title = buildIssueTitle(card);
     const description = buildRemoteDescriptionFromCard(card);
     const labels = card.categories || [];
-    await gitlabRequest(
-      `/api/v4/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(iid)}`,
-      "PUT",
-      { title, description, labels }
-    );
+    await gitlabRequest(`/api/v4/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(iid)}`, "PUT", {
+      title,
+      description,
+      labels,
+    });
+  }
+
+  async function gitlabApplyStatus(iid, card) {
+    const action = resolveGitLabStatusAction(statusMap, card.status);
+    if (!action) return { applied: false, reason: "no_status" };
+    const existingLabels = Array.isArray(card.categories) ? [...card.categories] : [];
+    const statusLabel = `status:${action.label}`;
+    if (!existingLabels.some((l) => normalizeText(l) === normalizeText(statusLabel))) {
+      existingLabels.push(statusLabel);
+    }
+    try {
+      await gitlabRequest(`/api/v4/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(iid)}`, "PUT", {
+        state_event: action.state_event,
+        labels: existingLabels,
+      });
+      return { applied: true, gitlabStateEvent: action.state_event, mapped: action.mapped };
+    } catch (error) {
+      return { applied: false, reason: error.message, mapped: action.mapped };
+    }
   }
 
   const allMd = await listMarkdownFiles(cardsRoot);
@@ -2329,15 +2470,32 @@ async function runForwardSyncGitLab(repoConfig, management) {
   for (const card of syncableCards) {
     const existing = await gitlabFindIssueByCardId(card);
     if (dryRun) {
-      actions.push({ action: existing ? "UPDATE" : "CREATE", cardId: card.cardId, gitlabIssueIid: existing?.iid || null });
+      actions.push({
+        action: existing ? "UPDATE" : "CREATE",
+        cardId: card.cardId,
+        gitlabIssueIid: existing?.iid || null,
+        status: card.status || null,
+      });
       continue;
     }
+    let iid = existing?.iid;
     if (existing) {
       await gitlabUpdateIssue(existing.iid, card);
       actions.push({ action: "UPDATED", cardId: card.cardId, gitlabIssueIid: existing.iid });
     } else {
       const created = await gitlabCreateIssue(card);
-      actions.push({ action: "CREATED", cardId: card.cardId, gitlabIssueIid: created?.iid || null });
+      iid = created?.iid;
+      actions.push({ action: "CREATED", cardId: card.cardId, gitlabIssueIid: iid || null });
+    }
+    if (iid && card.status) {
+      const st = await gitlabApplyStatus(iid, card);
+      actions.push({
+        action: st.applied ? "STATUS_SET" : "STATUS_SKIPPED",
+        cardId: card.cardId,
+        gitlabIssueIid: iid,
+        status: card.status,
+        ...st,
+      });
     }
   }
 
@@ -2581,51 +2739,11 @@ function yamlNullIfEmptyNumber(value) {
 }
 
 function jiraIssueToCardMarkdown(issue) {
-  const desc = issue?.fields?.description || "";
-  const parsed = parseSyncMetadataFromDescription(desc);
-  if (!parsed) return null;
-
-  const meta = parsed.meta || {};
-  const { type, title } = parseIssueSummaryTypeTitle(issue?.fields?.summary);
-
-  const cardId = meta.CARD_ID || null;
-  const sourceFile = meta.SOURCE_FILE || null;
-  if (!cardId || !sourceFile) return null;
-
-  const categoriesFromMeta = meta.CATEGORIES
-    ? meta.CATEGORIES.split(",").map((x) => x.trim()).filter(Boolean)
-    : null;
-  const categories = Array.isArray(issue?.fields?.labels) ? issue.fields.labels : categoriesFromMeta || [];
-
-  const typeValue = meta.TYPE || type;
-  const storyPointsYaml = yamlNullIfEmptyNumber(meta.STORY_POINTS);
-
-  const yaml = [];
-  yaml.push("---");
-  yaml.push(`card_id: ${yamlQuote(cardId)}`);
-  yaml.push(`title: ${yamlQuote(title)}`);
-  yaml.push(`status: ${yamlNullIfEmpty(meta.STATUS)}`);
-  yaml.push(`type: ${yamlQuote(typeValue)}`);
-  yaml.push(`priority: ${yamlNullIfEmpty(meta.PRIORITY)}`);
-  yaml.push(`sprint: ${yamlNullIfEmpty(meta.SPRINT)}`);
-  yaml.push(`story_points: ${storyPointsYaml}`);
-  yaml.push(`reporter: ${yamlNullIfEmpty(meta.REPORTER)}`);
-  yaml.push(`parent: ${yamlNullIfEmpty(meta.PARENT_CARD_ID)}`);
-  yaml.push(`due_date: ${yamlNullIfEmpty(meta.DUE_DATE)}`);
-
-  if (categories.length) {
-    yaml.push("categories:");
-    for (const c of categories) yaml.push(`  - ${yamlQuote(c)}`);
-  } else {
-    yaml.push("categories: []");
-  }
-
-  yaml.push("---");
-  yaml.push("");
-  yaml.push(parsed.bodyContent.trimEnd());
-  yaml.push("");
-
-  return { sourceFile, markdown: yaml.join("\n") };
+  return remoteIssueToCardMarkdown({
+    title: issue?.fields?.summary,
+    description: issue?.fields?.description || "",
+    labels: issue?.fields?.labels,
+  });
 }
 
 async function runReverseSyncJira(management) {
@@ -2687,6 +2805,166 @@ async function runReverseSyncJira(management) {
   if (!dryRun) log(`Jira reverse sync wrote: ${written} file(s)`);
 }
 
+async function runReverseSyncAzure(management) {
+  if (!management.azureOrgUrl || !management.azureProject || !management.azurePat) {
+    throw new Error("Azure DevOps backend requires AZDO_ORG_URL, AZDO_PROJECT, and AZDO_PAT (env or config).");
+  }
+
+  log(`Backend: azure-devops`);
+  log(`Dry-run: ${dryRun ? "yes" : "no"}`);
+  log("Direction: reverse (Azure -> Markdown)");
+
+  const baseUrl = String(management.azureOrgUrl).replace(/\/+$/, "");
+  const project = String(management.azureProject);
+  const auth = basicAuthHeaderFromPat(management.azurePat);
+
+  async function azureRequest(endpoint, method = "GET", body = undefined) {
+    const url = `${baseUrl}/${encodeURIComponent(project)}${endpoint}`;
+    const response = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const text = await response.text();
+    let payload = null;
+    try {
+      payload = text ? JSON.parse(text) : {};
+    } catch {
+      payload = { raw: text };
+    }
+    if (!response.ok) {
+      throw new Error(`Azure request failed (${response.status} ${response.statusText}): ${JSON.stringify(payload)}`);
+    }
+    return payload;
+  }
+
+  const wiql = await azureRequest(`/_apis/wit/wiql?api-version=7.0&$top=100`, "POST", {
+    query: buildAzureWiqlForAllCardIds(),
+  });
+  const ids = (wiql?.workItems || []).map((w) => w.id).filter(Boolean);
+  if (!ids.length) {
+    log("No Azure work items with CARD_ID found.");
+    return;
+  }
+
+  const batch = await azureRequest(`/_apis/wit/workitemsbatch?api-version=7.0`, "POST", {
+    ids,
+    fields: ["System.Id", "System.Title", "System.Description", "System.State", "System.Tags"],
+  });
+  const items = batch?.value || [];
+  log(`Azure work items found: ${items.length}`);
+
+  let written = 0;
+  for (const item of items) {
+    const fields = item?.fields || {};
+    const tags = String(fields["System.Tags"] || "")
+      .split(";")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const converted = remoteIssueToCardMarkdown({
+      title: fields["System.Title"],
+      description: fields["System.Description"] || "",
+      labels: tags,
+      statusOverride: fields["System.State"] || null,
+    });
+    if (!converted) continue;
+    const { sourceFile, markdown } = converted;
+    const targetPath = path.join(workspaceRoot, sourceFile);
+    if (dryRun) {
+      log(`Would write: ${sourceFile} (Azure work item ${item.id})`);
+      continue;
+    }
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    await fs.writeFile(targetPath, markdown, "utf8");
+    written++;
+  }
+
+  if (!dryRun) log(`Azure reverse sync wrote: ${written} file(s)`);
+}
+
+async function runReverseSyncGitLab(management) {
+  if (!management.gitlabProjectId || !management.gitlabToken) {
+    throw new Error("GitLab backend requires GITLAB_PROJECT_ID and GITLAB_TOKEN (env or config).");
+  }
+
+  log(`Backend: gitlab`);
+  log(`Dry-run: ${dryRun ? "yes" : "no"}`);
+  log("Direction: reverse (GitLab -> Markdown)");
+
+  const projectId = management.gitlabProjectId;
+  const gitlabBase = String(management.gitlabUrl || "https://gitlab.com").replace(/\/+$/, "");
+  const headers = {
+    "PRIVATE-TOKEN": management.gitlabToken,
+    Accept: "application/json",
+  };
+
+  async function gitlabRequest(endpoint) {
+    const response = await fetch(`${gitlabBase}${endpoint}`, { headers });
+    const text = await response.text();
+    let payload = null;
+    try {
+      payload = text ? JSON.parse(text) : {};
+    } catch {
+      payload = { raw: text };
+    }
+    if (!response.ok) {
+      throw new Error(`GitLab request failed (${response.status}): ${JSON.stringify(payload)}`);
+    }
+    return payload;
+  }
+
+  const issues = [];
+  let page = 1;
+  while (page <= 10) {
+    const batch = await gitlabRequest(
+      `/api/v4/projects/${encodeURIComponent(projectId)}/issues?search=${encodeURIComponent("CARD_ID:")}&state=all&per_page=50&page=${page}`
+    );
+    if (!Array.isArray(batch) || !batch.length) break;
+    issues.push(...batch.filter((i) => String(i?.description || "").includes("CARD_ID:")));
+    if (batch.length < 50) break;
+    page += 1;
+  }
+
+  if (!issues.length) {
+    log("No GitLab issues with CARD_ID found.");
+    return;
+  }
+
+  log(`GitLab issues found: ${issues.length}`);
+  let written = 0;
+  for (const issue of issues) {
+    const labels = Array.isArray(issue.labels) ? issue.labels : [];
+    const statusLabel = labels.find((l) => String(l).toLowerCase().startsWith("status:"));
+    const statusOverride = statusLabel
+      ? String(statusLabel).slice("status:".length)
+      : issue.state === "closed"
+        ? "Done"
+        : null;
+    const converted = remoteIssueToCardMarkdown({
+      title: issue.title,
+      description: issue.description || "",
+      labels: labels.filter((l) => !String(l).toLowerCase().startsWith("status:")),
+      statusOverride,
+    });
+    if (!converted) continue;
+    const { sourceFile, markdown } = converted;
+    const targetPath = path.join(workspaceRoot, sourceFile);
+    if (dryRun) {
+      log(`Would write: ${sourceFile} (GitLab issue !${issue.iid})`);
+      continue;
+    }
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    await fs.writeFile(targetPath, markdown, "utf8");
+    written++;
+  }
+
+  if (!dryRun) log(`GitLab reverse sync wrote: ${written} file(s)`);
+}
+
 async function runReverseSync() {
   const config = await readConfig();
   const repoConfig = resolveRepoConfig(config, repositorySlug);
@@ -2695,6 +2973,16 @@ async function runReverseSync() {
 
   if (backend === "jira") {
     await runReverseSyncJira(management);
+    return;
+  }
+
+  if (backend === "azure-devops" || backend === "azure") {
+    await runReverseSyncAzure(management);
+    return;
+  }
+
+  if (backend === "gitlab") {
+    await runReverseSyncGitLab(management);
     return;
   }
 
@@ -2805,6 +3093,11 @@ export {
   parseSyncMetadataFromDescription,
   parseIssueSummaryTypeTitle,
   jiraIssueToCardMarkdown,
+  remoteIssueToCardMarkdown,
+  resolveMappedStatus,
+  resolveGitLabStatusAction,
+  buildAzureWiqlForCardId,
+  buildAzureWiqlForAllCardIds,
   jiraRequest,
   graphql,
   DEFAULT_STATUS_OPTIONS,

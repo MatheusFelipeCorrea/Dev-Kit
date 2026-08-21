@@ -122,7 +122,7 @@ If the Project is on the **user profile** (not the repository), create a **fine-
 
 ## 4. Test with Hyperion
 
-Prerequisites: kit copied, `git remote` pointing to GitHub, Node 20+.
+Prerequisites: kit copied, `git remote` pointing to GitHub, Node 20+ **or** Docker (`./bin/hyperion` — [node-and-docker-en.md](../meta/node-and-docker-en.md)).
 
 ```bash
 # 1. Full bootstrap (discover repo, token, project → validate → sync)

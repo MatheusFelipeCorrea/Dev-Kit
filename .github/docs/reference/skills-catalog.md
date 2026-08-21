@@ -1,10 +1,23 @@
 # 🧩 Hyperion skills catalog
 
-Human index: **when to use**, **command**, **output**. 🟢 Start with the 6 commands in [GETTING-STARTED.md](../../../GETTING-STARTED.md).
+<p align="center">
+  <img src="https://img.shields.io/badge/skills-30-F5D76E?style=for-the-badge&labelColor=0B1220" alt="30 skills">
+  <img src="https://img.shields.io/badge/agents-8-F5D76E?style=for-the-badge&labelColor=0B1220" alt="8 agents">
+</p>
 
-**Português:** [catalogo-skills.md](./catalogo-skills.md) · **Outputs:** [skills-output-map.md](./skills-output-map.md) · **Commands:** [quick-commands-en.md](./quick-commands-en.md)
+Human index: **when**, **command**, **output**.
 
-## 🚀 Bootstrap
+| Study path | Link |
+|------------|------|
+| 🟢 Six commands | [GETTING-STARTED.md](../../../GETTING-STARTED.md) |
+| 🗺️ Hub overview | [README.md](../../../README.md) |
+| 💬 Chat phrases | [quick-commands-en.md](./quick-commands-en.md) |
+
+**Português:** [catalogo-skills.md](./catalogo-skills.md) · Areas: 🧭 Bootstrap · 📋 Planning · ⚡ Delivery · 🔍 Quality · 📚 Docs
+
+---
+
+## 🧭 Bootstrap
 
 | Skill | Command | When | Output | SKILL |
 |-------|---------|--------|--------|-------|

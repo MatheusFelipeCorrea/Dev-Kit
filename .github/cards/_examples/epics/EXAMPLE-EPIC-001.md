@@ -15,6 +15,8 @@ categories:
   - Database
 ---
 
+> **Kit sample** — never synced to your board. Copy the pattern into `epics/` / `features/` / `stories/` with your own IDs.
+
 # [EPIC] User Authentication
 
 > **Context:** Complete authentication system with login, registration, password recovery, and session management.

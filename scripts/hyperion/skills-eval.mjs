@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 /**
- * Structural eval for critical skills — golden string checks (not LLM).
+ * Structural eval for critical skills — golden string / regex checks (not LLM).
  * Run: npm run hyperion:skills-eval
+ *
+ * Case shape:
+ *   { "skill": "folder-name", "mustContain": ["..."], "mustMatch": ["regex"] }
+ *   { "file": "relative/path.md", "mustContain": ["..."], "mustMatch": ["regex"] }
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -27,22 +31,48 @@ function walkSkills(dir, map = new Map()) {
   return map;
 }
 
+function resolveCasePath(c, skills) {
+  if (c.file) {
+    const abs = join(root, c.file);
+    return existsSync(abs) ? abs : null;
+  }
+  return skills.get(c.skill) || null;
+}
+
+function caseLabel(c) {
+  return c.file || c.skill || "(unknown)";
+}
+
 const casesPath = join(evalRoot, "cases.json");
 const cases = JSON.parse(readFileSync(casesPath, "utf8"));
 const skills = walkSkills(join(root, ".github/skills"));
 
 let failed = 0;
 for (const c of cases) {
-  const path = skills.get(c.skill);
+  const path = resolveCasePath(c, skills);
   if (!path) {
-    console.error(`FAIL ${c.skill}: skill folder not found`);
+    console.error(`FAIL ${caseLabel(c)}: target not found`);
     failed++;
     continue;
   }
   const text = readFileSync(path, "utf8");
-  for (const needle of c.mustContain) {
+  for (const needle of c.mustContain || []) {
     if (!text.includes(needle)) {
-      console.error(`FAIL ${c.skill}: missing "${needle}"`);
+      console.error(`FAIL ${caseLabel(c)}: missing "${needle}"`);
+      failed++;
+    }
+  }
+  for (const pattern of c.mustMatch || []) {
+    let re;
+    try {
+      re = new RegExp(pattern, "m");
+    } catch (err) {
+      console.error(`FAIL ${caseLabel(c)}: invalid mustMatch /${pattern}/ (${err.message})`);
+      failed++;
+      continue;
+    }
+    if (!re.test(text)) {
+      console.error(`FAIL ${caseLabel(c)}: mustMatch /${pattern}/`);
       failed++;
     }
   }
@@ -53,4 +83,4 @@ if (failed) {
   process.exit(1);
 }
 
-console.log(`skills:eval OK (${cases.length} skill cases)`);
+console.log(`skills:eval OK (${cases.length} cases)`);

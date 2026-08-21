@@ -20,6 +20,31 @@ npm continua existindo para CI, power users e quando o agente não tem terminal.
 
 ---
 
+## 📦 1a. “Copiei o `.github/` inteiro e o CI do produto quebrou”
+
+O repo Hyperion carrega **`project.yml` com `kit_validation: true`** e workflows de **mantenedor do kit**. No seu produto:
+
+1. Use `project.example.yml` → `project.yml` (ou `/setup` / `/migrate`)
+2. **Não** copie `.github/workflows/` do kit — rode **`/pipeline`**
+3. **Merge** scripts `hyperion:*` no seu `package.json` — não substitua o arquivo
+
+Tabela canônica: [README.md](../../../README.md).
+
+---
+
+## 🐳 1b. “Não tenho Node no laptop”
+
+Os scripts (`sync`, `doctor`, `upgrade`, `*-verify`) **continuam obrigatórios** — são o diferencial. Sem Node ≥ 20:
+
+```bash
+./bin/hyperion doctor          # builda imagem hyperion-cli se preciso
+./bin/hyperion --docker sync
+```
+
+Guia: [node-and-docker.md](../meta/node-and-docker.md). Chat/skills funcionam sem Node; ops usam Docker.
+
+---
+
 ## 🖥️ 2. Cursor: regras não carregam
 
 O kit **já inclui** `.cursor/rules/hyperion.mdc` no clone completo.
@@ -137,7 +162,7 @@ GitHub Projects = caminho maduro. Outros backends = forward sync best-effort; re
 
 ## 🟢 11. “Nunca usei agents — por onde começo?”
 
-Você não precisa entender a arquitetura. Copie o kit → abra o chat no repo → **`/setup`** ou **`/migrate`**. Se o modelo não reconhecer a barra, digite *“Configura o Hyperion neste repo”*.
+Você não precisa entender a arquitetura. Clone [Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion) → copie o kit → abra o chat no repo → **`/setup`** ou **`/migrate`**. Se o modelo não reconhecer a barra, digite *“Configura o Hyperion neste repo”*.
 
 Confusões de comando:
 

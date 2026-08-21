@@ -122,7 +122,7 @@ Se o Project estiver no **perfil do usuário** (não no repositório), crie um *
 
 ## 4. Testar com o Hyperion
 
-Pré-requisitos: kit copiado, `git remote` apontando para GitHub, Node 20+.
+Pré-requisitos: kit copiado, `git remote` apontando para GitHub, Node 20+ **ou** Docker (`./bin/hyperion` — [node-and-docker.md](../meta/node-and-docker.md)).
 
 ```bash
 # 1. Bootstrap completo — ou peça /setup ao agente

@@ -1,0 +1,64 @@
+# Hyperion jobs for Azure Pipelines — include from azure-pipelines.yml:
+#
+#   stages:
+#     - stage: Hyperion
+#       jobs:
+#         - template: hyperion-azure-pipelines.yml
+#
+# Or copy jobs below into an existing stage. Does not replace product CI.
+
+parameters:
+  - name: runValidate
+    type: boolean
+    default: true
+  - name: runCards
+    type: boolean
+    default: true
+  - name: runSecurity
+    type: boolean
+    default: false
+
+jobs:
+  - job: HyperionValidate
+    displayName: Hyperion kit validation
+    condition: eq(${{ parameters.runValidate }}, true)
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "22.x"
+      - script: |
+          npm run docs:check
+          npm run skills:validate
+          npm run hyperion:check-rules
+          npm run hyperion:skills-eval
+          npm test
+        displayName: Validate Hyperion kit
+
+  - job: HyperionCards
+    displayName: Hyperion cards dry-run
+    condition: eq(${{ parameters.runCards }}, true)
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "22.x"
+      - script: |
+          node scripts/cards-sync/validate.mjs
+          node scripts/cards-sync/sync.mjs --dry-run
+        displayName: Validate + dry-run cards sync
+
+  - job: HyperionSecurity
+    displayName: Hyperion security scan
+    condition: eq(${{ parameters.runSecurity }}, true)
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "22.x"
+      - script: |
+          if [ -f package.json ]; then npm audit --audit-level=high; fi
+        displayName: npm audit (high+)

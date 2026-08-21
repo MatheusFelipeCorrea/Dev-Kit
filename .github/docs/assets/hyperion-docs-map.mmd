@@ -1,30 +1,67 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "darkMode": true,
+    "background": "#0B1220",
+    "primaryColor": "#1E3A5F",
+    "primaryTextColor": "#F8FAFC",
+    "primaryBorderColor": "#2563EB",
+    "secondaryColor": "#111827",
+    "secondaryTextColor": "#F8FAFC",
+    "secondaryBorderColor": "#F5D76E",
+    "tertiaryColor": "#0B1220",
+    "lineColor": "#94A3B8",
+    "textColor": "#F8FAFC",
+    "mainBkg": "#1E3A5F",
+    "nodeBorder": "#2563EB",
+    "clusterBkg": "#111827",
+    "clusterBorder": "#F5D76E",
+    "titleColor": "#F5D76E",
+    "edgeLabelBackground": "#0B1220",
+    "fontFamily": "Segoe UI, Helvetica, Arial, sans-serif"
+  }
+}}%%
+%% Hyperion documentation map — keep in sync with README.md + docs/README.md
 flowchart TB
+  README["README.md — hub"]
   GS["GETTING-STARTED.md"]
-  README["README.md"]
+  INDEX["docs/README.md — indice"]
   TRILHA["trilha-de-aprendizado.md"]
 
-  subgraph onboarding ["Onboarding"]
+  subgraph dia1 ["🟢 Dia 1"]
     SETUP["setup-github.md"]
     ADAPT["adaptar-ao-repo.md"]
+    PIT["armadilhas-comuns.md"]
   end
 
-  subgraph reference ["Reference"]
+  subgraph ref ["📚 Referencia"]
     CMD["comandos-rapidos.md"]
     CAT["catalogo-skills.md"]
-    SOM["skills-output-map.md"]
+    OUT["onde-ficam-os-outputs.md"]
   end
 
-  subgraph rest ["Depois"]
+  subgraph depois ["🔵 Depois"]
     FLOW["fluxo-completo.md"]
+    DOD["definition-of-done.md"]
+    NODE["node-and-docker.md"]
     GH["github-cli-setup.md"]
+    BE["escolher-backend.md"]
   end
 
   README --> GS
+  README --> INDEX
   GS --> TRILHA
   TRILHA --> SETUP
   TRILHA --> ADAPT
-  TRILHA --> FLOW
-  SETUP --> GH
-  ADAPT --> SOM
+  TRILHA --> PIT
   TRILHA --> CAT
   CAT --> CMD
+  TRILHA --> FLOW
+  SETUP --> GH
+  ADAPT --> OUT
+  FLOW --> DOD
+  FLOW --> NODE
+  SETUP --> BE
+
+  style README fill:#1D4ED8,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC
+  style GS fill:#1E3A5F,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC

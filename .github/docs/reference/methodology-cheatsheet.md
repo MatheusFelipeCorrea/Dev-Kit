@@ -6,7 +6,9 @@
 |---------|------------|-------------|
 | 🤖 **Agent** | Long flow with human gates | `/implement`, `/execute`, `/migrate` |
 | ✨ **Skill** | Short recipe (`SKILL.md`) | `/refine`, `/audit`, `/diagram` |
-| ⌨️ **Script** | Deterministic CLI | CI, sync, doctor |
+| ⌨️ **Script** | Deterministic CLI | CI, sync, doctor, `*-verify` |
+| ✅ **DoD / verify** | Artifact + script | [definition-of-done.md](../meta/definition-of-done.md) |
+| 🐳 **Runtime** | Node or Docker | [node-and-docker-en.md](../meta/node-and-docker-en.md) |
 | 💬 **Command** | Chat shortcut | `/setup` — see [quick-commands-en.md](./quick-commands-en.md) |
 | 🧠 **Memory** | Persistent context | After `/setup` — `.github/memory/` |
 

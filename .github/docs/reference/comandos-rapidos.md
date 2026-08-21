@@ -1,12 +1,19 @@
 ﻿# 💬 Comandos rápidos Hyperion
 
-Referência única: **npm** (terminal) e **chat da IA** (sem terminal).
+<p align="center">
+  <img src="https://img.shields.io/badge/preferência-falar_no_chat-F5D76E?style=for-the-badge&labelColor=0B1220" alt="chat">
+  <img src="https://img.shields.io/badge/npm-opcional-94A3B8?style=for-the-badge&labelColor=0B1220" alt="npm">
+</p>
+
+Referência única: **chat da IA** (dia a dia) e **npm** (CI / terminal).
 
 | Nível | O que ler |
 |-------|-----------|
 | 🟢 | [Kit mínimo](#kit-mínimo-primeira-semana) — 6 comandos |
 | 🟡 | [Fale com o agente](#preferência-fale-com-o-agente) — frases no chat |
 | 🔵 | [npm one-liners](#npm--one-liners) — CI e power users |
+
+Mapa de áreas + skills: [README.md](../../../README.md#mapa-rápido--onde-usar) · [catalogo-skills.md](./catalogo-skills.md)
 
 **English:** [quick-commands-en.md](./quick-commands-en.md)
 
@@ -61,7 +68,7 @@ Slash commands funcionam nativamente no **Claude Code** (`CLAUDE.md`). No **Curs
 
 ## npm — one-liners
 
-Requer Node 20+ na raiz do repo.
+**Node 20+** na raiz **ou** `./bin/hyperion` (Docker) — [node-and-docker.md](../meta/node-and-docker.md).
 
 ```bash
 npm run hyperion:help              # lista tudo
@@ -69,7 +76,19 @@ npm run hyperion:doctor            # saúde kit + cards
 npm run hyperion:setup -- --yes    # bootstrap completo (cards)
 npm run hyperion:sync              # validate + sync
 npm run hyperion:sync -- --dry-run # simula sem escrever
+npm run hyperion:phase-verify -- --plan <path>
+npm run hyperion:project-verify
+npm run hyperion:review-verify -- --review <path>
+npm run hyperion:cli -- doctor     # CLI unificada
+npm run hyperion:upgrade                          # GitHub origin: check + plano
+npm run hyperion:upgrade -- --yes                 # baixa origem + aplica
+npm run hyperion:upgrade -- --check               # exit 1 se atrasado
+npm run hyperion:upgrade -- --from <kit> --yes    # offline / path local
+./bin/hyperion doctor                             # Node nativo ou Docker
+npm run hyperion:docker-build                     # imagem hyperion-cli
 ```
+
+Gates: [definition-of-done.md](../meta/definition-of-done.md). Sem Node: [node-and-docker.md](../meta/node-and-docker.md).
 
 ### Primeira vez (GitHub)
 
@@ -136,10 +155,7 @@ Mapa completo: [diagrams/README.md](../../diagrams/README.md) · [onde-ficam-os-
 | `.github/skills/setup/hyperion-ops/` | Agente roda npm por você |
 | `.github/audits/manifest.yml` | Tipos de auditoria |
 
-**Fluxo mantenedor:** edite `commands.yml` → `npm run hyperion:generate-rules` → commit arquivos gerados.  
-Este doc (`comandos-rapidos.md`) é referência humana — atualize PT/EN se mudar comportamento visível ao usuário.
-
-Política completa: [doc-maintenance-policy.md](../meta/doc-maintenance-policy.md)
+**Só se você contribui no repositório Hyperion:** edite `commands.yml` → `npm run hyperion:generate-rules` → commit. Ver [CONTRIBUTING.md](../../../CONTRIBUTING.md).
 
 Guia de confusões frequentes: [armadilhas-comuns.md](../troubleshooting/armadilhas-comuns.md)
 
