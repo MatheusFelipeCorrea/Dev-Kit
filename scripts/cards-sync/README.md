@@ -72,14 +72,15 @@ When you create a card with `card-refiner` and run sync, the issue body is forma
 
 ### Kit reference vs project cards (never synced by default)
 
-| Path / pattern | Purpose | Forward sync |
-|----------------|---------|--------------|
+| Path / pattern | Purpose | Forward / reverse sync |
+|----------------|---------|------------------------|
 | `CARD.template.md`, `*.template.md` | Blank template to copy | **Never** |
 | `.github/cards/_examples/**` | Sample cards for agents/docs | **Never** |
 | `card_id` `EXAMPLE-*`, `TEMPLATE-*`, `SAMPLE-*` | Misplaced kit samples (safety net) | **Never** |
+| Remote issues with those CARD_IDs (or sample SOURCE_FILE) | Leftover kit samples on the board | **Never** (not mapped; skipped on `--reverse`) |
 | `.github/cards/{epics,features,stories,tasks}/PROJ-*` | Your real work | **Yes** |
 
-Agents read `_examples/` and `CARD.template.md` for guidance. Only cards **you create** under `epics/`, `features/`, `stories/`, `tasks/` go to GitHub.
+Agents read `_examples/` and `CARD.template.md` for guidance. Only cards **you create** under `epics/`, `features/`, `stories/`, `tasks/` go to GitHub — and only those come back on reverse sync. GitHub searches use `is:issue` (pull requests are out of scope).
 
 Maintainers testing the kit itself: `--include-samples` (optional, not for normal adopters).
 
