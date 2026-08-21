@@ -5,6 +5,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1D4ED8?style=for-the-badge&labelColor=0B1220" alt="MIT"></a>
   <a href="https://github.com/MatheusFelipeCorrea/Hyperion"><img src="https://img.shields.io/badge/repo-Hyperion-2563EB?style=for-the-badge&labelColor=0B1220&logo=github" alt="GitHub"></a>
+  <a href="https://github.com/MatheusFelipeCorrea/Hyperion/actions/workflows/hyperion-validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/MatheusFelipeCorrea/Hyperion/hyperion-validate.yml?branch=main&style=for-the-badge&label=validate&labelColor=0B1220" alt="Kit validation"></a>
   <img src="https://img.shields.io/badge/agents-8-F5D76E?style=for-the-badge&labelColor=0B1220" alt="8 agents">
   <img src="https://img.shields.io/badge/skills-30-F5D76E?style=for-the-badge&labelColor=0B1220" alt="30 skills">
 </p>
@@ -97,6 +98,7 @@ Trilha completa: [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md) · E
 | pipeline-architect | `/pipeline` | CI Hyperion adaptável ao seu pipeline |
 | cards-sync-setup | `/cards-setup` | Configura sync com o board |
 | integration-bridge | `/connect` | Liga Jira / Azure / Linear / GitLab |
+| mentoring *(agent)* | `/mentor` | Ensino socrático do kit / fluxo |
 
 ### 📋 Planejamento
 
@@ -248,7 +250,7 @@ npm run hyperion:sync
 
 ## Contribuir
 
-Melhorias no **repositório Hyperion**: [CONTRIBUTING.md](./CONTRIBUTING.md) · [Code of Conduct](./CODE_OF_CONDUCT.md) · [Security](./SECURITY.md)
+Melhorias no **repositório Hyperion**: [CONTRIBUTING.md](./CONTRIBUTING.md) · [Code of Conduct](./CODE_OF_CONDUCT.md) · [Security](./SECURITY.md) · [Support](./SUPPORT.md) · [Changelog](./CHANGELOG.md)
 
 Issues boas para começar: filtre por [`good first issue`](https://github.com/MatheusFelipeCorrea/Hyperion/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 

@@ -127,7 +127,7 @@ Run `npm run hyperion:check-rules` if shortcuts look inconsistent — CI enforce
 
 ## 9. Non-GitHub backends
 
-GitHub Projects is fully mature. Others are best-effort forward sync — see [choose-backend-en.md](../integration/choose-backend-en.md) and `/connect`.
+GitHub Projects is fully mature. Jira/Azure/GitLab also support reverse; Linear is forward-only. Native column parity is not identical to GitHub Projects — see [choose-backend-en.md](../integration/choose-backend-en.md) and `/connect`.
 
 ---
 
@@ -137,7 +137,7 @@ GitHub Projects is fully mature. Others are best-effort forward sync — see [ch
 |--------------|----------------|
 | Native Cursor slash plugin | Rules file — type `/setup` or the equivalent phrase |
 | Full Jira Kanban column sync | Workflow **transitions** when names match; native board depends on the project |
-| Azure / GitLab / Linear reverse | Not yet — GitHub and Jira only |
+| Linear reverse | Not yet — GitHub, Jira, Azure, and GitLab already support `--reverse` |
 | Video walkthrough | Markdown only |
 
 ---

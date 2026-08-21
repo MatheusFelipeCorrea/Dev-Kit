@@ -5,7 +5,8 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 **Repositório:** [https://github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
 Ao participar, você concorda com o [Code of Conduct](CODE_OF_CONDUCT.md).  
-Segurança: [SECURITY.md](SECURITY.md) — não abra issue pública para vulnerabilidades.
+Segurança: [SECURITY.md](SECURITY.md) — não abra issue pública para vulnerabilidades.  
+Ajuda de adotante: [SUPPORT.md](SUPPORT.md). Histórico de mudanças: [CHANGELOG.md](CHANGELOG.md).
 
 ## Por onde começar
 

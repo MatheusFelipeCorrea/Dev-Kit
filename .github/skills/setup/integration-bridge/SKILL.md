@@ -3,8 +3,8 @@ name: integration-bridge
 description: >-
   Prepares Hyperion integration with external project management tools (Jira,
   Azure DevOps, Linear, GitLab) via MCP or API. It configures the bridge and
-  maps fields. Current sync engine status: GitHub is full, Jira has forward
-  + reverse adapter, and Azure/Linear/GitLab have forward best-effort adapters.
+  maps fields. Sync engine: GitHub is full; Jira/Azure/GitLab support forward
+  + reverse; Linear is forward-only (status via status_map).
 ---
 
 # Integration Bridge
@@ -28,10 +28,10 @@ Cards remain in `.github/cards/` — sync engine reads from there regardless of 
 | Backend | Connection method | Card sync | Bidirectional |
 |---------|------------------|-----------|---------------|
 | **GitHub** (default) | GitHub API / gh CLI | Full (Issues + Projects + fields) | Yes (`--reverse`) |
-| **Jira** | MCP (`mcp-jira`) or REST API | Forward + reverse adapter in `sync.mjs` | Yes (`--reverse` rebuilds Markdown) |
-| **Azure DevOps** | MCP (`mcp-azure-devops`) or REST API | Forward best-effort adapter | Forward only |
-| **Linear** | MCP (`mcp-linear`) or GraphQL | Forward best-effort adapter | Forward only |
-| **GitLab** | MCP (`mcp-gitlab`) or REST API | Forward best-effort adapter | Forward only |
+| **Jira** | MCP (`mcp-jira`) or REST API | Forward + reverse in `sync.mjs` | Yes (`--reverse` rebuilds Markdown) |
+| **Azure DevOps** | MCP (`mcp-azure-devops`) or REST API | Forward + reverse; `System.State` via `status_map` | Yes (`--reverse`) |
+| **Linear** | MCP (`mcp-linear`) or GraphQL | Forward; workflow state via `status_map` | Forward only |
+| **GitLab** | MCP (`mcp-gitlab`) or REST API | Forward + reverse; open/close + `status:` label | Yes (`--reverse`) |
 
 ## Step 1 — Detect current backend
 
@@ -185,7 +185,7 @@ If no MCP is available, fall back to REST API calls via the sync script.
 - Always test with dry-run before real sync (GitHub Projects engine)
 - Respect rate limits of external APIs
 - If MCP is available, prefer it over direct API calls (better auth handling)
-- This kit syncs real card data to GitHub (full), Jira (forward + reverse), and forward-best-effort to Azure/Linear/GitLab. Reverse sync beyond GitHub/Jira is not implemented yet.
+- This kit syncs real card data to GitHub (full), Jira/Azure/GitLab (forward + reverse), and Linear (forward only). GitHub Projects remains the richest native-column path.
 - Keep backward compatibility — GitHub remains the default zero-config path
 
 ## Example

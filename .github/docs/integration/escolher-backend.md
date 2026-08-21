@@ -87,7 +87,7 @@ management:
 
 **Env:** `CARDS_SYNC_BACKEND=azure-devops`, `AZDO_ORG_URL`, `AZDO_PROJECT`, `AZDO_PAT` · opcional `AZDO_WORK_ITEM_TYPE=Task`
 
-Forward sync idempotente via `CARD_ID`. Reverse e colunas nativas: ainda não.
+Forward + reverse via `CARD_ID`. Status remoto: `System.State` via `management.status_map` em `project.yml`.
 
 ---
 
@@ -105,7 +105,7 @@ Forward + status via workflow states. Reverse: ainda não.
 
 **Env:** `CARDS_SYNC_BACKEND=gitlab`, `GITLAB_PROJECT_ID`, `GITLAB_TOKEN` · opcional `GITLAB_URL` (default gitlab.com)
 
-Forward sync idempotente. Reverse e board nativo: ainda não.
+Forward + reverse via `CARD_ID`. Status: open/close + label `status:` via `status_map`.
 
 ---
 
