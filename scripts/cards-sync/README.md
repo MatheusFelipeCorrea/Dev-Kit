@@ -129,7 +129,7 @@ Status update behavior (**GitHub Projects only — safe mode**):
   - new issues/items: sync uses `defaults.status` (usually `Backlog`)
   - existing issues/items: sync preserves current Project status (no overwrite)
 
-> **Other backends:** Jira/Azure/Linear/GitLab store `status` in issue description metadata on forward sync. Native board columns / workflow states are not updated yet. When the agent moves a card conversationally, the local frontmatter is always updated; board column change is guaranteed only on **GitHub Projects** today.
+> **Other backends:** On forward sync, Jira applies workflow **transitions** when status names match; Azure updates **`System.State`** via `status_map`; GitLab open/close + `status:` label; Linear applies workflow state via `status_map`. Reverse (`--reverse`) works for GitHub, Jira, Azure, and GitLab (not Linear). GitHub Projects still has the richest native-column + safe-mode behavior.
 
 Worst-case behavior (Project auto-create):
 - If the Project does not exist and `projects-map.json.default.projectNumber` is `0/null` (and `autoCreateProject` is enabled),

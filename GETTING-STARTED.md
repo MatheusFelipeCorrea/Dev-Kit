@@ -135,7 +135,7 @@ Sem GitHub Projects, pule isto. Jira/Linear/Azure/GitLab: [escolher-backend.md](
 
 > **`/refine`** → **`/sync`**
 
-Cards em `.github/cards/` — GitHub completo; Jira com transições; Linear com `status_map`; Azure/GitLab só ida (kit → remoto).
+Cards em `.github/cards/` — GitHub completo; Jira/Azure/GitLab com `--reverse`; Linear com `status_map` (só ida por enquanto).
 
 ---
 

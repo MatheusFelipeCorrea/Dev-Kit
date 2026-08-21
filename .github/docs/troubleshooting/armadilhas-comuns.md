@@ -143,7 +143,7 @@ Se algo parecer inconsistente, rode `npm run hyperion:check-rules` — o CI bloq
 
 ## 🔄 9. Backend não-GitHub (Jira, Azure, Linear, GitLab)
 
-GitHub Projects = caminho maduro. Outros backends = forward sync best-effort; reverse e colunas nativas limitadas.
+GitHub Projects = caminho maduro. Jira/Azure/GitLab também têm reverse; Linear ainda é só forward. Paridade de colunas nativas ≠ GitHub Projects.
 
 → [escolher-backend.md](../integration/escolher-backend.md) + skill `integration-bridge` (`/connect`)
 
@@ -155,7 +155,7 @@ GitHub Projects = caminho maduro. Outros backends = forward sync best-effort; re
 |----------------|--------------|
 | Slash commands nativos no Cursor (plugin) | Via rules — escreva `/setup` ou a frase equivalente |
 | Sync bidirecional de status em Jira | Transições de **workflow** quando o nome bate; Kanban nativo depende do projeto |
-| Reverse Azure / GitLab / Linear | Ainda não — só GitHub e Jira |
+| Reverse Linear | Ainda não — GitHub, Jira, Azure e GitLab já suportam `--reverse` |
 | Vídeo / tutorial interativo | Só markdown |
 
 ---

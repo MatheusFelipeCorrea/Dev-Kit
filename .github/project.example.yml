@@ -1,8 +1,9 @@
 # yaml-language-server: $schema=./project.schema.json
 # Project contract for .github/ agents and skills.
 #
-# This file is the ONLY bridge between the generic kit and your specific
-# product. Copy the .github/ pack to any repo and rewrite only this YAML.
+# Adopter template — copy this file to project.yml (do NOT copy the kit's
+# dogfood project.yml). Prefer /setup or /migrate for a guided wire-up.
+# Do not blindly copy kit workflows; use /pipeline when you want CI.
 #
 # Paths are POSIX-style, relative to repo root.
 

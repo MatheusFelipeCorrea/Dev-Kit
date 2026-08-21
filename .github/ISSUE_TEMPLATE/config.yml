@@ -3,6 +3,9 @@ contact_links:
   - name: Getting started
     url: https://github.com/MatheusFelipeCorrea/Hyperion/blob/main/GETTING-STARTED.md
     about: Read the onboarding guide before filing a “how do I…?” question.
+  - name: Support / how to get help
+    url: https://github.com/MatheusFelipeCorrea/Hyperion/blob/main/SUPPORT.md
+    about: Where adopters and contributors should ask for help.
   - name: Security vulnerability
     url: https://github.com/MatheusFelipeCorrea/Hyperion/security/advisories/new
     about: Report security issues privately (do not open a public issue).
