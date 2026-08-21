@@ -1,0 +1,62 @@
+name: Bug report
+description: Something in Hyperion does not work as documented
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Hyperion. Fill in what you can — reproductions beat guesses.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong in one or two sentences?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, chat phrases (`/setup`, `/sync`, …), or npm scripts.
+      placeholder: |
+        1. Copy kit into repo X
+        2. Run /doctor
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+      description: What should happen? What happened instead? Paste errors if any.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Docs / onboarding
+        - Skills or agents
+        - Cards sync
+        - hyperion:* scripts / CLI / Docker
+        - CI / workflows
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: "OS, Node version (or Docker), IDE (Cursor / Claude / Copilot)"
+      placeholder: "Windows 11 · Node 22 · Cursor"
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I read GETTING-STARTED and the relevant docs for this area
+          required: false
+        - label: This is not a secret/credential leak (use SECURITY.md for that)
+          required: true

@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose an improvement to Hyperion (skill, agent, docs, sync, DX)
+title: "[feat] "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What friction or gap does this solve for adopters?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What should Hyperion do? Keep it concrete (command, skill, doc, script).
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Docs / onboarding
+        - New or improved skill
+        - Agent flow
+        - Cards sync / backends
+        - Scripts / CI / Docker
+        - Branding / DX polish
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional — workarounds or other approaches you tried.
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a PR for this (even a draft)
+          required: false

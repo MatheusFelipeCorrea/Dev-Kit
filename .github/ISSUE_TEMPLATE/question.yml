@@ -1,0 +1,21 @@
+name: Question
+description: How do I adopt or use Hyperion in my repo?
+title: "[question] "
+labels: ["question", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prefer reading [GETTING-STARTED.md](https://github.com/MatheusFelipeCorrea/Hyperion/blob/main/GETTING-STARTED.md) first.
+        If Discussions are enabled, use them for open-ended Q&A.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Stack, IDE, whether you used `/setup` or `/migrate`, etc.

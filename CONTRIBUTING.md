@@ -4,6 +4,16 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 
 **Repositório:** [https://github.com/MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 
+Ao participar, você concorda com o [Code of Conduct](CODE_OF_CONDUCT.md).  
+Segurança: [SECURITY.md](SECURITY.md) — não abra issue pública para vulnerabilidades.
+
+## Por onde começar
+
+1. Leia [GETTING-STARTED.md](GETTING-STARTED.md) (visão de adotante).
+2. Procure issues com o label **`good first issue`** ou **`help wanted`**.
+3. Comente na issue antes de grandes mudanças (evita trabalho duplicado).
+4. Abra um PR a partir de uma branch (a `main` é protegida — sem push direto).
+
 ## Como contribuir
 
 1. Fork [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
@@ -14,6 +24,7 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
    npm run docs:check              # links em markdown
    npm run skills:validate         # frontmatter + ## Output das skills
    npm run hyperion:check-rules    # runtime rules sincronizadas
+   npm run hyperion:skills-catalog -- --check  # se tocou catálogo/meta
    npm run hyperion:project-verify # smoke do project.yml do kit
    npm run cards:test              # testes do cards-sync
    npm test                        # hyperion + cards
@@ -21,14 +32,14 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
    ```
    Sem Node: `./bin/hyperion` — [node-and-docker.md](.github/docs/meta/node-and-docker.md). Gates: [definition-of-done.md](.github/docs/meta/definition-of-done.md).
 5. Commit com mensagem descritiva
-6. Abra um Pull Request
+6. Abra um Pull Request (use o template do repositório)
 
 ## Tipos de contribuição
 
 - **Nova skill** — crie em `.github/skills/<categoria>/sua-skill/SKILL.md`
 - **Novo prompt de auditoria** — adicione em `.github/audits/prompts/` e registre no `manifest.yml`
 - **Bug fix** — descreva o comportamento esperado vs. atual
-- **Documentação** — melhorias no README, exemplos, traduções
+- **Documentação** — melhorias no README, exemplos, traduções (ótimo primeiro PR)
 
 ## Padrões
 
@@ -36,6 +47,7 @@ Obrigado por considerar contribuir! Este kit é open-source e aceita PRs.
 - Nomes de skills em inglês (kebab-case)
 - Documentação bilíngue quando possível (PT-BR primário, EN secundário)
 - Mantenha compatibilidade multi-runtime (Copilot, Cursor, Claude Code)
+- Não copie `project.yml` / workflows dogfood do kit em exemplos de adoção — use `project.example.yml` e `/pipeline`
 
 ## Estrutura de uma Skill
 

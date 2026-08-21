@@ -248,7 +248,9 @@ npm run hyperion:sync
 
 ## Contribuir
 
-Melhorias no **repositório Hyperion**: [CONTRIBUTING.md](./CONTRIBUTING.md)
+Melhorias no **repositório Hyperion**: [CONTRIBUTING.md](./CONTRIBUTING.md) · [Code of Conduct](./CODE_OF_CONDUCT.md) · [Security](./SECURITY.md)
+
+Issues boas para começar: filtre por [`good first issue`](https://github.com/MatheusFelipeCorrea/Hyperion/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 
 ## Licença
 
