@@ -1,10 +1,27 @@
 # 🧩 Catálogo de skills Hyperion
 
-Índice humano: **quando usar**, **comando**, **output**. 🟢 Comece pelos 6 comandos em [GETTING-STARTED.md](../../../GETTING-STARTED.md).
+<p align="center">
+  <img src="https://img.shields.io/badge/skills-30-F5D76E?style=for-the-badge&labelColor=0B1220" alt="30 skills">
+  <img src="https://img.shields.io/badge/agents-8-F5D76E?style=for-the-badge&labelColor=0B1220" alt="8 agents">
+  <img src="https://img.shields.io/badge/áreas-5-2563EB?style=for-the-badge&labelColor=0B1220" alt="5 áreas">
+</p>
 
-**English:** [skills-catalog.md](./skills-catalog.md) · **Outputs:** [skills-output-map.md](./skills-output-map.md) · **Comandos:** [comandos-rapidos.md](./comandos-rapidos.md)
+Índice humano: **quando usar**, **comando**, **output**.
 
-## 🚀 Bootstrap
+| Como estudar | Link |
+|--------------|------|
+| 🟢 Só os 6 comandos | [GETTING-STARTED.md](../../../GETTING-STARTED.md) |
+| 🗺️ Visão no hub | [README.md](../../../README.md#skills-por-área--o-que-fazem) |
+| 💬 Frases no chat | [comandos-rapidos.md](./comandos-rapidos.md) |
+| 📁 Onde grava | [skills-output-map.md](./skills-output-map.md) |
+
+**English:** [skills-catalog.md](./skills-catalog.md)
+
+Legenda de área: 🧭 Bootstrap · 📋 Planejamento · ⚡ Entrega · 🔍 Qualidade · 📚 Docs
+
+---
+
+## 🧭 Bootstrap
 
 | Skill | Comando | Quando | Output | SKILL |
 |-------|---------|--------|--------|-------|

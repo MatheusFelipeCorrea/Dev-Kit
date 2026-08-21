@@ -1,12 +1,20 @@
 # 📚 Trilha de aprendizado Hyperion
 
+<p align="center">
+  <img src="https://img.shields.io/badge/🟢-dia_1-22C55E?style=flat-square&labelColor=0B1220" alt="dia 1">
+  <img src="https://img.shields.io/badge/🟡-github-EAB308?style=flat-square&labelColor=0B1220" alt="github">
+  <img src="https://img.shields.io/badge/🔵-sdlc-2563EB?style=flat-square&labelColor=0B1220" alt="sdlc">
+</p>
+
 **Duas velocidades.** Não leia o kit inteiro — escolha seu nível e siga em ordem.
+
+Antes de aprofundar, leia no hub: [o que é](../../../README.md#o-que-é-o-hyperion) · [áreas](../../../README.md#mapa-rápido--onde-usar) · [skills](../../../README.md#skills-por-área--o-que-fazem)
 
 | Legenda | Significado |
 |---------|-------------|
 | 🟢 | Iniciante — chat + 6 comandos |
 | 🟡 | Intermediário — GitHub, cards, repo |
-| 🔵 | Avançado — SDLC completo, referência, contribuição |
+| 🔵 | Avançado — SDLC completo, referência |
 
 **English:** [learning-path-en.md](./learning-path-en.md) · **Repo:** [MatheusFelipeCorrea/Hyperion](https://github.com/MatheusFelipeCorrea/Hyperion)
 

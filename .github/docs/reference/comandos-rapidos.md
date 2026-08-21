@@ -1,12 +1,19 @@
 ﻿# 💬 Comandos rápidos Hyperion
 
-Referência única: **npm** (terminal) e **chat da IA** (sem terminal).
+<p align="center">
+  <img src="https://img.shields.io/badge/preferência-falar_no_chat-F5D76E?style=for-the-badge&labelColor=0B1220" alt="chat">
+  <img src="https://img.shields.io/badge/npm-opcional-94A3B8?style=for-the-badge&labelColor=0B1220" alt="npm">
+</p>
+
+Referência única: **chat da IA** (dia a dia) e **npm** (CI / terminal).
 
 | Nível | O que ler |
 |-------|-----------|
 | 🟢 | [Kit mínimo](#kit-mínimo-primeira-semana) — 6 comandos |
 | 🟡 | [Fale com o agente](#preferência-fale-com-o-agente) — frases no chat |
 | 🔵 | [npm one-liners](#npm--one-liners) — CI e power users |
+
+Mapa de áreas + skills: [README.md](../../../README.md#mapa-rápido--onde-usar) · [catalogo-skills.md](./catalogo-skills.md)
 
 **English:** [quick-commands-en.md](./quick-commands-en.md)
 

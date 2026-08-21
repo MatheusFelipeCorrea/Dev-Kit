@@ -1,5 +1,28 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "darkMode": true,
+    "background": "#0B1220",
+    "primaryColor": "#1E3A5F",
+    "primaryTextColor": "#F8FAFC",
+    "primaryBorderColor": "#2563EB",
+    "secondaryColor": "#111827",
+    "secondaryTextColor": "#F8FAFC",
+    "secondaryBorderColor": "#F5D76E",
+    "tertiaryColor": "#0B1220",
+    "lineColor": "#94A3B8",
+    "textColor": "#F8FAFC",
+    "mainBkg": "#1E3A5F",
+    "nodeBorder": "#2563EB",
+    "clusterBkg": "#111827",
+    "clusterBorder": "#F5D76E",
+    "titleColor": "#F5D76E",
+    "edgeLabelBackground": "#0B1220",
+    "fontFamily": "Segoe UI, Helvetica, Arial, sans-serif"
+  }
+}}%%
 flowchart TB
-  subgraph bootstrap [Bootstrap]
+  subgraph bootstrap ["🧭 Bootstrap"]
     A[Copy kit] --> B{"Existing repo?"}
     B -->|Yes| Mig["/migrate"]
     B -->|No| S["/setup"]
@@ -8,13 +31,13 @@ flowchart TB
     C --> D["/pipeline"]
   end
 
-  subgraph planning [Planning]
+  subgraph planning ["📋 Planning"]
     E["/explore"] --> F["/refine"]
     F --> G["/spec"]
     G --> H["/spec-review"]
   end
 
-  subgraph delivery [Delivery]
+  subgraph delivery ["⚡ Delivery"]
     H --> I["/implement"]
     I --> J["/execute"]
     J --> K{Tests pass?}
@@ -23,9 +46,12 @@ flowchart TB
     PR --> L["/audit-run"]
   end
 
-  subgraph ship [Release]
+  subgraph ship ["📚 Release"]
     L --> Dep["/deps"]
     Dep --> Rel["/release"]
   end
 
   bootstrap --> planning
+
+  style Rel fill:#1D4ED8,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC
+  style A fill:#1E3A5F,stroke:#F5D76E,stroke-width:2px,color:#F8FAFC

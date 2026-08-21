@@ -1,141 +1,261 @@
-# Hyperion
+<p align="center">
+  <img src="./.github/docs/assets/hyperion-banner.png" alt="Hyperion — AI agents for the full dev cycle" width="100%">
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-MatheusFelipeCorrea%2FHyperion-181717?logo=github)](https://github.com/MatheusFelipeCorrea/Hyperion)
-![Made for AI](https://img.shields.io/badge/Made%20for-AI%20Agents-blueviolet)
-![Runtime](https://img.shields.io/badge/Runtime-Copilot%20%7C%20Cursor%20%7C%20Claude-green)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1D4ED8?style=for-the-badge&labelColor=0B1220" alt="MIT"></a>
+  <a href="https://github.com/MatheusFelipeCorrea/Hyperion"><img src="https://img.shields.io/badge/repo-Hyperion-2563EB?style=for-the-badge&labelColor=0B1220&logo=github" alt="GitHub"></a>
+  <img src="https://img.shields.io/badge/agents-8-F5D76E?style=for-the-badge&labelColor=0B1220" alt="8 agents">
+  <img src="https://img.shields.io/badge/skills-30-F5D76E?style=for-the-badge&labelColor=0B1220" alt="30 skills">
+</p>
 
-**Hyperion** é um kit portátil de **agentes e skills de IA** para o ciclo de software — do setup ao release. Funciona com Cursor, Claude Code, GitHub Copilot ou qualquer assistente que leia Markdown.
+<p align="center">
+  <img src="https://img.shields.io/badge/Cursor-ready-2563EB?style=flat-square&labelColor=111827" alt="Cursor">
+  <img src="https://img.shields.io/badge/Claude_Code-ready-2563EB?style=flat-square&labelColor=111827" alt="Claude">
+  <img src="https://img.shields.io/badge/Copilot-ready-2563EB?style=flat-square&labelColor=111827" alt="Copilot">
+  <img src="https://img.shields.io/badge/boards-GitHub_·_Jira_·_Azure_·_Linear_·_GitLab-94A3B8?style=flat-square&labelColor=0B1220" alt="Boards">
+</p>
 
-<details>
-<summary>🇺🇸 English</summary>
+<p align="center">
+  <a href="./GETTING-STARTED.md"><img src="https://img.shields.io/badge/▶_Começar-GETTING--STARTED-F5D76E?style=for-the-badge&labelColor=0B1220" alt="Começar"></a>
+  <a href="./.github/docs/reference/catalogo-skills.md"><img src="https://img.shields.io/badge/📚_Skills-catálogo-2563EB?style=for-the-badge&labelColor=0B1220" alt="Skills"></a>
+  <a href="./.github/docs/reference/comandos-rapidos.md"><img src="https://img.shields.io/badge/💬_Comandos-lista-2563EB?style=for-the-badge&labelColor=0B1220" alt="Comandos"></a>
+  <a href="./.github/docs/onboarding/learning-path-en.md"><img src="https://img.shields.io/badge/English-guide-94A3B8?style=for-the-badge&labelColor=0B1220" alt="English"></a>
+</p>
 
-Portable AI agents/skills kit for the software lifecycle. Start at **[GETTING-STARTED.md](./GETTING-STARTED.md)** · **[Learning path (EN)](./.github/docs/onboarding/learning-path-en.md)** · **[Skills catalog](./.github/docs/reference/skills-catalog.md)**.
+---
 
-</details>
+## O que é o Hyperion?
+
+**Hyperion** é um kit que você **copia para o seu repositório**. A IA (Cursor, Claude, Copilot) lê os arquivos do kit e passa a seguir receitas prontas — do setup ao release.
+
+| Sem Hyperion | Com Hyperion |
+|--------------|--------------|
+| Você explica o processo toda vez no chat | Você digita **`/refine`**, **`/implement`**, **`/execute`** |
+| Cards, specs e reviews ficam soltos | Artefatos vão para pastas padrão (`.github/cards`, `plans`, `audits`) |
+| Board e código não conversam | **`/sync`** sobe cards para GitHub / Jira / Azure / Linear / GitLab |
+
+> Não é um app na nuvem. É **Markdown + scripts** no seu repo. Você fala no **chat**; o terminal (`npm` / Docker) é opcional.
+
+---
+
+## Mapa rápido — onde usar
+
+Cinco áreas. Cada uma tem comandos no chat e skills por trás.
+
+| | Área | Você usa quando… | Comandos típicos |
+|---|------|------------------|------------------|
+| 🧭 | **Bootstrap** | Ligar o kit, saúde, CI, board | `/setup` · `/migrate` · `/doctor` · `/pipeline` · `/sync` |
+| 📋 | **Planejamento** | Ideia → cards → spec | `/explore` · `/refine` · `/spec` · `/spec-review` |
+| ⚡ | **Entrega** | Plano, código, PR | `/implement` · `/execute` · `/pr-review` · `/test-plan` |
+| 🔍 | **Qualidade** | Auditar produto / código / ops | `/audit` · `/security` · `/architecture` · `/deps` |
+| 📚 | **Docs & release** | Diagramas, ADR, changelog, tag | `/diagram` · `/adr` · `/changelog` · `/release` |
+
+Fluxo visual do dia a dia:
+
+<p align="center">
+  <img src="./.github/docs/assets/hyperion-journey-minimal.png" alt="Copiar kit → setup/migrate → doctor → refine → implement → execute" width="720">
+</p>
+
+Trilha completa: [fluxo-completo.md](./.github/docs/meta/fluxo-completo.md) · Estudo por nível: [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md)
 
 ---
 
 ## Sumário
 
-1. [Quickstart](#-quickstart)
-2. [Os 6 comandos da primeira semana](#-os-6-comandos-da-primeira-semana)
-3. [O que vem no kit](#-o-que-vem-no-kit)
-4. [Documentação](#-documentação) ← comece por aqui se estiver perdido
-5. [Compatibilidade](#-compatibilidade)
-6. [npm (opcional)](#-npm-opcional)
-7. [Contribuir](#-contribuir)
-8. [Licença](#-licença)
+1. [O que é](#o-que-é-o-hyperion)
+2. [Mapa rápido](#mapa-rápido--onde-usar)
+3. [Skills por área](#skills-por-área--o-que-fazem)
+4. [Comandos](#comandos--o-que-digitar-no-chat)
+5. [Quickstart](#quickstart)
+6. [Guia de estudo](#guia-de-estudo)
+7. [Compatibilidade](#compatibilidade)
+8. [npm (opcional)](#npm-opcional)
+9. [Contribuir](#contribuir)
 
 ---
 
-## 🚀 Quickstart
+## Skills por área — o que fazem
+
+**Skill** = receita curta (`SKILL.md`) que a IA segue uma vez.  
+**Agent** = fluxo longo (`.agent.md`) com pausas para você aprovar.
+
+<img src="https://img.shields.io/badge/setup-8_skills-2563EB?style=flat-square&labelColor=0B1220" alt="setup">
+<img src="https://img.shields.io/badge/planning-6_skills-2563EB?style=flat-square&labelColor=0B1220" alt="planning">
+<img src="https://img.shields.io/badge/quality-9+_skills-2563EB?style=flat-square&labelColor=0B1220" alt="quality">
+<img src="https://img.shields.io/badge/docs-5_skills-2563EB?style=flat-square&labelColor=0B1220" alt="docs">
+<img src="https://img.shields.io/badge/agents-8-F5D76E?style=flat-square&labelColor=0B1220" alt="agents">
+
+### 🧭 Bootstrap / setup
+
+| Skill / agent | Comando | Faz o quê |
+|---------------|---------|-----------|
+| project-startup | `/setup` | Setup guiado no repo novo |
+| migration *(agent)* | `/migrate` | Adapta o kit a repo que já tem código |
+| hyperion-ops | `/doctor` | Saúde do kit + cards (roda scripts) |
+| project-discovery | `/discover` | Mapeia stack e gera `project.yml` |
+| pipeline-architect | `/pipeline` | CI Hyperion adaptável ao seu pipeline |
+| cards-sync-setup | `/cards-setup` | Configura sync com o board |
+| integration-bridge | `/connect` | Liga Jira / Azure / Linear / GitLab |
+
+### 📋 Planejamento
+
+| Skill | Comando | Faz o quê |
+|-------|---------|-----------|
+| hypothesis-forge | `/explore` | Explora ideia antes de virar card |
+| card-refiner | `/refine` | Ideia → épicos / features / stories |
+| acceptance-spec | `/spec` | Spec Given/When/Then |
+| project-architect | `/architect` | Blueprint greenfield |
+| refactor-guide | `/refactor` | Plano de refactor seguro |
+| sprint-retro | `/retro` | Retrospectiva |
+
+### ⚡ Entrega (agents + skills)
+
+| Skill / agent | Comando | Faz o quê |
+|---------------|---------|-----------|
+| implementation-plan *(agent)* | `/implement` | Plano em fases (você aprova) |
+| implementation-executor *(agent)* | `/execute` | Código + testes da fase |
+| pr-reviewer *(agent)* | `/pr-review` | Revisa PR aberto |
+| testing-strategy | `/test-plan` | Estratégia de testes |
+| spec-review *(agent)* | `/spec-review` | Gate de spec antes de codar |
+
+### 🔍 Qualidade
+
+| Skill / agent | Comando | Faz o quê |
+|---------------|---------|-----------|
+| full-audit | `/audit` | 6 dimensões de uma vez |
+| audit-runner *(agent)* | `/audit-run` | Auditoria orquestrada com gates |
+| security / architecture / devops / po / ux / code-review | `/security` · `/architecture` · … | Dimensão única |
+| dependency-health | `/deps` | Dependências desatualizadas / risco |
+| tech-debt-tracker | `/tech-debt` | Inventário de dívida |
+
+### 📚 Docs & release
+
+| Skill / agent | Comando | Faz o quê |
+|---------------|---------|-----------|
+| plantuml-generator | `/diagram` | Pacote UML em `.github/diagrams/` |
+| adr-generator | `/adr` | Architecture Decision Record |
+| changelog-generator | `/changelog` | CHANGELOG |
+| readme-updater | `/readme` | Atualiza README(s) |
+| release *(agent)* | `/release` | Changelog + versão + tag |
+
+📄 **Lista completa (quando · output · link do SKILL):** [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md)
+
+---
+
+## Comandos — o que digitar no chat
+
+<img src="https://img.shields.io/badge/preferência-chat_da_IA-F5D76E?style=flat-square&labelColor=0B1220" alt="chat">
+<img src="https://img.shields.io/badge/não_é-terminal-94A3B8?style=flat-square&labelColor=0B1220" alt="não terminal">
+
+### 🟢 Primeira semana (memorize estes 6)
+
+| # | No chat | Resultado |
+|---|---------|-----------|
+| 1 | **`/setup`** ou **`/migrate`** | Kit ligado ao seu repo |
+| 2 | **`/doctor`** | O que falta (gh, token, cards…) |
+| 3 | **`/refine`** | Sua ideia vira cards |
+| 4 | **`/implement`** | Plano em fases |
+| 5 | **`/execute`** | Código + testes |
+| 6 | **`/help`** | Lista o restante |
+
+Repo **novo** → `/setup`. Repo **já tem código** → `/migrate`.  
+Se o `/` não aparecer no Cursor, diga a frase: *“Configura o Hyperion neste repo”*.
+
+### 🟡 Quando precisar
+
+| Situação | Comando |
+|----------|---------|
+| Subir cards pro board | `/sync` |
+| Spec antes de codar | `/spec` · `/spec-review` |
+| Revisar PR | `/pr-review` |
+| Auditoria | `/audit` (rápida) ou `/audit-run` (com gates) |
+| Dependências / release | `/deps` · `/release` |
+| Diagramas | `/diagram` |
+
+💬 **Todas as frases + npm:** [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md)
+
+---
+
+## Quickstart
 
 ```bash
 git clone https://github.com/MatheusFelipeCorrea/Hyperion.git
 ```
 
-| # | Passo | O que fazer |
-|---|--------|-------------|
-| 1 | **Obter** | Clone ou baixe o ZIP deste repositório |
-| 2 | **Copiar para o seu produto** | Veja a tabela abaixo (não copie tudo às cegas) |
-| 3 | **No chat da IA** | Repo novo: **`/setup`** · Já tem código: **`/migrate`** |
+| # | Passo | Ação |
+|---|--------|------|
+| 1 | **Obter** | Clone ou ZIP |
+| 2 | **Copiar** | Seletivo — abra o bloco abaixo |
+| 3 | **Usar** | No chat do **seu** repo: `/setup` ou `/migrate` |
 
-### O que copiar (e o que não)
+<details>
+<summary><strong>📦 O que copiar (e o que não)</strong></summary>
 
 | Copiar | Não copiar / cuidado |
 |--------|----------------------|
-| `.github/skills/`, `agents/`, `docs/`, `audits/` (prompts + manifest), `commands.yml`, `memory/` (templates), `cards/` (template + `_examples` + config vazio), `diagrams/`, `STRUCTURE.md`, `project.schema.json`, `project.example.yml`, `hyperion-origin.json` | **`.github/project.yml`** deste repo → `cp project.example.yml project.yml` ou deixe `/setup` criar |
-| `scripts/` | **`.github/workflows/`** do kit → use **`/pipeline`** no seu repo (senão herda CI de mantenedor) |
-| Scripts `hyperion:*` / `cards:*` no **seu** `package.json` (**merge**, não substitua o arquivo) | Trocar o `package.json` do produto pelo do Hyperion |
-| `bin/` + `Dockerfile` (sem Node no host) | `projects-map.json` de outro time — `/setup` configura o seu |
-| `.cursor/rules/` ou `CLAUDE.md` (conforme a IDE) | `.git/`, `plans/` gerados, resultados de audit |
+| `.github/skills/`, `agents/`, `docs/`, `audits/`, `commands.yml`, `memory/`, `cards/` limpo, `project.example.yml`, `project.schema.json`, `hyperion-origin.json`, … | **`project.yml`** do kit → `project.example.yml` ou `/setup` |
+| `scripts/` | **`workflows/`** do kit → use **`/pipeline`** |
+| Scripts `hyperion:*` / `cards:*` (**merge** no seu `package.json`) | Substituir o `package.json` do produto |
+| `bin/` + `Dockerfile` (sem Node) | `projects-map` de outro time |
+| `.cursor/rules/` ou `CLAUDE.md` | `.git/`, artefatos gerados |
 
-Depois: abra o **chat no seu repo** e diga `/setup` ou `/migrate`.
+</details>
 
-![Jornada mínima](./.github/docs/assets/hyperion-journey-minimal.png)
-
-Guia linear: **[GETTING-STARTED.md](./GETTING-STARTED.md)**
+Guia passo a passo: **[GETTING-STARTED.md](./GETTING-STARTED.md)**
 
 ---
 
-## 🟢 Os 6 comandos da primeira semana
-
-Digite **no chat** (não no terminal):
-
-| Ordem | Comando | Para quê |
-|-------|---------|----------|
-| 1 | **`/setup`** ou **`/migrate`** | Liga o kit ao seu repo |
-| 2 | **`/doctor`** | Diz o que falta |
-| 3 | **`/refine`** | Ideia → cards |
-| 4 | **`/implement`** | Plano em fases |
-| 5 | **`/execute`** | Código + testes |
-| 6 | **`/help`** | Lista o resto |
-
-Quando precisar: **`/sync`** (board) · **`/pr-review`** · **`/audit`** · **`/release`**
-
----
-
-## 🔷 O que vem no kit
-
-| Peça | Qtd | Função |
-|------|-----|--------|
-| Agentes | 8 | Fluxos longos com pausa humana (`/migrate`, `/execute`, `/pr-review`, …) |
-| Skills | 30 | Receitas curtas (planning, setup, quality, docs) |
-| Cards sync | 5 backends | GitHub · Jira · Azure · Linear · GitLab |
-| Auditorias | 6 dimensões | Segurança, arquitetura, DevOps, code review, PO, UX |
-
----
-
-## 📚 Documentação
-
-**Um caminho só.** O resto é consulta.
+## Guia de estudo
 
 | Quero… | Abra |
 |--------|------|
-| **Começar do zero** | [GETTING-STARTED.md](./GETTING-STARTED.md) |
-| **Trilha por nível** 🟢🟡🔵 | [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md) |
-| **Lista de comandos** | [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) |
-| **Qual skill usar** | [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) |
-| **Algo deu errado** | [armadilhas-comuns.md](./.github/docs/troubleshooting/armadilhas-comuns.md) |
-| **Índice completo** | [.github/docs/README.md](./.github/docs/README.md) |
-| **English** | [learning-path-en.md](./.github/docs/onboarding/learning-path-en.md) |
+| 🚀 Entender e rodar na prática | [GETTING-STARTED.md](./GETTING-STARTED.md) |
+| 📗 Estudar por nível 🟢🟡🔵 | [trilha-de-aprendizado.md](./.github/docs/onboarding/trilha-de-aprendizado.md) |
+| 🧩 Ver **todas** as skills | [catalogo-skills.md](./.github/docs/reference/catalogo-skills.md) |
+| 💬 Ver **todos** os comandos | [comandos-rapidos.md](./.github/docs/reference/comandos-rapidos.md) |
+| ⚠️ Evitar erros comuns | [armadilhas-comuns.md](./.github/docs/troubleshooting/armadilhas-comuns.md) |
+| 🗺️ Índice completo | [.github/docs/README.md](./.github/docs/README.md) |
 
-Mais tarde (não no dia 1): [setup GitHub](./.github/docs/onboarding/setup-github.md) · [adaptar repo](./.github/docs/onboarding/adaptar-ao-repo.md) · [fluxo SDLC](./.github/docs/meta/fluxo-completo.md) · [Node/Docker](./.github/docs/meta/node-and-docker.md) · [Definition of Done](./.github/docs/meta/definition-of-done.md)
+Mais tarde: [setup GitHub](./.github/docs/onboarding/setup-github.md) · [adaptar repo](./.github/docs/onboarding/adaptar-ao-repo.md) · [Node/Docker](./.github/docs/meta/node-and-docker.md) · [Definition of Done](./.github/docs/meta/definition-of-done.md)
 
 ---
 
-## 🌌 Compatibilidade
+## Compatibilidade
 
-| Runtime | Arquivo |
-|---------|---------|
+| Runtime | Arquivo no kit |
+|---------|----------------|
 | Cursor | `.cursor/rules/hyperion.mdc` |
 | Claude Code | `CLAUDE.md` |
 | GitHub Copilot | `.github/instructions/copilot-instructions.md` |
 
 ---
 
-## ⌨️ npm (opcional)
+## npm (opcional)
 
-Só se você quiser terminal/CI. No dia a dia, o chat basta.
+No dia a dia o **chat basta**. Terminal/CI:
 
 ```bash
 npm run hyperion:doctor
 npm run hyperion:setup -- --yes
 npm run hyperion:sync
-./bin/hyperion doctor    # Node 20+ ou Docker
+./bin/hyperion doctor
 ```
 
-Sem Node: [node-and-docker.md](./.github/docs/meta/node-and-docker.md) · Auth GitHub: [github-cli-setup.md](./.github/docs/integration/github-cli-setup.md)
+[Node/Docker](./.github/docs/meta/node-and-docker.md) · [GitHub CLI](./.github/docs/integration/github-cli-setup.md)
 
 ---
 
-## 🏆 Contribuir
+## Contribuir
 
-Quer melhorar o **próprio** Hyperion (skills, scripts, docs)? Veja [CONTRIBUTING.md](./CONTRIBUTING.md).
+Melhorias no **repositório Hyperion**: [CONTRIBUTING.md](./CONTRIBUTING.md)
 
----
-
-## ⚪ Licença
+## Licença
 
 [MIT](LICENSE)
+
+---
+
+<p align="center">
+  <img src="./.github/docs/assets/hyperion-logo.png" alt="Hyperion" width="200">
+</p>
